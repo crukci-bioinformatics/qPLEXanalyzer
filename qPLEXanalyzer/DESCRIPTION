@@ -9,8 +9,8 @@ Description: Tools for quantitative proteomics data analysis generated from qPLE
 License: GPL-2
 LazyLoad: yes
 Imports: tidyr, preprocessCore, limma, gplots, ggplot2, RColorBrewer, stats, utils,
-         corrplot, sparcl, DAPAR, Biostrings, GenomicRanges, IRanges, graphics, BiocGenerics,
-	       dplyr, Biobase
+         corrplot, sparcl, Biostrings, GenomicRanges, IRanges, graphics, BiocGenerics,
+	  dplyr, Biobase
 Depends: R (>= 3.3), MSnbase, statmod
 Suggests: knitr
 VignetteBuilder: knitr

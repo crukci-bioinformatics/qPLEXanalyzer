@@ -1,7 +1,7 @@
 ######### This script contains all the functions required for data processing and analysis ###############
 
 
-convertToMSnset <- function(data,metadata,indExpData,indFData,rmMissing=TRUE)
+convertToMSnset <- function(data,metadata,indExpData,Sequences,Accessions,rmMissing=TRUE)
 {
   if (!is.data.frame(data))
     stop("data has to be of class dataframe")
@@ -9,19 +9,30 @@ convertToMSnset <- function(data,metadata,indExpData,indFData,rmMissing=TRUE)
     stop("metadata has to be of class dataframe")
   if(!is.numeric(indExpData))
     stop('indExpData has to be of class numeric ..')
-  if(!is.numeric(indFData))
-    stop('indFData has to be of class numeric ..')
-  columns <- c("Experiment","Label","Bio.Rep","Tech.Rep","Analyt.Rep")
+  if(!is.numeric(Sequences))
+    stop('Sequences has to be of class numeric ..')
+  if(!is.numeric(Accessions))
+    stop('Accessions has to be of class numeric ..')
+  columns <- c("SampleName","Group","BioRep","TechRep")
   if(length(which((columns %in% colnames(metadata))==FALSE)) > 0)
-    stop('metadata must contain "Experiment","Label", "Bio.Rep","Tech.Rep" and "Analyt.Rep" columns ..')
+    stop('metadata must contain "SampleName","Group", "BioRep" and "TechRep" columns ..')
   if (!is.logical(rmMissing))
     stop("rmMissing has to be of class logical")
   samples <- colnames(data[,indExpData])
+  colnames(data)[Sequences] <- "Sequences"
+  colnames(data)[Accessions] <- "Accessions"
   if(rmMissing)
     data <- filter(data, complete.cases(select(data, one_of(samples))))
-  MSnset_data <- createMSnset(data,metadata=metadata,indExpData=indExpData,indFData=indFData,pep_prot_data = "peptide")
-  return(MSnset_data)
+  obj <- readMSnSet2(data,ecol=indExpData)
+  
+  if (identical(colnames(exprs(obj)), metadata$SampleName) == FALSE) 
+    stop("Problem consistency between column names \n            in expression data and SampleName in metadata")
+  pData(obj) <- metadata
+  featureNames(obj) <- paste0("peptide_",featureNames(obj))
+  sampleNames(obj) <- pData(obj)$SampleName
+  return(obj)
 }  
+
   
 
 ##### Summarization function ##########
@@ -34,7 +45,7 @@ convertToMSnset <- function(data,metadata,indExpData,indFData,rmMissing=TRUE)
 # Filters any rows with missing values.
 # Typical summarization functions are sum, mean and median.
 # For successful running of this function the annotation file must have four column "Protein","Gene","Description" and "GeneSymbol"
-# In addition the PD output must have columns "Annotated.Sequence" and "Master.Protein.Accessions"
+# In addition the PD output must have columns "Sequences" and "Accessions"
 
 summarizeIntensities <- function(data, summarizationFunction, annotation)
 {
@@ -42,25 +53,33 @@ summarizeIntensities <- function(data, summarizationFunction, annotation)
     stop('data has to be of class MSnSet..')
   if(!is.data.frame(annotation))
     stop('annotation has to be of class data frame..')
-  Proteins <- as.character(fData(data)$Master.Protein.Accessions)
+  columns <- c("Sequences","Accessions")
+  if(length(which((columns %in% colnames(fData(data)))==FALSE)) > 0)
+    stop('This MSnSet is not a peptide dataset ..')
+  Proteins <- as.character(fData(data)$Accessions)
   features <- fData(data)
-  features <- as.data.frame(features[,c("Annotated.Sequence","Master.Protein.Accessions")], stringsAsFactors=FALSE)
+  features <- as.data.frame(features[,c("Sequences","Accessions")], stringsAsFactors=FALSE)
   features <- unique(features)
-  features$Annotated.Sequence <- as.character(features$Annotated.Sequence)
-  features$Master.Protein.Accessions <- as.character(features$Master.Protein.Accessions)
-  counts <- features %>% count(Master.Protein.Accessions) %>% rename(Protein=Master.Protein.Accessions,Count = n)
+  features$Sequences <- as.character(features$Sequences)
+  features$Accessions <- as.character(features$Accessions)
+  counts <- features %>% count(Accessions) %>% rename(Protein=Accessions,Count = n)
   intensities <- cbind.data.frame(exprs(data),Protein=Proteins)
-  #counts <- intensities %>% count(Protein) %>% rename(Count = n)
   summIntensities <- intensities %>%
     group_by(Protein) %>%
     summarize_all(funs(summarizationFunction))
   summIntensities$Protein <- as.character(summIntensities$Protein)
   summarizedProteinIntensities <- left_join(counts, summIntensities, by ="Protein")
   summarizedProteinIntensities <- right_join(annotation, summarizedProteinIntensities, by = "Protein")
-  MSnset_data <- createMSnset(summarizedProteinIntensities,metadata=pData(data),
-                              indExpData=c(6:ncol(summarizedProteinIntensities)),indFData=c(1:5))
-  return(MSnset_data)
+  obj <- readMSnSet2(summarizedProteinIntensities,ecol=c(6:ncol(summarizedProteinIntensities)))
+  if (identical(colnames(exprs(obj)), metadata$SampleName) == FALSE) 
+    stop("Problem consistency between column names \n
+         in expression data and SampleName in metadata")
+  pData(obj) <- pData(data)
+  featureNames(obj) <- fData(obj)$Protein
+  sampleNames(obj) <- pData(obj)$SampleName
+  return(obj)
 }
+
 
 ############### Normalization functions ################
 
@@ -108,7 +127,7 @@ normalizeScaling <- function(data, func, Protein = NULL)
 
 # Performs scaling normalization on the intensities within group (median or mean)
 
-groupScaling <- function(data,func,Grp="Label")
+groupScaling <- function(data,func,Grp="Group")
 {
   if(!is(data,"MSnSet"))
     stop('data has to be of class MSnSet..')
@@ -125,10 +144,10 @@ groupScaling <- function(data,func,Grp="Label")
       mutate_all(funs(log)) %>%
       as.numeric
     grpsFactors <- exp(scaledIntensities - mean(scaledIntensities))
-    names(grpsFactors) <- pData(allgrps[[i]])$Experiment
+    names(grpsFactors) <- pData(allgrps[[i]])$SampleName
     scalingFactors <- c(scalingFactors,grpsFactors)
   }
-  ind <- match(data$Experiment,names(scalingFactors))
+  ind <- match(data$SampleName,names(scalingFactors))
   scalingFactors <- scalingFactors[ind]
   normalizedIntensities <- t(t(intensities) / scalingFactors)
   exprs(data) <- normalizedIntensities
@@ -174,7 +193,7 @@ regressIntensity <- function(data,controlInd=NULL,ProteinId)
   residuals <- apply(combdata, 1, function (x) resid(lm(x[1:ncol(dep)]~x[(ncol(dep)+1):ncol(combdata)])))
   residuals <- t(residuals)
   exprs(data) <- residuals
-  pData(data)$Label <- factor(pData(data)$Label)
+  pData(data)$Group <- factor(pData(data)$Group)
   reg_dep <- exprs(data)
   Transformed_Correlation <- apply(reg_dep[-ind,],1,function(x) cor(x,dep[ind,]))
   hist(Transformed_Correlation,main = "Corr Regressed data")
@@ -185,31 +204,31 @@ regressIntensity <- function(data,controlInd=NULL,ProteinId)
 
 
 # Fits a linear model to the intensity data using limma.
-# The PhenoData table must contain Experiment and Label columns.
+# The PhenoData table must contain SampleName and Group columns.
 # The intensities table must contain column headings for each sample in PhenoData
 # Fits a linear model to the intensity data using limma.
-# The PhenoData table must contain Experiment and Label columns.
+# The PhenoData table must contain SampleName and Group columns.
 # The intensities table must contain column headings for each sample in PhenoData
 computeDiffStats <- function(data, batchEffect = NULL, applyLog2Transform = TRUE, contrasts, 
                              trend = TRUE, robust = TRUE)
 {
   cat("Fitting linear model\n")
-  samples <- as.character(pData(data)$Experiment)
+  samples <- as.character(pData(data)$SampleName)
   intensities <- as.data.frame(exprs(data))
   if (applyLog2Transform)
   {
     log2xplus1 <- function(x) { log2(x + 1) }
     intensities <- log2xplus1(intensities) 
   }
-  batchEffect <- unique(c("Label", batchEffect))
+  batchEffect <- unique(c("Group", batchEffect))
   model <- as.formula(paste(c("~ 0", batchEffect), collapse = " + "))
   design <- model.matrix(model, data = pData(data))
   colnames(design) <- colnames(design) %>%
-    sub(pattern = "^Label", replacement = "") %>%
+    sub(pattern = "^Group", replacement = "") %>%
     gsub(pattern = " ", replacement = "_")
-  if(length(which(is.na(pData(data)$Tech.Rep)==FALSE))>0)
+  if(length(which(is.na(pData(data)$TechRep)==FALSE))>0)
   {
-    dupcor <- duplicateCorrelation(intensities,design,block=pData(data)$Tech.Rep)
+    dupcor <- duplicateCorrelation(intensities,design,block=pData(data)$TechRep)
     fit <- lmFit(intensities, design = design, weights = NULL, correlation=dupcor$consensus)
   }
   else
@@ -264,7 +283,7 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL, ann, ap
     log2xplus1 <- function(x) { log2(x + 1) }
     intensities <- log2xplus1(intensities) 
   }
-  samples <- as.character(data$Experiment)
+  samples <- as.character(data$SampleName)
   intensities$Protein <- fData(data)$Protein
   intensities$Unique_Peptides <- fData(data)$Count
   results <- right_join(right_join(ann, intensities, by = "Protein"),results,by = "Protein")
