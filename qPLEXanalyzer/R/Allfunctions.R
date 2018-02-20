@@ -13,23 +13,27 @@ convertToMSnset <- function(data,metadata,indExpData,Sequences,Accessions,rmMiss
     stop('Sequences has to be of class numeric ..')
   if(!is.numeric(Accessions))
     stop('Accessions has to be of class numeric ..')
-  columns <- c("SampleName","Group","BioRep","TechRep")
+  columns <- c("SampleName","SampleGroup","BioRep","TechRep")
   if(length(which((columns %in% colnames(metadata))==FALSE)) > 0)
-    stop('metadata must contain "SampleName","Group", "BioRep" and "TechRep" columns ..')
+    stop('metadata must contain "SampleName","SampleGroup", "BioRep" and "TechRep" columns ..')
   if (!is.logical(rmMissing))
     stop("rmMissing has to be of class logical")
-  samples <- colnames(data[,indExpData])
   colnames(data)[Sequences] <- "Sequences"
   colnames(data)[Accessions] <- "Accessions"
   if(rmMissing)
-    data <- filter(data, complete.cases(select(data, one_of(samples))))
+    data <- data %<>% filter_at(vars(indExpData), all_vars(!is.na(.)))
   obj <- readMSnSet2(data,ecol=indExpData)
-  
-  if (identical(colnames(exprs(obj)), metadata$SampleName) == FALSE) 
+  rownames(metadata) <- as.character(metadata$SampleName)
+  check <- all(rownames(metadata) %in% sampleNames(obj))
+  if(check)
+  {
+    ind <- match(sampleNames(obj), rownames(metadata))
+    metadata <- metadata[ind,]
+  }
+  else
     stop("Problem consistency between column names \n            in expression data and SampleName in metadata")
   pData(obj) <- metadata
   featureNames(obj) <- paste0("peptide_",featureNames(obj))
-  sampleNames(obj) <- pData(obj)$SampleName
   return(obj)
 }  
 
@@ -71,9 +75,6 @@ summarizeIntensities <- function(data, summarizationFunction, annotation)
   summarizedProteinIntensities <- left_join(counts, summIntensities, by ="Protein")
   summarizedProteinIntensities <- right_join(annotation, summarizedProteinIntensities, by = "Protein")
   obj <- readMSnSet2(summarizedProteinIntensities,ecol=c(6:ncol(summarizedProteinIntensities)))
-  if (identical(colnames(exprs(obj)), metadata$SampleName) == FALSE) 
-    stop("Problem consistency between column names \n
-         in expression data and SampleName in metadata")
   pData(obj) <- pData(data)
   featureNames(obj) <- fData(obj)$Protein
   sampleNames(obj) <- pData(obj)$SampleName
@@ -127,7 +128,7 @@ normalizeScaling <- function(data, func, Protein = NULL)
 
 # Performs scaling normalization on the intensities within group (median or mean)
 
-groupScaling <- function(data,func,Grp="Group")
+groupScaling <- function(data,func,Grp="SampleGroup")
 {
   if(!is(data,"MSnSet"))
     stop('data has to be of class MSnSet..')
@@ -193,7 +194,7 @@ regressIntensity <- function(data,controlInd=NULL,ProteinId)
   residuals <- apply(combdata, 1, function (x) resid(lm(x[1:ncol(dep)]~x[(ncol(dep)+1):ncol(combdata)])))
   residuals <- t(residuals)
   exprs(data) <- residuals
-  pData(data)$Group <- factor(pData(data)$Group)
+  pData(data)$SampleGroup <- factor(pData(data)$SampleGroup)
   reg_dep <- exprs(data)
   Transformed_Correlation <- apply(reg_dep[-ind,],1,function(x) cor(x,dep[ind,]))
   hist(Transformed_Correlation,main = "Corr Regressed data")
@@ -204,10 +205,10 @@ regressIntensity <- function(data,controlInd=NULL,ProteinId)
 
 
 # Fits a linear model to the intensity data using limma.
-# The PhenoData table must contain SampleName and Group columns.
+# The PhenoData table must contain SampleName and SampleGroup columns.
 # The intensities table must contain column headings for each sample in PhenoData
 # Fits a linear model to the intensity data using limma.
-# The PhenoData table must contain SampleName and Group columns.
+# The PhenoData table must contain SampleName and SampleGroup columns.
 # The intensities table must contain column headings for each sample in PhenoData
 computeDiffStats <- function(data, batchEffect = NULL, applyLog2Transform = TRUE, contrasts, 
                              trend = TRUE, robust = TRUE)
@@ -220,11 +221,11 @@ computeDiffStats <- function(data, batchEffect = NULL, applyLog2Transform = TRUE
     log2xplus1 <- function(x) { log2(x + 1) }
     intensities <- log2xplus1(intensities) 
   }
-  batchEffect <- unique(c("Group", batchEffect))
+  batchEffect <- unique(c("SampleGroup", batchEffect))
   model <- as.formula(paste(c("~ 0", batchEffect), collapse = " + "))
   design <- model.matrix(model, data = pData(data))
   colnames(design) <- colnames(design) %>%
-    sub(pattern = "^Group", replacement = "") %>%
+    sub(pattern = "^SampleGroup", replacement = "") %>%
     gsub(pattern = " ", replacement = "_")
   if(length(which(is.na(pData(data)$TechRep)==FALSE))>0)
   {
