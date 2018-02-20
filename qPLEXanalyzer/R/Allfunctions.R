@@ -21,7 +21,7 @@ convertToMSnset <- function(data,metadata,indExpData,Sequences,Accessions,rmMiss
   colnames(data)[Sequences] <- "Sequences"
   colnames(data)[Accessions] <- "Accessions"
   if(rmMissing)
-    data <- data %<>% filter_at(vars(indExpData), all_vars(!is.na(.)))
+    data %<>% filter_at(vars(indExpData), all_vars(!is.na(.)))
   obj <- readMSnSet2(data,ecol=indExpData)
   rownames(metadata) <- as.character(metadata$SampleName)
   check <- all(rownames(metadata) %in% sampleNames(obj))
