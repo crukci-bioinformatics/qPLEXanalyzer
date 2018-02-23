@@ -290,9 +290,9 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL, applyLo
   results <- results %>%
     mutate_at(funs(round(., digits = 2)), .vars=c("logFC", "t", "B",samples)) %>%
     mutate_at(funs(signif(., digits = 2)), .vars=c("P.Value", "adj.P.Val"))
-  colnames(results)[which(colnames(results)=="AveExpr")] <- "AvgIntensity"
-  colnames(results)[which(colnames(results)=="logFC")] <- "log2FC"
-  colnames(results)[which(colnames(results)=="Count")] <- "Unique_Peptides"
+  colnames(results)[match(c("AveExpr","logFC","Count"),colnames(results))] <- 
+    c("AvgIntensity","log2FC","Unique_Peptides")
+  
   if(writeFile == TRUE)
     write.table(results, paste0(names(contrast),".txt"), quote = FALSE, sep = "\t", row.names = FALSE)
   return(results)
