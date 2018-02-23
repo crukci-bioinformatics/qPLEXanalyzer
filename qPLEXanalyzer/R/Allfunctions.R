@@ -253,7 +253,7 @@ computeDiffStats <- function(data, batchEffect = NULL, applyLog2Transform = TRUE
 }
 
 
-getContrastResults <- function(diffstats, contrast, controlGroup = NULL, ann, applyLog2Transform = TRUE, 
+getContrastResults <- function(diffstats, contrast, controlGroup = NULL, applyLog2Transform = FALSE, 
                                writeFile= FALSE)
 {
   cat("Obtaining results for contrast", contrast, "\n")
@@ -277,17 +277,14 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL, ann, ap
     results$controlLogFoldChange = apply(contrastIntensities - controlIntensity, 1, max)
   }
   
-  results$Protein <- fData(data)$Protein
   intensities <- as.data.frame(exprs(data))
   if (applyLog2Transform)
   {
     log2xplus1 <- function(x) { log2(x + 1) }
     intensities <- log2xplus1(intensities) 
   }
+  results <- cbind(fData(data),intensities,results)
   samples <- as.character(data$SampleName)
-  intensities$Protein <- fData(data)$Protein
-  intensities$Unique_Peptides <- fData(data)$Count
-  results <- right_join(right_join(ann, intensities, by = "Protein"),results,by = "Protein")
   results <- results %>%
     arrange(desc(B))
   results <- results %>%
@@ -295,6 +292,7 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL, ann, ap
     mutate_at(funs(signif(., digits = 2)), .vars=c("P.Value", "adj.P.Val"))
   colnames(results)[which(colnames(results)=="AveExpr")] <- "AvgIntensity"
   colnames(results)[which(colnames(results)=="logFC")] <- "log2FC"
+  colnames(results)[which(colnames(results)=="Count")] <- "Unique_Peptides"
   if(writeFile == TRUE)
     write.table(results, paste0(names(contrast),".txt"), quote = FALSE, sep = "\t", row.names = FALSE)
   return(results)
