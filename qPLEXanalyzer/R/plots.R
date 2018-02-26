@@ -327,7 +327,9 @@ coveragePlot <- function(MSnSetObj, ProteinID, fastaFile, myCol="brown"){
   if(!is(ProteinID,"character")){ stop('ProteinID has to be of class character..') }
   if(!is(fastaFile,"character")){ stop('fastaFile has to be of class character..') }
   if(!is(myCol,"character")){ stop('myCol has to be of class character..') }
-  if(!"Sequence"%in%fData(MSnSetObj)){ stop('MSnSetObj feature data must include a column of peptide sequences labelled "Sequence"..') }
+  if(!"Sequences"%in%colnames(fData(MSnSetObj))){ 
+    stop('MSnSetObj feature data must include a column of peptide sequences labelled "Sequences"..') 
+    }
   
   ## read protein sequence from fastafile
   Protein_seq <- readAAStringSet(fastaFile)
