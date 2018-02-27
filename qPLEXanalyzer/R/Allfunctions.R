@@ -10,7 +10,7 @@ convertToMSnset <- function(ExpObj,metadata,indExpData,Sequences,Accessions,rmMi
   if(!is.numeric(Sequences)){ stop('Sequences has to be of class numeric ..') }
   if(!is.numeric(Accessions)){ stop('Accessions has to be of class numeric ..') }
   columns <- c("SampleName","SampleGroup","BioRep","TechRep")
-  if(!all(columns%in%colnames(metadata))) stop('metadata must contain "', columns, '" columns ..')
+  if(!all(columns%in%colnames(metadata))) stop('metadata must contain"', columns, '" columns ..')
   if (!is.logical(rmMissing)){ stop("rmMissing has to be of class logical") }
   colnames(ExpObj)[Sequences] <- "Sequences"
   colnames(ExpObj)[Accessions] <- "Accessions"
@@ -181,14 +181,16 @@ regressIntensity <- function(MSnSetObj,controlInd=NULL,ProteinId){
 # Fits a linear model to the intensity data using limma.
 # The PhenoData table must contain SampleName and SampleGroup columns.
 # The intensities table must contain column headings for each sample in PhenoData
-computeDiffStats <- function(MSnSetObj, batchEffect = NULL, applyLog2Transform = TRUE, contrasts, 
+computeDiffStats <- function(MSnSetObj, batchEffect = NULL, transform = TRUE, contrasts, 
                              trend = TRUE, robust = TRUE){
   if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
-  if(!is.logical(trend)){ stop('MSnSetObj has to be of class MSnSet..') }
+  if(!is.logical(transform)){ stop('transform has to either TRUE or FALSE..') }
+  if(!is.logical(trend)){ stop('trend has to be of either TRUE or FALSE..') }
+  if(!is.logical(robust)){ stop('robust has to be of either TRUE or FALSE..') }
   if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
   message("Fitting linear model\n")
   intensities <- as.data.frame(exprs(MSnSetObj))
-  if (applyLog2Transform){
+  if (transform){
     intensities <- log2xplus1(intensities) 
   }
   batchEffect <- unique(c("SampleGroup", batchEffect))
@@ -220,8 +222,10 @@ computeDiffStats <- function(MSnSetObj, batchEffect = NULL, applyLog2Transform =
 }
 
 
-getContrastResults <- function(diffstats, contrast, controlGroup = NULL, ann, applyLog2Transform = TRUE, 
+getContrastResults <- function(diffstats, contrast, controlGroup = NULL, transform = TRUE, 
                                writeFile= FALSE){
+  if(!is.logical(transform)){ stop('transform has to either TRUE or FALSE..') }
+  if(!is.logical(writeFile)){ stop('writeFile has to either TRUE or FALSE..') }
   message("Obtaining results for contrast", contrast, "\n")
   
   contrast <- contrast %>%
@@ -242,22 +246,19 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL, ann, ap
     results$controlLogFoldChange = apply(contrastIntensities - controlIntensity, 1, max)
   }
   
-  results$Protein <- fData(MSnSetObj)$Protein
   intensities <- as.data.frame(exprs(MSnSetObj))
-  if (applyLog2Transform){
+  if (transform){
     intensities <- log2xplus1(intensities) 
   }
   SamplesCol <- as.character(MSnSetObj$SampleName)
-  intensities$Protein <- fData(MSnSetObj)$Protein
-  intensities$Unique_Peptides <- fData(MSnSetObj)$Count
-  results <- right_join(right_join(ann, intensities, by = "Protein"),results,by = "Protein")
+  results <- cbind(fData(MSnSetObj),intensities,results)
   results <- results %>%
     arrange(desc(B))
   results <- results %>%
     mutate_at(funs(round(., digits = 2)), .vars=c("logFC", "t", "B",SamplesCol)) %>%
     mutate_at(funs(signif(., digits = 2)), .vars=c("P.Value", "adj.P.Val"))
-  colnames(results)[which(colnames(results)=="AveExpr")] <- "AvgIntensity"
-  colnames(results)[which(colnames(results)=="logFC")] <- "log2FC"
+  colnames(results)[match(c("Count","AveExpr","logFC"),colnames(results))] <- c("Unique_peptides",
+                                                                                "AvgIntensity","log2FC")
   if(writeFile == TRUE)
     write.table(results, paste0(names(contrast),".txt"), quote = FALSE, sep = "\t", row.names = FALSE)
   return(results)
