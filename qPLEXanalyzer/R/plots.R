@@ -315,9 +315,9 @@ plotMeanVar <- function(MSnSetObj){
   ssDat <- smooth.spline(x=mvDat$Mean, y=mvDat$Variance, spar=1) %$% 
     data.frame(x=x, y=y)
   
-  ggplot(mean.var_res, aes(x=Mean, y=Variance)) + 
+  ggplot(mvDat, aes(x=Mean, y=Variance)) + 
     geom_point(size=0.5, alpha=0.6, colour="darkblue") + 
-    geom_line(data=ssdat, aes(x=x, y=y), colour="red", size=0.5) +
+    geom_line(data=ssDat, aes(x=x, y=y), colour="red", size=0.5) +
     theme_bw()
 }
 
