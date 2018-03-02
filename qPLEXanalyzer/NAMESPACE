@@ -1,18 +1,16 @@
+import(magrittr)
 import(tidyr)
 import(statmod)
 import(preprocessCore)
 import(limma)
-import(gplots)
 import(ggplot2)
 import(RColorBrewer)
-import(sparcl)
 import(MSnbase)
-importFrom(dplyr,group_by, summarize_all, funs,left_join, right_join,
-		mutate_all, filter, select, one_of, arrange, desc, 
-		mutate_at, count, rename, mutate)
+import(dplyr)
+importFrom(purrr, map_dfr)
 importFrom(GenomicRanges,GRanges,union)
 importFrom(BiocGenerics, start, end, width)
-importFrom(IRanges,IRanges)
+importFrom(IRanges, IRanges, reduce)
 importFrom(Biobase, fData, pData, exprs)
 importFrom(corrplot, corrplot)
 importFrom(Biostrings,readAAStringSet,startIndex,endIndex,vmatchPattern)
@@ -22,5 +20,8 @@ importFrom("stats", "as.formula", "complete.cases", "contrasts", "cor",
              "dist", "hclust", "lm", "model.matrix", "prcomp", "resid",
              "smooth.spline", "var")
 importFrom("utils", "head", "tail", "write.table")
+importFrom("tibble", "rownames_to_column")
+importFrom(grDevices, colorRampPalette)
+importFrom(ggdendro, dendro_data)
 
 exportPattern("^[^\\\\.]")
