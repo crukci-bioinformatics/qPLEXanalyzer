@@ -5,7 +5,7 @@
   PCA plots of the samples within MSnset
 }
 \usage{pcaPlot(MSnSetObj, omitIgG=FALSE, sampleColours=NULL, transFunc=log2xplus1, transform=TRUE, 
-                    colourBy="SampleGroup", title="", labelColumn=NULL, labelsize=4, pointsize=4, x.nudge=4, x.PC=1)}
+                    colourBy="SampleGroup", title="", labelColumn="BioRep", labelsize=4, pointsize=4, x.nudge=4, x.PC=1)}
 \arguments{
   \item{MSnSetObj}{MSnSet; An object of class MSnSet}
   \item{omitIgG}{Logical: Whether to remove IgG from the PCA plot}

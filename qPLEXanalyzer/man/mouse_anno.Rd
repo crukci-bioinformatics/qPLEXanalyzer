@@ -2,6 +2,9 @@
 \name{mouse_anno}
 \alias{mouse_anno}
 \title{mouse_anno dataset}
+\description{
+  Uniprot Mouse protein annotation table.
+}
 \format{An object of class \code{\link{data.frame}} consisting of
 uniprot mouse protein annotation.}
 \usage{

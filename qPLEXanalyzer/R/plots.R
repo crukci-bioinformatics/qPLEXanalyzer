@@ -129,7 +129,7 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL, transFunc=log2
                     colourBy="SampleGroup", title="", labelColumn="BioRep", labelsize=4, pointsize=4, x.nudge=4, x.PC=1){   
     
   if(!is(MSnSetObj,"MSnSet")){ stop('data has to be of class MSnSet..') }
-  if(!colourBy%in%colnames(pData)){ stop("colourBy must a column names in the pData of the MSnSetObj")}
+  if(!colourBy%in%colnames(pData(MSnSetObj))){ stop("colourBy must a column names in the pData of the MSnSetObj")}
   if(is.null(sampleColours)){ sampleColours <- assignColours(MSnSetObj, colourBy=colourBy) }
   
   # Remove IgG samples is requested
@@ -166,7 +166,7 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL, transFunc=log2
 # MA or volcano plot
 maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
                       selectedGenes=NULL, fdrCutOff=0.05,
-                      lfcCutOff=1, controlLfcCutOff=1, title="", plotType="MA"){
+                      lfcCutOff=1, controlLfcCutOff=1, plotType="MA"){
   # For plotting we will assign the proteins to one of 7 groups:
   # A - selected (user specified in `selectedGenes`) - highlighted blue
   # B - significant - pass cutoffs - highligted red
@@ -253,7 +253,7 @@ corrPlot <- function(MSnSetObj, addValues=TRUE, title=""){
 hierarchicalPlot <- function(MSnSetObj, sampleColours=NULL, colourBy="SampleGroup", horizontal=TRUE,
                              title=""){
   if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
-  if(!colourBy%in%colnames(pData)){ stop("colourBy must a column names in the pData of the MSnSetObj")}
+  if(!colourBy%in%colnames(pData(MSnSetObj))){ stop("colourBy must a column names in the pData of the MSnSetObj")}
   if(is.null(sampleColours)){ sampleColours <- assignColours(MSnSetObj, colourBy=colourBy) }
   
   dendro.dat <- t(log2xplus1(exprs(MSnSetObj))) %>% 
@@ -378,7 +378,7 @@ coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile, myCol="br
 # Intensity boxplots
 intensityBoxplot <- function(MSnSetObj, title="", sampleColours=NULL, colourBy="SampleGroup"){
   if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
-  if(!colourBy%in%colnames(pData)){ stop("colourBy must a column names in the pData of the MSnSetObj")}
+  if(!colourBy%in%colnames(pData(MSnSetObj))){ stop("colourBy must a column names in the pData of the MSnSetObj")}
   if(is.null(sampleColours)){ sampleColours <- assignColours(MSnSetObj, colourBy=colourBy) }
   
   exprs(MSnSetObj) %>% 
@@ -402,7 +402,7 @@ intensityBoxplot <- function(MSnSetObj, title="", sampleColours=NULL, colourBy="
 # Relative log intensity plot
 rliPlot <- function(MSnSetObj, title="", sampleColours=NULL, colourBy="SampleGroup", omitIgG=TRUE){
   if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
-  if(!colourBy%in%colnames(pData)){ stop("colourBy must a column names in the pData of the MSnSetObj")}
+  if(!colourBy%in%colnames(pData(MSnSetObj))){ stop("colourBy must a column names in the pData of the MSnSetObj")}
   if(is.null(sampleColours)){ sampleColours <- assignColours(MSnSetObj, colourBy=colourBy) }
   
   # Remove IgG samples is requested
