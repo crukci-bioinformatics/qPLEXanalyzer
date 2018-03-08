@@ -8,4 +8,6 @@ This repository contains an R package [**qPLEXanalyzer**]  used for quantitative
 
 **qPLEXdata**: A data package outlining the steps for the statistical analysis of the datasets generated from the application of the qPLEX-RIME approach and total proteome analysis in breast cancer cells or in human Patient Derived Xenograft (PDX) tumour material.
 
-Installation: For usage, please download both the file in your desktop and install it into R session. Please provide the path to package to the install.packages() command to install the package in your R session. After installation and loading of the package see ?qPLEXanalyzer at the R prompt for a brief overview.
+## Installation
+
+To install *[qPLEXanalyzer], please download both the file in your desktop and install it into R session. Please provide the path to package to the install.packages() command to install the package in your R session. After installation and loading of the package see ?qPLEXanalyzer at the R prompt for a brief overview.
