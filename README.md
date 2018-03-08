@@ -10,4 +10,4 @@ This repository contains an R package **qPLEXanalyzer**  used for quantitative p
 
 ## Installation
 
-To install **qPLEXanalyzer**, please download both the file in your desktop and install it into R session. Please provide the path to package to the install.packages() command to install the package in your R session. After installation and loading of the package see ?qPLEXanalyzer at the R prompt for a brief overview.
+To install **qPLEXanalyzer**, please download both the files (*.tar.gz) in your desktop and install it into R session. Please provide the path to package to the install.packages() command to install the package in your R session. After installation and loading of the package see ?qPLEXanalyzer at the R prompt for a brief overview.
