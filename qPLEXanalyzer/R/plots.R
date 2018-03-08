@@ -163,7 +163,7 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL, transFunc=log2
 
 
 # MA or volcano plot
-maVolPlot <- function(diffstats, contrast, controlGroup = NULL,
+maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
                       selectedGenes=NULL, fdrCutOff=0.05,
                       lfcCutOff=1, controlLfcCutOff=1, plotType="MA"){
   # For plotting we will assign the proteins to one of 7 groups:
@@ -225,6 +225,7 @@ maVolPlot <- function(diffstats, contrast, controlGroup = NULL,
 # Correlation plot
 corrPlot <- function(MSnSetObj, addValues=TRUE, title=""){
   if(!is(MSnSetObj,"MSnSet")){ stop('data has to be of class MSnSet..') }
+  if(!is.logical(addValues)){ stop('addValues has to be either TRUE or FALSE..') }
   
   col2Cols <- c("#FFFFFF", "#B90505")
   cor(exprs(MSnSetObj)) %>% 

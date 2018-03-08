@@ -4,9 +4,9 @@
 \description{
   Performs linear regression on protein intensities based on selected protein (qPLEX-RIME bait)
 }
-\usage{regressIntensity(data,controlInd=NULL,ProteinId)}
+\usage{regressIntensity(MSnSetObj,controlInd=NULL,ProteinId)}
 \arguments{
-  \item{data}{MSnSet; An object of class MSnSet}
+  \item{MSnSetObj}{MSnSet; An object of class MSnSet}
   \item{controlInd}{numeric; Index of IgG within MSnSet}
   \item{ProteinId}{character; Uniprot protein ID}
 }
@@ -17,9 +17,9 @@ This function performs regression based analysis upon protein intensities based 
 \examples{
 data(human_anno)
 data(exp3_OHT_ESR1)
-MSnset_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,metadata=exp3_OHT_ESR1$metadata_qPLEX1,
-indExpData=c(7:16),indFData=c(1:6))
-MSnset_P <- summarizeIntensities(MSnset_data, sum, human_anno)
-IgG_ind <- which(pData(MSnset_P)$Label == "IgG")
+MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+indExpData=c(7:16),Sequences=2,Accessions=6)
+MSnset_P <- summarizeIntensities(MSnSet_data, sum, human_anno)
+IgG_ind <- which(pData(MSnset_P)$SampleGroup == "IgG")
 MSnset_reg <- regressIntensity(MSnset_P,controlInd=IgG_ind,ProteinId="P03372")
 }

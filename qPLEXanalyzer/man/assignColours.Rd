@@ -4,17 +4,16 @@
 \description{
   Assigns colours to samples in groups for plotting
 }
-\usage{assignColours(data, groupColourSchemes)}
+\usage{assignColours(MSnSetObj, colourBy="SampleGroup")}
 \arguments{
-  \item{data}{MSnSet; An object of class MSnSet}
-  \item{groupColourSchemes}{character: character vector of colors for samples}
+  \item{MSnSetObj}{MSnSet; An object of class MSnSet}
+  \item{colourBy}{Character: column name to use for coloring samples from pData(MSnSetObj)}
 }
 \value{A character vector of colors for samples.}
 \examples{
 data(human_anno)
 data(exp3_OHT_ESR1)
-MSnset_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,metadata=exp3_OHT_ESR1$metadata_qPLEX1,
-indExpData=c(7:16),indFData=c(1:6))
-sampleColours <- assignColours(MSnset_data, groupColourSchemes = c("Blues","Greens","Purples",
-"Reds","YlOrBr"))
+MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+indExpData=c(7:16),Sequences=2,Accessions=6)
+sampleColours <- assignColours(MSnSet_data)
 }

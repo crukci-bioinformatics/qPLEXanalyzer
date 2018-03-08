@@ -12,10 +12,10 @@ importFrom(GenomicRanges,GRanges,union)
 importFrom(BiocGenerics, start, end, width)
 importFrom(IRanges, IRanges, reduce)
 importFrom(Biobase, fData, pData, exprs)
-importFrom(corrplot, corrplot)
 importFrom(Biostrings,readAAStringSet,startIndex,endIndex,vmatchPattern)
 importFrom("graphics", "axis", "hist", "lines", "par", "rect",
              "smoothScatter", "text")
+importFrom("stats", "as.dendrogram", "median", "na.omit", "setNames")
 importFrom("stats", "as.formula", "complete.cases", "contrasts", "cor",
              "dist", "hclust", "lm", "model.matrix", "prcomp", "resid",
              "smooth.spline", "var")
@@ -24,4 +24,12 @@ importFrom("tibble", "rownames_to_column")
 importFrom(grDevices, colorRampPalette)
 importFrom(ggdendro, dendro_data)
 
-exportPattern("^[^\\\\.]")
+export(
+  "assignColours","computeDiffStats","convertToMSnset"     
+  ,"corrPlot","coveragePlot","getContrastResults"  
+  ,"groupScaling","hierarchicalPlot","intensityBoxplot"    
+  ,"intensityPlot","log2xplus1","maVolPlot"           
+  ,"normalizeQuantiles","normalizeScaling","pcaPlot"             
+  ,"peptideIntensityPlot","plotMeanVar","regressIntensity"    
+  ,"rliPlot","rowScaling","summarizeIntensities"
+)

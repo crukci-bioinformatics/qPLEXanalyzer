@@ -1,16 +1,16 @@
 \name{coveragePlot}
 \alias{coveragePlot}
-\title{Plot protein sequence coverage}
+\title{Plot peptide sequence coverage}
 \description{
-  Computes and display protein sequence coverage in proteomics experiment
+  Computes and display peptide sequence coverage in proteomics experiment
 }
-\usage{coveragePlot(data, ProteinID, name,fastaFile, col="brown")}
+\usage{coveragePlot(MSnSetObj, ProteinID, ProteinName,fastaFile, myCol="brown")}
 \arguments{
-  \item{data}{MSnSet: An object of class MSnSet}
+  \item{MSnSetObj}{MSnSet: An object of class MSnSet}
   \item{ProteinID}{character: Uniprot ID of the protein}
-  \item{name}{character: Name of the protein}
+  \item{ProteinName}{character: Name of the protein}
   \item{fastaFile}{character: fasta file of protein sequence}
-  \item{col}{character: Color for plotting}
+  \item{myCol}{character: Color for plotting}
 }
 \details{
   In the qPLEX-RIME experiment it is imperative for bait protein to have good sequence coverage. 
@@ -21,8 +21,8 @@
 \examples{
 data(human_anno)
 data(exp3_OHT_ESR1)
-MSnset_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, metadata=exp3_OHT_ESR1$metadata_qPLEX1,
-indExpData=c(7:16),indFData=c(1:6))
+MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+indExpData=c(7:16),Sequences=2,Accessions=6)
 mySequenceFile <- system.file('extdata', "P03372.fasta", package="qPLEXanalyzer")
-coveragePlot(MSnset_data, ProteinID="P03372", name="ERa", fastaFile=mySequenceFile)
+coveragePlot(MSnSet_data, ProteinID="P03372", ProteinName="ERa", fastaFile=mySequenceFile)
 }
