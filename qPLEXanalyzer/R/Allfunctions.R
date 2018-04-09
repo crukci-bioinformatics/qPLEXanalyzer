@@ -62,7 +62,8 @@ summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation){
   summIntensities$Protein <- as.character(summIntensities$Protein)
   summarizedProteinIntensities <- left_join(counts, summIntensities, by ="Protein")
   summarizedProteinIntensities <- right_join(annotation, summarizedProteinIntensities, by = "Protein")
-  obj <- readMSnSet2(summarizedProteinIntensities,ecol=c(6:ncol(summarizedProteinIntensities)))
+  expInd <- ncol(annotation)+2
+  obj <- readMSnSet2(summarizedProteinIntensities,ecol=c(expInd:ncol(summarizedProteinIntensities)))
   pData(obj) <- pData(MSnSetObj)
   featureNames(obj) <- fData(obj)$Protein
   sampleNames(obj) <- pData(obj)$SampleName
