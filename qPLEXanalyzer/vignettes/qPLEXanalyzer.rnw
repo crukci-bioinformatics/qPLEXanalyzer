@@ -23,6 +23,8 @@
 
 
 \title{qPLEXanalyzer}
+\author{Matthew Eldridge, Kamal Kishore, Ashley Sawle}
+
 \date{}
 \begin{document}
 
@@ -249,6 +251,12 @@ maVolPlot(diffstats, contrast = contrasts, plotType="MA", title= contrasts)
 maVolPlot(diffstats, contrast = contrasts, plotType="Volcano", title= contrasts)
 @
 \end{center}
+
+\newpage
+\section{Session Information}
+<<info,echo=TRUE>>=
+sessionInfo()
+@
 
 \end{document}
 

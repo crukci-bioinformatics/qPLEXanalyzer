@@ -175,7 +175,7 @@ maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
   if(!plotType%in%c("MA", "Volcano")){ stop("plotType should be 'MA' or 'Volcano'..") }
   
   testSignficant <- function(dat){
-    '%in%'(dat$adj.P.Val<=fdrCutOff, T) & abs(dat$log2FC)>=lfcCutOff &
+    '%in%'(dat$adj.P.Val<=fdrCutOff, TRUE) & abs(dat$log2FC)>=lfcCutOff &
       abs(dat$controlLogFoldChange)>=controlLfcCutOff
   }
   
@@ -234,7 +234,7 @@ corrPlot <- function(MSnSetObj, addValues=TRUE, title=""){
     rownames_to_column("X") %>% 
     gather("Y", "Cor", -1) %>% 
     mutate(addValues=addValues) %>% 
-    mutate(CorTxt=ifelse(addValues==T, round(Cor, 3), "")) %>%
+    mutate(CorTxt=ifelse(addValues==TRUE, round(Cor, 3), "")) %>%
     ggplot(aes(x=X, y=Y, fill=Cor)) +
     geom_tile(col="grey") +
     geom_text(aes(label=CorTxt)) +
@@ -274,7 +274,7 @@ hierarchicalPlot <- function(MSnSetObj, sampleColours=NULL, colourBy="SampleGrou
     geom_text(data = labelDat, 
                aes_string(x = "x", y = "y", label = "SampleName", colour=colourBy), 
                hjust=hj, nudge_y=ny, angle=ang) +
-    guides(colour=F) +
+    guides(colour=FALSE) +
     scale_fill_manual(values = sampleColours, breaks=names(sampleColours)) +
     labs(x=NULL, y="Distance", title=title)
   if(horizontal){
@@ -395,7 +395,7 @@ intensityBoxplot <- function(MSnSetObj, title="", sampleColours=NULL, colourBy="
       theme_bw() +
       theme(axis.text.x = element_text(angle = 90, hjust = 1),
             plot.title=element_text(hjust=0.5)) +
-      guides(fill=F) %>% 
+      guides(fill=FALSE) %>% 
     return()
 }
 
@@ -426,6 +426,6 @@ rliPlot <- function(MSnSetObj, title="", sampleColours=NULL, colourBy="SampleGro
       theme_bw() +
       theme(axis.text.x = element_text(angle = 90, hjust = 1),
             plot.title=element_text(hjust=0.5))  +
-      guides(fill=F) %>% 
+      guides(fill=FALSE) %>% 
     return()
 }

@@ -1,17 +1,18 @@
-import(magrittr)
+importFrom(magrittr,"%>%", "use_series", "%$%", "%<>%")
 import(tidyr)
 import(statmod)
 import(preprocessCore)
 import(limma)
 import(ggplot2)
 import(RColorBrewer)
-import(MSnbase)
-import(dplyr)
+importFrom(MSnbase,readMSnSet2,"sampleNames<-")
+importFrom(dplyr,filter_at, mutate, mutate_all, mutate_at, one_of, left_join,right_join,desc,distinct,rename,count,n)
+importFrom(dplyr,summarize_all, select, vars, ungroup,filter,all_vars,arrange,bind_rows,everything,funs,group_by)
 importFrom(purrr, map_dfr)
 importFrom(GenomicRanges,GRanges,union)
 importFrom(BiocGenerics, start, end, width)
 importFrom(IRanges, IRanges, reduce)
-importFrom(Biobase, fData, pData, exprs)
+importFrom(Biobase, fData, pData, exprs, featureNames,sampleNames,"exprs<-","pData<-","featureNames<-")
 importFrom(Biostrings,readAAStringSet,startIndex,endIndex,vmatchPattern)
 importFrom("graphics", "axis", "hist", "lines", "par", "rect",
              "smoothScatter", "text")
@@ -22,14 +23,13 @@ importFrom("stats", "as.formula", "complete.cases", "contrasts", "cor",
 importFrom("utils", "head", "tail", "write.table")
 importFrom("tibble", "rownames_to_column")
 importFrom(grDevices, colorRampPalette)
-importFrom(ggdendro, dendro_data)
+importFrom(ggdendro, dendro_data, label)
 
 export(
   "assignColours","computeDiffStats","convertToMSnset"     
   ,"corrPlot","coveragePlot","getContrastResults"  
   ,"groupScaling","hierarchicalPlot","intensityBoxplot"    
-  ,"intensityPlot","log2xplus1","maVolPlot"           
-  ,"normalizeQuantiles","normalizeScaling","pcaPlot"             
-  ,"peptideIntensityPlot","plotMeanVar","regressIntensity"    
+  ,"intensityPlot","maVolPlot","normalizeQuantiles","normalizeScaling",
+  "pcaPlot","peptideIntensityPlot","plotMeanVar","regressIntensity"    
   ,"rliPlot","rowScaling","summarizeIntensities"
 )
