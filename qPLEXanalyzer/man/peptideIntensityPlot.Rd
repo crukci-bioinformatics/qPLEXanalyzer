@@ -15,6 +15,9 @@
   \item{selectedSequence}{Character: sequence present in the "Sequences" column in fData(MSnSetObj)}
   \item{selectedModifications}{Character: modification present in the "Modifications" column in fData(MSnSetObj)}
 }
+\value{
+An intensity plot for selected protein and associated peptides.
+}
 \examples{
 data(human_anno)
 data(exp3_OHT_ESR1)

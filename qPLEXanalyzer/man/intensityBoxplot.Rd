@@ -10,6 +10,9 @@
    \item{sampleColours}{Character: A vector of colors for samples}
    \item{colourBy}{Character: column name to use for coloring samples from pData(MSnSetObj)}
 }
+\value{
+An intensity distribution box-plot for quantitative proteomics data.
+}
 \examples{
 data(human_anno)
 data(exp3_OHT_ESR1)

@@ -18,6 +18,9 @@
    \item{controlLfcCutOff}{numeric: plot genes above controlLogFoldChange cutoff}
    \item{plotType}{Character: "MA" or "Volcano"}
 }
+\value{
+A "MA" or "Volcano" plot to visualize differential statistics results.
+}
 \examples{
 data(human_anno)
 data(human_anno)

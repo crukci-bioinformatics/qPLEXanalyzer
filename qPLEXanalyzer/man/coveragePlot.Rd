@@ -18,6 +18,9 @@
   experiment. It requires the fasta sequence file of bait protein as input to generate
   the plot.
 }
+\value{
+A protein coverage plot of selected protein for quantitative proteomics data.
+}
 \examples{
 data(human_anno)
 data(exp3_OHT_ESR1)

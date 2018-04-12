@@ -13,6 +13,9 @@
    \item{horizontal}{Logical: Define orientation of the dendrogram"}
    \item{title}{Character: The main title for the dendrogram}
 }
+\value{
+A hierarchical clustering plot for quantitative proteomics data.
+}
 \examples{
 data(human_anno)
 data(exp3_OHT_ESR1)

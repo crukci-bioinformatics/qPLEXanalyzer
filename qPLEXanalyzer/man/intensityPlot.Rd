@@ -15,6 +15,9 @@
    \item{xlab}{Character: Text for x-axis}
    \item{trFunc}{func: internal helper function for log transformation}
 }
+\value{
+An intensity distribution plot for quantitative proteomics data.
+}
 \examples{
 data(human_anno)
 data(exp3_OHT_ESR1)
