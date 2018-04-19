@@ -6,11 +6,11 @@
 }
 \usage{rliPlot(MSnSetObj, title="", sampleColours=NULL, colourBy="SampleGroup", omitIgG=TRUE)}
 \arguments{
-  \item{MSnSetObj}{MSnSet; An object of class MSnSet}
-  \item{title}{Character: title for the plot}
-  \item{sampleColours}{Character: A named vector of colours for samples}
-  \item{colourBy}{Character: column name to use for colouring samples from pData(MSnSetObj)}
-  \item{omitIgG}{Logical: Whether to remove IgG from the RLI plot}
+  \item{MSnSetObj}{MSnSet; an object of class MSnSet}
+  \item{title}{character: title for the plot}
+  \item{sampleColours}{character: a named vector of colours for samples}
+  \item{colourBy}{character: column name to use for colouring samples from pData(MSnSetObj)}
+  \item{omitIgG}{logical: whether to remove IgG from the RLI plot}
 }
 \value{An instance of class "MSnSet".}
 \details{
@@ -30,5 +30,10 @@ data(human_anno)
 data(exp3_OHT_ESR1)
 MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, metadata=exp3_OHT_ESR1$metadata_qPLEX1,
 indExpData=c(7:16), Sequences=2, Accessions=6)
-print(rliPlot(MSnSet_data, title = "qPLEX_RIME_ER"))
+rliPlot(MSnSet_data, title = "qPLEX_RIME_ER")
+
+# custom colours
+customCols <- rainbow(length(unique(pData(MSnSet_data)$SampleGroup)))
+names(customCols) <- unique(pData(MSnSet_data)$SampleGroup)
+rliPlot(MSnSet_data, title = "qPLEX_RIME_ER", sampleColours = customCols)
 }
