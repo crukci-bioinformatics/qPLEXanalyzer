@@ -6,9 +6,9 @@
 }
 \usage{groupScaling(MSnSetObj, func, Grp="SampleGroup")}
 \arguments{
-  \item{MSnSetObj}{MSnSet; An object of class MSnSet}
+  \item{MSnSetObj}{MSnSet; an object of class MSnSet}
   \item{func}{function; median or mean}
-  \item{Grp}{character; the feature on which groups would be based; example "SampleGroup"}
+  \item{Grp}{character; the feature on which groups would be based; default="SampleGroup"}
 }
 \details{
   In this normalization method the central tendencies (mean or median) of the samples within groups 
