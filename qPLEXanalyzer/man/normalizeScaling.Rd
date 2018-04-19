@@ -6,9 +6,9 @@
 }
 \usage{normalizeScaling(MSnSetObj,func,Protein = NULL)}
 \arguments{
-  \item{MSnSetObj}{MSnSet; An object of class MSnSet}
+  \item{MSnSetObj}{MSnSet; an object of class MSnSet}
   \item{func}{function; median or mean}
-  \item{Protein}{character; Protein Id}
+  \item{Protein}{character; protein Id}
 }
 \details{
   In this normalization method the central tendencies (mean or median) of the samples are aligned. 

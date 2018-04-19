@@ -6,18 +6,18 @@
 }
 \usage{convertToMSnset(ExpObj,metadata,indExpData,Sequences,Accessions,rmMissing=TRUE)}
 \arguments{
-  \item{ExpObj}{A data frame consisting of quantitative peptide intensities}
-  \item{metadata}{A dataframe describing the samples information (in lines)}
-  \item{indExpData}{A numeric vector indicating the column indexes of intensities in ExpObj}
-  \item{Sequences}{A numeric value indicating the index of column consisting of peptide sequence in ExpObj}
-  \item{Accessions}{A numeric value indicating the index of column consisting of protein accession in ExpObj}
+  \item{ExpObj}{data.frame; a data.frame consisting of quantitative peptide intensities and peptide annotation}
+  \item{metadata}{data.frame; a data.frame describing the samples}
+  \item{indExpData}{numeric; a numeric vector indicating the column indexes of intensities in ExpObj}
+  \item{Sequences}{numeric; a numeric value indicating the index of column consisting of peptide sequence in ExpObj}
+  \item{Accessions}{numeric; a numeric value indicating the index of column consisting of protein accession in ExpObj}
   \item{rmMissing}{logical; TRUE or FALSE to indicate whether to remove missing data or not}
 }
 \details{
 This function builds an object of class MSnSet from a dataframe consisting of 
 quantitative proteomics intensities data and a meta-data describing the samples 
 information. This function creates an MSnSet object from the intensities and metadata file. 
-The metadata must contain "SampleName","SampleGroup", "BioRep" and "TechRep" columns.
+The metadata must contain "SampleName", "SampleGroup", "BioRep" and "TechRep" columns.
 }
 \value{An instance of class "MSnSet".}
 \examples{

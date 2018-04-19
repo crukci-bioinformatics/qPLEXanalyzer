@@ -6,13 +6,13 @@
 }
 \usage{getContrastResults(diffstats, contrast, controlGroup = NULL, transform = TRUE, writeFile= FALSE)}
 \arguments{
-  \item{diffstats}{list; Output of computeDiffStats function}
-  \item{contrast}{character; Contrast of interest to see differential statistics results}
+  \item{diffstats}{list; output of computeDiffStats function}
+  \item{contrast}{character; contrast of interest for which to retrieve differential statistics results}
   \item{controlGroup}{character; control group such as IgG}
-  \item{transform}{Logical; apply log2 transformation to the raw intensities}                      
+  \item{transform}{logical; apply log2 transformation to the raw intensities}                      
   \item{writeFile}{logical; whether to write the results into a text file}
 }
-\value{A dataframe object and text file containing the result of the differential statistics.}
+\value{A \code{\link{data.frame}} object and text file containing the result of the differential statistics.}
 \examples{
 data(human_anno)
 data(exp3_OHT_ESR1)

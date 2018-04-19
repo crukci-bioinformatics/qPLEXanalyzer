@@ -2,14 +2,14 @@
 \alias{summarizeIntensities}
 \title{Summarizes peptides intensities to proteins}
 \description{
-  Summarizes multiple peptides measurements to proteins.
+  Summarizes multiple peptides intensities measurements to protein level.
 }
 \usage{summarizeIntensities(MSnSetObj, summarizationFunction, annotation)}
 \arguments{
-  \item{MSnSetObj}{MSnSet; An object of class MSnSet}
-  \item{summarizationFunction}{function; Method used to aggregate the peptides 
+  \item{MSnSetObj}{MSnSet; an object of class MSnSet}
+  \item{summarizationFunction}{function; method used to aggregate the peptides 
   into proteins. Sum, mean or median}
-  \item{annotation}{data frame; A dataframe of protein annotation of four columns: 
+  \item{annotation}{data.frame; a data.frame of protein annotation of four columns: 
                         "Protein", "Gene", "Description" and "GeneSymbol"}
 }
 \value{An instance of class "MSnSet".}

@@ -2,15 +2,15 @@
 \alias{coveragePlot}
 \title{Plot peptide sequence coverage}
 \description{
-  Computes and display peptide sequence coverage in proteomics experiment
+  Computes and displays peptide sequence coverage in proteomics experiment
 }
-\usage{coveragePlot(MSnSetObj, ProteinID, ProteinName,fastaFile, myCol="brown")}
+\usage{coveragePlot(MSnSetObj, ProteinID, ProteinName, fastaFile, myCol="brown")}
 \arguments{
-  \item{MSnSetObj}{MSnSet: An object of class MSnSet}
+  \item{MSnSetObj}{MSnSet: an object of class MSnSet}
   \item{ProteinID}{character: Uniprot ID of the protein}
-  \item{ProteinName}{character: Name of the protein}
+  \item{ProteinName}{character: name of the protein}
   \item{fastaFile}{character: fasta file of protein sequence}
-  \item{myCol}{character: Color for plotting}
+  \item{myCol}{character: colour for plotting}
 }
 \details{
   In the qPLEX-RIME experiment it is imperative for bait protein to have good sequence coverage. 

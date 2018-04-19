@@ -6,12 +6,12 @@
 }
 \usage{regressIntensity(MSnSetObj,controlInd=NULL,ProteinId)}
 \arguments{
-  \item{MSnSetObj}{MSnSet; An object of class MSnSet}
-  \item{controlInd}{numeric; Index of IgG within MSnSet}
+  \item{MSnSetObj}{MSnSet; an object of class MSnSet}
+  \item{controlInd}{numeric; index of IgG within MSnSet}
   \item{ProteinId}{character; Uniprot protein ID}
 }
 \details{
-This function performs regression based analysis upon protein intensities based on selected protein. In qPLEX RIME this method could be used to regress out affect of target protein on other interactors. This function corrects this dependency of many proteins on the target protein levels by linear regression. It sets target protein levels as the independent variable (x) and all other proteins as dependent variable (y). The resulting residuals of the linear regression y=ax+b are the protein levels corrected for target protein dependency.
+This function performs regression based analysis upon protein intensities based on a selected protein. In qPLEX RIME this method could be used to regress out the effect of target protein on other interactors. This function corrects this dependency of many proteins on the target protein levels by linear regression. It sets the target protein levels as the independent variable (x) and each of the other proteins as the dependent variable (y). The resulting residuals of the linear regressions y=ax+b are the protein levels corrected for target protein dependency.
 }
 \value{An instance of class "MSnSet". This consists of corrected protein levels. In addtion the function also plots histogram of correlation of target protein with all other proteins before and after this correction.}
 \examples{

@@ -6,7 +6,7 @@
 }
 \usage{normalizeQuantiles(MSnSetObj)}
 \arguments{
-  \item{MSnSetObj}{MSnSet; An object of class MSnSet}
+  \item{MSnSetObj}{MSnSet; an object of class MSnSet}
 }
 \details{
   The peptide intensities are roughly replaced by the order statics on their abundance. 

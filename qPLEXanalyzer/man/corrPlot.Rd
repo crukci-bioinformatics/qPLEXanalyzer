@@ -4,13 +4,13 @@
 \description{
   Computes and display correlation plot for samples within MSnSet
 }
-\usage{corrPlot(MSnSetObj,addValues=TRUE,title="")}
+\usage{corrPlot(MSnSetObj, addValues=TRUE, title="")}
 \arguments{
-   \item{MSnSetObj}{MSnSet; An object of class MSnSet}
-   \item{addValues}{Logical: Adds correlation values to the plot"}
-   \item{title}{Character; title of the plot}  
+   \item{MSnSetObj}{MSnSet; an object of class MSnSet}
+   \item{addValues}{logical: adds correlation values to the plot}
+   \item{title}{character; title of the plot}  
 }
-\value{(Invisibly) returns a reordered correlation matrix.}
+\value{(Invisibly) returns a reordered correlation matrix plot.}
 \examples{
 data(human_anno)
 data(exp3_OHT_ESR1)

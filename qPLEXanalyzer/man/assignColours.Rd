@@ -6,8 +6,8 @@
 }
 \usage{assignColours(MSnSetObj, colourBy="SampleGroup")}
 \arguments{
-  \item{MSnSetObj}{MSnSet; An object of class MSnSet}
-  \item{colourBy}{Character: column name to use for coloring samples from pData(MSnSetObj)}
+  \item{MSnSetObj}{MSnSet; an object of class MSnSet}
+  \item{colourBy}{character: column name from pData(MSnSetObj) to use for coloring samples}
 }
 \value{A character vector of colors for samples.}
 \examples{

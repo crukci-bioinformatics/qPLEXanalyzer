@@ -2,16 +2,16 @@
 \alias{hierarchicalPlot}
 \title{Hierarchical plot}
 \description{
-  Computes and display hierarchical clustering plot for samples within MSnSet
+  Computes and display hierarchical clustering plot for samples in MSnSet
 }
-\usage{hierarchicalPlot(MSnSetObj,sampleColours=NULL,colourBy="SampleGroup", horizontal=TRUE,
+\usage{hierarchicalPlot(MSnSetObj, sampleColours=NULL, colourBy="SampleGroup", horizontal=TRUE,
                              title="")}
 \arguments{
-   \item{MSnSetObj}{MSnSet; An object of class MSnSet}
-   \item{sampleColours}{Character: A vector of colors for samples}
-   \item{colourBy}{Character: column name to use for coloring samples from pData(MSnSetObj)}
-   \item{horizontal}{Logical: Define orientation of the dendrogram"}
-   \item{title}{Character: The main title for the dendrogram}
+   \item{MSnSetObj}{MSnSet; an object of class MSnSet}
+   \item{sampleColours}{character: a vector of colors for samples}
+   \item{colourBy}{character: column name from pData(MSnSetObj) to use for coloring samples}
+   \item{horizontal}{logical: define orientation of the dendrogram}
+   \item{title}{character: the main title for the dendrogram}
 }
 \value{
 A hierarchical clustering plot for quantitative proteomics data.

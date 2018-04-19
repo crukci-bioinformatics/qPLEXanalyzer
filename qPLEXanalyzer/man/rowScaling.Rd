@@ -4,9 +4,9 @@
 \description{
   Divide each peptide/protein by the row mean/median and transform to log2
 }
-\usage{rowScaling(MSnSetObj,func)}
+\usage{rowScaling(MSnSetObj, func)}
 \arguments{
-  \item{MSnSetObj}{MSnSet; An object of class MSnSet}
+  \item{MSnSetObj}{MSnSet; an object of class MSnSet}
   \item{func}{function; median or mean}
 }
 \value{An instance of class "MSnSet".}

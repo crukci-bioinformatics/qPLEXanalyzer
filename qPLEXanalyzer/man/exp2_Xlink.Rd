@@ -13,7 +13,7 @@ An object of class \code{\link{list}} related to peptides
 quantification.
 }
 \description{
-An ER qPLEX-RIME experiment was performed to compare two different ways of cell crosslinking. 
+An ER qPLEX-RIME experiment was performed to compare two different methods of crosslinking. 
 MCF7 cells were double crosslinked with DSG/formaldehyde (double) or with formaldehyde alone 
 (single). Four biological replicates were obtained for each condition along with two IgG pooled 
 samples from each replicate.

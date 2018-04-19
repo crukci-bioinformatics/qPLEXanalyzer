@@ -16,7 +16,7 @@
   
   The package offers the following functionalities
   
-  Data processing, Normalization & analysis:
+  Data processing, normalization & analysis:
   \itemize{
     \item convertToMSnset: Converts quantitative data to a MSnSet
     \item summarizeIntensities: Summarizes multiple peptide measurements for a protein
@@ -40,7 +40,7 @@
     \item corrPlot: Correlation plot of all the samples
     \item rliPlot: Relative intensity plot of all the samples
     \item hierarchicalPlot: Hierarchical clustering plot of all the samples
-    \item plotMeanVar: Computes and plots mean-variance for samples within MSnSet
+    \item plotMeanVar: Computes and plots mean-variance for samples in MSnSet
     \item coveragePlot: Computes and display protein sequence coverage of selected protein in proteomics experiment
   }
 }

@@ -2,12 +2,12 @@
 \alias{plotMeanVar}
 \title{Mean variance plot}
 \description{
-  Computes and plots mean-variance for samples within MSnset
+  Computes and plots mean-variance for samples in MSnset
 }
-\usage{plotMeanVar(MSnSetObj,title="")}
+\usage{plotMeanVar(MSnSetObj, title="")}
 \arguments{
-   \item{MSnSetObj}{MSnSet; An object of class MSnSet}
-   \item{title}{Character: title for the plot}
+   \item{MSnSetObj}{MSnSet; an object of class MSnSet}
+   \item{title}{character: title for the plot}
 }
 \value{Plot of mean variance.}
 \examples{
