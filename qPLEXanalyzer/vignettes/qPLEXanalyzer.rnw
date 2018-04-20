@@ -119,7 +119,7 @@ Hierarchical clustering can be performed by \Rfunction{hierarchicalPlot} to prod
 \begin{center}
 <<hierarchicalplot,fig.width=7.1,fig.height=5,out.width='0.85\\textwidth', fig.cap="Clustering plot of peptide intensitites", message=FALSE,cache=TRUE,fig.asp=0.8>>=
 exprs(MSnset_data) <- exprs(MSnset_data)+0.01
-suppressWarnings(hierarchicalPlot(MSnset_data))
+hierarchicalPlot(MSnset_data)
 @
 \end{center}
 \newpage
