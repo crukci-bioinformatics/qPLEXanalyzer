@@ -53,8 +53,7 @@ intensityPlot <- function(MSnSetObj, sampleColours=NULL, title="", colourBy="Sam
       legend.justification=c(1,1),
       legend.position=c(1,1),
       legend.background=element_rect(fill="transparent")
-      ) %>% 
-    return()
+      )
 }
 
 # Peptide intensity plot
@@ -119,8 +118,7 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
           axis.title.x=element_blank(),
           axis.text.y=element_text(size=12),
           axis.title.y=element_text(size=14),
-          legend.position="none") %>% 
-    return()
+          legend.position="none")
 }
 
 
@@ -157,8 +155,7 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL, transFunc=log2
     theme_bw() + 
     theme(text=element_text(size=14),
           plot.title=element_text(size=14,hjust=0.5),
-          aspect.ratio=1) %>% 
-    return()
+          aspect.ratio=1)
 }
 
 
@@ -219,8 +216,7 @@ maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
           plot.title=element_text(size=14,hjust=0.5)
       ) +
       guides(colour="none", size="none", shape="none", alpha="none",
-             fill = guide_legend(override.aes = list(shape = 21))) %>% 
-    return()
+             fill = guide_legend(override.aes = list(shape = 21)))
 }
 
 # Correlation plot
@@ -245,8 +241,7 @@ corrPlot <- function(MSnSetObj, addValues=TRUE, title=""){
         axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5, size=13),
         axis.text.y = element_text(size=13),
         plot.title = element_text(hjust = 0.5),
-        panel.background = element_blank()) %>% 
-    return()
+        panel.background = element_blank())
 }
 
 # Hierachical clustering plot
@@ -371,8 +366,7 @@ coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile, myCol="br
           plot.subtitle = element_text(hjust = 0.5),
           plot.title = element_text(hjust = 0.5)) +
     scale_x_continuous(limits=c(0,protWidth), breaks=brkTicks) +
-    scale_y_continuous(limits=c(0,10), breaks=c(0,10), expand = c(0, 0)) %>% 
-    return()
+    scale_y_continuous(limits=c(0,10), breaks=c(0,10), expand = c(0, 0))
 }
 
 # Intensity boxplots
@@ -395,8 +389,7 @@ intensityBoxplot <- function(MSnSetObj, title="", sampleColours=NULL, colourBy="
       theme_bw() +
       theme(axis.text.x = element_text(angle = 90, hjust = 1),
             plot.title=element_text(hjust=0.5)) +
-      guides(fill=FALSE) %>% 
-    return()
+      guides(fill=FALSE)
 }
 
 # Relative log intensity plot
@@ -426,6 +419,5 @@ rliPlot <- function(MSnSetObj, title="", sampleColours=NULL, colourBy="SampleGro
       theme_bw() +
       theme(axis.text.x = element_text(angle = 90, hjust = 1),
             plot.title=element_text(hjust=0.5))  +
-      guides(fill=FALSE) %>% 
-    return()
+      guides(fill=FALSE)
 }
