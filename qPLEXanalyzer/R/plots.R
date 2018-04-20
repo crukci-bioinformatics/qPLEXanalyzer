@@ -130,7 +130,7 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL, transFunc=log2
   if(!colourBy%in%colnames(pData(MSnSetObj))){ stop("colourBy must a column names in the pData of the MSnSetObj")}
   if(is.null(sampleColours)){ sampleColours <- assignColours(MSnSetObj, colourBy=colourBy) }
   
-  # Remove IgG samples is requested
+  ## Remove IgG samples is requested
   if(omitIgG){ MSnSetObj <- MSnSetObj[,toupper(MSnSetObj$SampleGroup)!="IGG"] }
   if(!transform){ transFunc <- as.data.frame }
   intensities <- exprs(MSnSetObj) %>% as.data.frame() %>% na.omit() %>% transFunc()
@@ -143,10 +143,10 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL, transFunc=log2
     mutate_at(vars(colourBy), funs(as.factor))
   xPC <- paste0("PC", x.PC)
   yPC <- paste0("PC", x.PC+1)
-  ggplot(plotDat) + 
-    geom_point(aes_string(x=xPC, y=yPC, fill=colourBy), pch=21, colour="black", size=pointsize) +
+  ggplot(plotDat, aes_string(x=xPC, y=yPC, fill=colourBy, label=labelColumn)) + 
+    geom_point(pch=21, colour="black", size=pointsize) +
     { if(!is.null(labelColumn))
-      geom_text(aes_string(x=xPC, y=yPC, label=labelColumn), hjust=0, size=labelsize, nudge_x=x.nudge)
+      geom_text(hjust=0, size=labelsize, nudge_x=x.nudge)
     } +
     scale_fill_manual(values=sampleColours, breaks=names(sampleColours)) +
     labs(x=paste0(xPC, ", ", pcaVariance[x.PC], "% variance"),
@@ -412,8 +412,8 @@ rliPlot <- function(MSnSetObj, title="", sampleColours=NULL, colourBy="SampleGro
     mutate(RLI=logInt-medianLogInt) %>% 
     left_join(pData(MSnSetObj), "SampleName") %>% 
     mutate_at(vars(colourBy), funs(as.factor)) %>%
-    ggplot() +
-      geom_boxplot(aes_string(x="SampleName", y="RLI", fill=colourBy), alpha=0.6) +
+    ggplot(aes_string(x="SampleName", y="RLI", fill=colourBy)) +
+      geom_boxplot(alpha=0.6) +
       scale_fill_manual(values=sampleColours, breaks=names(sampleColours)) +
       labs(x="Sample", y="RLI", title=title)  +
       theme_bw() +
