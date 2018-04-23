@@ -8,8 +8,8 @@
   \tabular{ll}{
     Package: \tab qPLEXanalyzer\cr
     Type: \tab Package\cr
-    Version: \tab 1.0.2\cr
-    Date: \tab 2018-03-07\cr
+    Version: \tab 1.0.0\cr
+    Date: \tab 2018-04-23\cr
     License: \tab GPL\cr
     Depends: \tab methods\cr
   }
@@ -45,9 +45,9 @@
   }
 }
 \author{
-   Matthew Eldridge, Kamal Kishore (Maintainer), Ashley Sawle
+   Matthew Eldridge, Kamal Kishore, Ashley Sawle (Maintainer)
   
-  \email{kamal.fartiyal84@gmail.com}
+  \email{ads2202cu@gmail.com}
 }
 
 \keyword{ package }
