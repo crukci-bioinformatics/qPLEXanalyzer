@@ -172,8 +172,10 @@ maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
   if(!plotType%in%c("MA", "Volcano")){ stop("plotType should be 'MA' or 'Volcano'..") }
   
   testSignficant <- function(dat){
-    '%in%'(dat$adj.P.Val<=fdrCutOff, TRUE) & abs(dat$log2FC)>=lfcCutOff &
-      abs(dat$controlLogFoldChange)>=controlLfcCutOff
+    dat$adj.P.Val<=fdrCutOff & 
+          !is.na(dat$adj.P.Val) &
+          abs(dat$log2FC)>=lfcCutOff &
+          abs(dat$controlLogFoldChange)>=controlLfcCutOff
   }
   
   daResTab <- suppressMessages(getContrastResults(diffstats=diffstats, contrast=contrast, 
