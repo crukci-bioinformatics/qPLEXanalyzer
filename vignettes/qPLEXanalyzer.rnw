@@ -287,10 +287,27 @@ proteins with unique ID must be provided. An example file can be found with the
 package corresponding to uniprot annotation of human and mouse proteins. It 
 consists of four columns: 'Protein', 'Gene', 'Description' and 'GeneSymbol'. 
 The columns 'Protein'and 'GeneSymbol' are mandatory for successful downstream 
-analysis while the other two columns are optional. A code to generate such a 
-file has been provided in section below but commented due to time taken to run 
-this. The \Rfunction{summarizeIntensities} function expects an annotation file 
-in this format.
+analysis while the other two columns are optional. The \Rpackage{UniProt.ws} 
+package provides a convenient means of obtaining these annotations using Uniprot
+protein accessions, as shown in the sction below. The 
+\Rfunction{summarizeIntensities} function expects an annotation file in this 
+format.
+
+\begin{center}
+<<annotation,out.width='.85\\textwidth',message=FALSE,cache=TRUE>>=
+library(UniProt.ws)
+library(dplyr)
+proteins <- unique(fData(MSnset_data)$Accessions)[1:10]
+columns <- c("ENTRY-NAME", "PROTEIN-NAMES", "GENES")
+hs <- UniProt.ws::UniProt.ws(taxId=9606)
+first_ten_anno <- UniProt.ws::select(hs, proteins, columns, "UNIPROTKB") %>%
+  as_tibble() %>% 
+  mutate(GeneSymbol=gsub(" .*", "", GENES)) %>%
+  select(Protein="UNIPROTKB", Gene="ENTRY-NAME", 
+         Description="PROTEIN-NAMES", GeneSymbol)
+head(first_ten_anno)
+@
+\end{center}
 
 The aggregation can be performed by calculating the sum, mean or median of the 
 raw or normalized peptide intensities. The summarized intensity for a selected 
@@ -300,14 +317,6 @@ across all the samples (Figure 9).
 
 \begin{center}
 <<summarize,fig.width=6,fig.height=5,out.width='.85\\textwidth',message=FALSE,cache=TRUE>>=
-# library(UniProt.ws)
-# library(dplyr)
-# proteins <- unique(fData(MSnset_data)$Accessions)
-# columns <- c("ENTRY-NAME", "PROTEIN-NAMES", "GENES")
-# hs <- UniProt.ws::UniProt.ws(taxId=9606)
-# human_anno <- UniProt.ws::select(hs, proteins, columns, "UNIPROTKB") %>%
-#   mutate(GeneSymbol=gsub(" .*", "", GENES)) %>%
-#   select(Protein="UNIPROTKB", Gene="ENTRY-NAME", Description="PROTEIN-NAMES", GeneSymbol)
 MSnset_Pnorm <- summarizeIntensities(MSnset_norm_gs, sum, human_anno)
 @
 \end{center}
