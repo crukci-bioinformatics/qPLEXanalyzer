@@ -93,7 +93,7 @@ normalizeScaling <- function(MSnSetObj, func, Protein = NULL){
     featuredata <- fData(MSnSetObj)
     ### use protein identifier here
     ind <- which(featuredata$Master.Protein.Accessions == Protein)
-    if(length(ind)==0)
+    if(!length(ind))
       stop('Protein not found')
     intensitiesForScaling <- intensities[ind,] 
   }
@@ -152,7 +152,7 @@ regressIntensity <- function(MSnSetObj,controlInd=NULL,ProteinId){
   if(!is.null(controlInd)){ MSnSetObj <- MSnSetObj[,-controlInd] }
   if(!is.character(ProteinId)){ stop('ProteinId has to be of class character') }
   ind <- which(fData(MSnSetObj)$Protein==ProteinId)
-  if(length(ind)==0){ stop('ProteinId is not found or this is not summarized protein intensities dataset...') }
+  if(!length(ind)){ stop('ProteinId is not found or this is not summarized protein intensities dataset...') }
   prot <- exprs(MSnSetObj)[ind,]
   dep <- exprs(MSnSetObj)
   indep <- exprs(MSnSetObj)

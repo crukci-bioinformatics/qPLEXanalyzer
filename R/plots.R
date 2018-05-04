@@ -97,7 +97,7 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
       filter(Protein == ProteinID)
   }
   
-  if (nrow(intensities) == 0) {
+  if (!nrow(intensities)) {
     warning("No peptides were found for ", ProteinID)
     return(NULL)
   }
@@ -134,7 +134,7 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL, transFunc=log2
   if(omitIgG){ MSnSetObj <- MSnSetObj[,toupper(MSnSetObj$SampleGroup)!="IGG"] }
   if(!transform){ transFunc <- as.data.frame }
   intensities <- exprs(MSnSetObj) %>% as.data.frame() %>% na.omit() %>% transFunc()
-  if (nrow(intensities) == 0){ return(NULL) }
+  if (!nrow(intensities)){ return(NULL) }
   pca <- intensities %>% t() %>% prcomp()
   pcaVariance <- round((pca$sdev^2 / sum(pca$sdev^2)) * 100)
   plotDat <- as.data.frame(pca$x) %>% 
