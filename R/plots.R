@@ -222,11 +222,11 @@ maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
 }
 
 # Correlation plot
-corrPlot <- function(MSnSetObj, addValues=TRUE, title=""){
+corrPlot <- function(MSnSetObj, addValues=TRUE, title="", low_cor_colour="#FFFFFF", high_cor_colour="#B90505"){
   if(!is(MSnSetObj,"MSnSet")){ stop('data has to be of class MSnSet..') }
   if(!is.logical(addValues)){ stop('addValues has to be either TRUE or FALSE..') }
   
-  col2Cols <- c("#FFFFFF", "#B90505")
+  col2Cols <- c(low_cor_colour, high_cor_colour)
   cor(exprs(MSnSetObj)) %>% 
     as.data.frame() %>% 
     rownames_to_column("X") %>% 
