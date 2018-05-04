@@ -65,7 +65,7 @@ identify differentially abundant proteins.
 
 <<libs, message=FALSE, cache=TRUE, warning= FALSE>>=
 library(qPLEXanalyzer)
-library(grid)
+library(gridExtra)
 data(human_anno)
 data(exp2_Xlink)
 @
@@ -272,18 +272,7 @@ p3 <- intensityPlot(MSnset_norm_ns, title = "Scaling")
 MSnset_norm_gs <- groupScaling(MSnset_data,func=median, Grp="SampleGroup")
 p4 <- intensityPlot(MSnset_norm_gs, title = "WithinGrp Scaling")
 
-grid.newpage()
-pushViewport(viewport(layout = grid.layout(nrow = 2, ncol = 2)))
- define_region <- function(row, col){
-   viewport(layout.pos.row = row, layout.pos.col = col)
-}
-print(p1, vp = define_region(row = 1, col = 1)) 
-print(p2, vp = define_region(row = 1, col = 2)) 
-print(p3, vp = define_region(row = 2, col = 1)) 
-print(p4, vp = define_region(row = 2, col = 2)) 
-
-#library(gridExtra)
-#grid.arrange(p1, p2, p3, p4, ncol=2, nrow=2)
+grid.arrange(p1, p2, p3, p4, ncol=2, nrow=2)
 
 @
 \end{center}
