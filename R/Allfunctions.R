@@ -63,7 +63,7 @@ summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation){
   summarizedProteinIntensities <- left_join(counts, summIntensities, by ="Protein")
   summarizedProteinIntensities <- right_join(annotation, summarizedProteinIntensities, by = "Protein")
   expInd <- ncol(annotation)+2
-  obj <- readMSnSet2(summarizedProteinIntensities,ecol=c(expInd:ncol(summarizedProteinIntensities)))
+  obj <- readMSnSet2(summarizedProteinIntensities, ecol=seq(expInd, ncol(summarizedProteinIntensities)))
   pData(obj) <- pData(MSnSetObj)
   featureNames(obj) <- fData(obj)$Protein
   sampleNames(obj) <- pData(obj)$SampleName
@@ -156,14 +156,14 @@ regressIntensity <- function(MSnSetObj,controlInd=NULL,ProteinId){
   prot <- exprs(MSnSetObj)[ind,]
   dep <- exprs(MSnSetObj)
   indep <- exprs(MSnSetObj)
-  for (i in 1:ncol(indep)){
+  for (i in seq_len(ncol(indep))){
     indep[,i] <- prot[i]
   }
   combdata <- cbind(dep,indep)
   Original_Correlation <- apply(dep[-ind,],1,function(x) cor(x,dep[ind,]))
   par(mfrow=c(1,2))
   hist(Original_Correlation,main = "Corr Raw data")
-  residuals <- apply(combdata, 1, function (x) resid(lm(x[1:ncol(dep)]~x[(ncol(dep)+1):ncol(combdata)])))
+  residuals <- apply(combdata, 1, function (x) resid(lm(x[seq_len(ncol(dep))]~x[seq(ncol(dep)+1, ncol(combdata))])))
   residuals <- t(residuals)
   exprs(MSnSetObj) <- residuals
   pData(MSnSetObj)$SampleGroup <- factor(pData(MSnSetObj)$SampleGroup)
