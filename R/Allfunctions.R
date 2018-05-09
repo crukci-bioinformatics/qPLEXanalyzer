@@ -112,27 +112,31 @@ normalizeScaling <- function(MSnSetObj, func, Protein = NULL){
 
 # Performs scaling normalization on the intensities within group (median or mean)
 
-groupScaling <- function(MSnSetObj,func,Grp="SampleGroup"){
-  if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
-  if(!is.character(Grp)){ stop('Grp has to be of class character..') }
-  intensities <- as.data.frame(exprs(MSnSetObj))
-  allgrps <- split(MSnSetObj,Grp)
-  scalingFactors <- numeric()
-  for (i in 1:length(allgrps)){
-    intensitiesForScaling <- as.data.frame(exprs(allgrps[[i]]))
-    scaledIntensities <- intensitiesForScaling %>%
-      summarize_all(funs(func)) %>%
-      mutate_all(funs(log)) %>%
-      as.numeric
-    grpsFactors <- exp(scaledIntensities - mean(scaledIntensities))
-    names(grpsFactors) <- pData(allgrps[[i]])$SampleName
-    scalingFactors <- c(scalingFactors,grpsFactors)
-  }
-  ind <- match(MSnSetObj$SampleName,names(scalingFactors))
-  scalingFactors <- scalingFactors[ind]
-  normalizedIntensities <- t(t(intensities) / scalingFactors)
-  exprs(MSnSetObj) <- normalizedIntensities
-  return(MSnSetObj)
+groupScaling <- function(MSnSetObj, func=median, groupingColumn="SampleGroup"){
+    if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
+    if(!is.character(groupingColumn)){ stop('groupingColumn has to be of class character..') }
+    if(!is.function(func)){ stop('func should be a summary function, e.g. mean or median') }
+
+    exprs(MSnSetObj) <- as.data.frame(exprs(MSnSetObj)) %>%
+        rownames_to_column("PeptideID")  %>%
+        gather("SampleName", "RawIntensity", -PeptideID) %>%
+        left_join(pData(MSnSetObj), "SampleName") %>%
+        rename_at(vars(groupingColumn), ~"Grouping_column") %>%
+        group_by(SampleName) %>%
+        mutate(scaledIntensity=func(RawIntensity) %>% log) %>%
+        group_by(Grouping_column) %>%
+        mutate(meanscaledIntensity=mean(scaledIntensity)) %>%
+        ungroup() %>%
+        mutate(scalingFactors=exp(scaledIntensity-meanscaledIntensity)) %>%
+        mutate(normalizedIntensities=RawIntensity/scalingFactors) %>%
+        select(PeptideID, SampleName, normalizedIntensities) %>%
+        spread(SampleName, normalizedIntensities) %>%
+        arrange(factor(PeptideID, levels=rownames(MSnSetObj))) %>%
+        as.data.frame() %>%
+        column_to_rownames("PeptideID") %>%
+        select(colnames(MSnSetObj)) %>%
+        as.matrix()
+    return(MSnSetObj)
 }
 
 #### Row scaling based on mean or median of row
