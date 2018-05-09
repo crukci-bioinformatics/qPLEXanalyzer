@@ -112,10 +112,10 @@ normalizeScaling <- function(MSnSetObj, func, Protein = NULL){
 
 # Performs scaling normalization on the intensities within group (median or mean)
 
-groupScaling <- function(MSnSetObj, func=median, groupingColumn="SampleGroup"){
+groupScaling <- function(MSnSetObj, scalingFunction=median, groupingColumn="SampleGroup"){
     if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
     if(!is.character(groupingColumn)){ stop('groupingColumn has to be of class character..') }
-    if(!is.function(func)){ stop('func should be a summary function, e.g. mean or median') }
+    if(!is.function(scalingFunction)){ stop('scalingFunction should be a summary function, e.g. mean or median') }
 
     exprs(MSnSetObj) <- as.data.frame(exprs(MSnSetObj)) %>%
         rownames_to_column("PeptideID")  %>%
@@ -123,7 +123,7 @@ groupScaling <- function(MSnSetObj, func=median, groupingColumn="SampleGroup"){
         left_join(pData(MSnSetObj), "SampleName") %>%
         rename_at(vars(groupingColumn), ~"Grouping_column") %>%
         group_by(SampleName) %>%
-        mutate(scaledIntensity=func(RawIntensity) %>% log) %>%
+        mutate(scaledIntensity=scalingFunction(RawIntensity) %>% log) %>%
         group_by(Grouping_column) %>%
         mutate(meanscaledIntensity=mean(scaledIntensity)) %>%
         ungroup() %>%
@@ -140,10 +140,10 @@ groupScaling <- function(MSnSetObj, func=median, groupingColumn="SampleGroup"){
 }
 
 #### Row scaling based on mean or median of row
-rowScaling <- function(MSnSetObj,func){
+rowScaling <- function(MSnSetObj, scalingFunction){
   if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
   intensities <- exprs(MSnSetObj)
-  rwm <- apply(intensities,1,func)
+  rwm <- apply(intensities,1,scalingFunction)
   res <- intensities/rwm
   exprs(MSnSetObj) <- log2(res+0.0001)
   return(MSnSetObj)
