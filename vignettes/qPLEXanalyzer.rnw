@@ -289,7 +289,7 @@ consists of four columns: 'Protein', 'Gene', 'Description' and 'GeneSymbol'.
 The columns 'Protein'and 'GeneSymbol' are mandatory for successful downstream 
 analysis while the other two columns are optional. The \Rpackage{UniProt.ws} 
 package provides a convenient means of obtaining these annotations using Uniprot
-protein accessions, as shown in the sction below. The 
+protein accessions, as shown in the section below. The 
 \Rfunction{summarizeIntensities} function expects an annotation file in this 
 format.
 
