@@ -2,12 +2,14 @@ Package: qPLEXanalyzer
 Type: Package
 Title: Tools for qPLEX-RIME data analysis
 Version: 0.99.1
-Date: 2018-04-23
-Author: Matthew Eldridge, Kamal Kishore, Ashley Sawle
-Maintainer: Ashley Sawle <ads2202cu@gmail.com>
+Date: 2018-05-11
+Authors@R: as.person(c(
+    "Matthew Eldridge [aut]", 
+    "Kamal Kishore <kamal.fartiyal84@gmail.com> [aut]",
+    "Ashley Sawle <ads2202cu@gmail.com> [aut, cre]"
+  ))
 Description: Tools for quantitative proteomics data analysis generated from qPLEX-RIME method.
 License: GPL-2
-LazyLoad: yes
 Imports: tidyr, preprocessCore, limma, ggplot2, RColorBrewer, stats, utils,
          Biostrings, GenomicRanges, IRanges, graphics, BiocGenerics,
 	       purrr, tibble, ggdendro, grDevices, dplyr, magrittr
