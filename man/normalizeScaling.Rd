@@ -4,10 +4,10 @@
 \description{
   Performs scaling normalization on the peptide/protein intensities (median or mean)
 }
-\usage{normalizeScaling(MSnSetObj,func,Protein = NULL)}
+\usage{normalizeScaling(MSnSetObj, scalingFunction, Protein = NULL)}
 \arguments{
   \item{MSnSetObj}{MSnSet; an object of class MSnSet}
-  \item{func}{function; median or mean}
+  \item{scalingFunction}{function; median or mean}
   \item{Protein}{character; protein Id}
 }
 \details{
@@ -24,5 +24,5 @@ data(human_anno)
 data(exp3_OHT_ESR1)
 MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,metadata=exp3_OHT_ESR1$metadata_qPLEX1,
 indExpData=c(7:16),Sequences=2,Accessions=6)
-MSnset_norm <- normalizeScaling(MSnSet_data,func=median)
+MSnset_norm <- normalizeScaling(MSnSet_data, scalingFunction=median)
 }

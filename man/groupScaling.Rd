@@ -4,10 +4,10 @@
 \description{
   Performs scaling normalization on the intensities within group (median or mean)
 }
-\usage{groupScaling(MSnSetObj, func, groupingColumn="SampleGroup")}
+\usage{groupScaling(MSnSetObj, scalingFunction, groupingColumn="SampleGroup")}
 \arguments{
   \item{MSnSetObj}{MSnSet; an object of class MSnSet}
-  \item{func}{function; median or mean}
+  \item{scalingFunction}{function; median or mean}
   \item{groupingColumn}{character; the feature on which groups would be based; default="SampleGroup"}
 }
 \details{
@@ -23,5 +23,5 @@ data(human_anno)
 data(exp3_OHT_ESR1)
 MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,metadata=exp3_OHT_ESR1$metadata_qPLEX1,
 indExpData=c(7:16),Sequences=2,Accessions=6)
-MSnset_norm <- groupScaling(MSnSet_data,func=median, groupingColumn="SampleGroup")
+MSnset_norm <- groupScaling(MSnSet_data, scalingFunction=median, groupingColumn="SampleGroup")
 }

@@ -266,10 +266,10 @@ p1 <- intensityPlot(MSnset_data, title = "No normalization")
 MSnset_norm_q <- normalizeQuantiles(MSnset_data)
 p2 <- intensityPlot(MSnset_norm_q, title = "Quantile")
 
-MSnset_norm_ns <- normalizeScaling(MSnset_data,func=median)
+MSnset_norm_ns <- normalizeScaling(MSnset_data, scalingFunction=median)
 p3 <- intensityPlot(MSnset_norm_ns, title = "Scaling")
 
-MSnset_norm_gs <- groupScaling(MSnset_data,func=median, groupingColumn="SampleGroup")
+MSnset_norm_gs <- groupScaling(MSnset_data, scalingFunction=median, groupingColumn="SampleGroup")
 p4 <- intensityPlot(MSnset_norm_gs, title = "WithinGrp Scaling")
 
 grid.arrange(p1, p2, p3, p4, ncol=2, nrow=2)

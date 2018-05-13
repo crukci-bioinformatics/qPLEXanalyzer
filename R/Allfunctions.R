@@ -84,7 +84,7 @@ normalizeQuantiles <- function(MSnSetObj){
 }
 
 # Performs scaling normalization on the intensities within columns (mean, median or sum)
-normalizeScaling <- function(MSnSetObj, func, Protein = NULL){
+normalizeScaling <- function(MSnSetObj, scalingFunction, Protein = NULL){
   if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
   intensities <- as.data.frame(exprs(MSnSetObj))
   intensitiesForScaling <- intensities
@@ -99,7 +99,7 @@ normalizeScaling <- function(MSnSetObj, func, Protein = NULL){
   }
     
   scaledIntensities <- intensitiesForScaling %>%
-    summarize_all(funs(func)) %>%
+    summarize_all(funs(scalingFunction)) %>%
     mutate_all(funs(log)) %>%
     as.numeric
 
