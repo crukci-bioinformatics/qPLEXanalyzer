@@ -1,7 +1,7 @@
 ######### This script contains all the functions required for data processing and analysis ###############
 
-# Log2 with addition of 1 count to deal with zeros
-log2xplus1 <- function(x) { log2(x + 1) }
+# Log2 with addition of 1e-10 count to deal with zeros
+log2xplus1 <- function(x) { log2(x + 1e-10) }
 
 convertToMSnset <- function(ExpObj,metadata,indExpData,Sequences,Accessions,rmMissing=TRUE){
   if (!is.data.frame(ExpObj)){ stop("ExpObj has to be of class dataframe") }
