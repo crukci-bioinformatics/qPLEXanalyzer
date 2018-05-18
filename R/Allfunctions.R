@@ -3,17 +3,25 @@
 # Log2 with addition of 1e-10 count to deal with zeros
 log2xplus1 <- function(x) { log2(x + 1e-10) }
 
-convertToMSnset <- function(ExpObj,metadata,indExpData,Sequences,Accessions,rmMissing=TRUE){
+convertToMSnset <- function(ExpObj,metadata,indExpData,Sequences=NULL,Accessions,
+                            type="peptide",rmMissing=TRUE){
   if (!is.data.frame(ExpObj)){ stop("ExpObj has to be of class dataframe") }
   if (!is.data.frame(metadata)){ stop("metadata has to be of class dataframe") }
   if(!is.numeric(indExpData)){ stop('indExpData has to be of class numeric ..') }
-  if(!is.numeric(Sequences)){ stop('Sequences has to be of class numeric ..') }
+  if(!is.numeric(Sequences) & !is.null(Sequences)){ stop('Sequences has to be either numeric or NULL..') }
   if(!is.numeric(Accessions)){ stop('Accessions has to be of class numeric ..') }
+  if(!is.character(type)){ stop('type has to be of class character ..') }
+  if(!(type%in%c("peptide","protein"))) stop('type has to be either peptide or protein')
   columns <- c("SampleName","SampleGroup","BioRep","TechRep")
   if(!all(columns%in%colnames(metadata))) stop('metadata must contain"', columns, '" columns ..')
   if (!is.logical(rmMissing)){ stop("rmMissing has to be of class logical") }
-  colnames(ExpObj)[Sequences] <- "Sequences"
+  
   colnames(ExpObj)[Accessions] <- "Accessions"
+  if(type=="peptide") 
+  {
+    if(!is.numeric(Sequences)){ stop('Sequences has to be numeric when type is peptide..') }
+    colnames(ExpObj)[Sequences] <- "Sequences"
+  }
   if(rmMissing){ ExpObj %<>% filter_at(vars(indExpData), all_vars(!is.na(.))) }
   obj <- readMSnSet2(ExpObj,ecol=indExpData)
   rownames(metadata) <- as.character(metadata$SampleName)
@@ -25,9 +33,12 @@ convertToMSnset <- function(ExpObj,metadata,indExpData,Sequences,Accessions,rmMi
     stop("Column names in expression data do not match SampleNames in metadata")
   }
   pData(obj) <- metadata
-  featureNames(obj) <- paste0("peptide_",featureNames(obj))
+  if(type=="protein")
+    featureNames(obj) <- fData(obj)$Accessions
+  else
+    featureNames(obj) <- paste0("peptide_",featureNames(obj))
   return(obj)
-}  
+}   
 
   
 
