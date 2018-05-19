@@ -17,3 +17,4 @@ Depends: R (>= 3.5), Biobase, statmod, MSnbase
 Suggests: knitr
 VignetteBuilder: knitr
 biocViews: Proteomics, MassSpectrometry, Normalization, Preprocessing, QualityControl, DataImport
+BugReports: https://github.com/crukci-bioinformatics/qPLEXanalyzer/issues
