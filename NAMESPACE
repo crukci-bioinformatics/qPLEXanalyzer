@@ -5,22 +5,25 @@ import(ggplot2)
 import(RColorBrewer)
 import(MSnbase)
 importFrom(tidyr, spread, gather)
-importFrom(dplyr, filter_at, mutate, mutate_all, mutate_at, one_of, left_join,right_join,desc,distinct,rename,count,n)
-importFrom(dplyr,summarize_all, select, vars, ungroup,filter,all_vars,arrange,bind_rows,everything,funs,group_by, rename_at, rename_all)
+importFrom(dplyr, filter_at, mutate, mutate_all, mutate_at, one_of,
+           left_join, right_join,desc, distinct, rename,count, n,
+           summarize_all, select, vars, ungroup, filter, all_vars, arrange,
+           bind_rows, everything, funs, group_by, rename_at, rename_all)
 importFrom(magrittr,"%>%", "use_series", "%$%", "%<>%")
 importFrom(stringr, str_replace)
 importFrom(purrr, map_dfr)
 importFrom(GenomicRanges,GRanges,union)
 importFrom(BiocGenerics, start, end, width)
 importFrom(IRanges, IRanges, reduce)
-importFrom(Biobase, fData, pData, exprs, featureNames,sampleNames,"exprs<-","pData<-","featureNames<-")
+importFrom(Biobase, fData, pData, exprs, featureNames, sampleNames, "exprs<-",
+           "pData<-","featureNames<-")
 importFrom(Biostrings,readAAStringSet,startIndex,endIndex,vmatchPattern)
 importFrom("graphics", "axis", "hist", "lines", "par", "rect",
              "smoothScatter", "text")
-importFrom("stats", "as.dendrogram", "median", "na.omit", "setNames")
-importFrom("stats", "as.formula", "complete.cases", "contrasts", "cor",
-             "dist", "hclust", "lm", "model.matrix", "prcomp", "resid",
-             "smooth.spline", "var")
+importFrom("stats", "as.dendrogram", "median", "na.omit", "setNames", 
+           "as.formula", "complete.cases", "contrasts", "cor", "dist",
+           "hclust", "lm", "model.matrix", "prcomp", "resid", "smooth.spline",
+           "var")
 importFrom("utils", "head", "tail", "write.table")
 importFrom("tibble", "column_to_rownames", "rownames_to_column")
 importFrom(grDevices, colorRampPalette)
