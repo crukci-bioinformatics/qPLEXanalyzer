@@ -4,11 +4,11 @@
 \description{
   Performs scaling normalization on the peptide/protein intensities (median or mean)
 }
-\usage{normalizeScaling(MSnSetObj, scalingFunction, Protein = NULL)}
+\usage{normalizeScaling(MSnSetObj, scalingFunction, ProteinId = NULL)}
 \arguments{
   \item{MSnSetObj}{MSnSet; an object of class MSnSet}
   \item{scalingFunction}{function; median or mean}
-  \item{Protein}{character; protein Id}
+  \item{ProteinId}{character; protein Id}
 }
 \details{
   In this normalization method the central tendencies (mean or median) of the samples are aligned. 
@@ -16,7 +16,7 @@
   by subtracting from each central tendency the mean of all the central tendencies.  The raw intensities
   are then divided by the scaling factor to get normalized ones. 
   The intensities can also be normalized based on the peptides intensities of a selected protein. For this
-  the argument "Protein" allows you to define the protein that will be used for scaling the intensities.
+  the argument "ProteinId" allows you to define the protein that will be used for scaling the intensities.
 }
 \value{An instance of class "MSnSet".}
 \examples{

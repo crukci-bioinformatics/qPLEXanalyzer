@@ -99,15 +99,15 @@ normalizeQuantiles <- function(MSnSetObj){
 }
 
 # Performs scaling normalization on the intensities within columns (mean, median or sum)
-normalizeScaling <- function(MSnSetObj, scalingFunction, Protein = NULL){
+normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId = NULL){
   if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
   intensities <- as.data.frame(exprs(MSnSetObj))
   intensitiesForScaling <- intensities
   
-  if (!is.null(Protein)){
+  if (!is.null(ProteinId)){
     featuredata <- fData(MSnSetObj)
     ### use protein identifier here
-    ind <- which(featuredata$Accessions == Protein)
+    ind <- which(featuredata$Accessions == ProteinId)
     if(!length(ind))
       stop('Protein not found')
     intensitiesForScaling <- intensities[ind,] 
