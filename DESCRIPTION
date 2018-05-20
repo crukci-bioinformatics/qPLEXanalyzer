@@ -3,11 +3,11 @@ Type: Package
 Title: Tools for qPLEX-RIME data analysis
 Version: 0.99.1
 Date: 2018-05-11
-Authors@R: as.person(c(
-    "Matthew Eldridge [aut]", 
-    "Kamal Kishore <kamal.fartiyal84@gmail.com> [aut]",
-    "Ashley Sawle <ads2202cu@gmail.com> [aut, cre]"
-  ))
+Authors@R: c(person("Matthew Eldridge", "Developer", role = "aut"),
+             person("Kamal Kishore", "Developer", role = "aut", 
+                    email = "kamal.fartiyal84@gmail.com"),
+             person("Ashley Sawle", "Developer", role=c("aut", "cre"),
+                     email="ads2202cu@gmail.com"))
 Description: Tools for quantitative proteomics data analysis generated from qPLEX-RIME method.
 License: GPL-2
 Imports: tidyr, preprocessCore, limma, ggplot2, RColorBrewer, stats, utils,
