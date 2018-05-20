@@ -11,7 +11,7 @@
   \item{indExpData}{numeric; a numeric vector indicating the column indexes of intensities in ExpObj}
   \item{Sequences}{numeric; a numeric value indicating the index of column consisting of peptide sequence in ExpObj}
   \item{Accessions}{numeric; a numeric value indicating the index of column consisting of protein accession in ExpObj}
-  §item{type}{character; what type of data set to create, either 'peptide' or 'protein'}
+  \item{type}{character; what type of data set to create, either 'peptide' or 'protein'}
   \item{rmMissing}{logical; TRUE or FALSE to indicate whether to remove missing data or not}
 }
 \details{
