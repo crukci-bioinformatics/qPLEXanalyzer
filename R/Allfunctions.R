@@ -362,7 +362,9 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL,
                   .vars = c("logFC", "t", "B", SamplesCol)) %>%
         mutate_at(funs(signif(., digits = 2)), 
                   .vars = c("P.Value", "adj.P.Val")) %>% 
-        rename_all(function(x){str_replace(x, "^Count$", "Unique_peptides")}) %>%
+        rename_all(function(x){str_replace(x, 
+                                           "^Count$", 
+                                           "Unique_peptides")}) %>%
         rename(AvgIntensity=AveExpr, log2FC=logFC)
     
     if (writeFile == TRUE) {
