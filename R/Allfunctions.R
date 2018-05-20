@@ -170,7 +170,7 @@ regressIntensity <- function(MSnSetObj,controlInd=NULL,ProteinId){
   if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
   if(!is.null(controlInd)){ MSnSetObj <- MSnSetObj[,-controlInd] }
   if(!is.character(ProteinId)){ stop('ProteinId has to be of class character') }
-  ind <- which(fData(MSnSetObj)$Protein==ProteinId)
+  ind <- which(fData(MSnSetObj)$Accessions==ProteinId)
   if(!length(ind)){ stop('ProteinId is not found or this is not summarized protein intensities dataset...') }
   prot <- exprs(MSnSetObj)[ind,]
   dep <- exprs(MSnSetObj)
