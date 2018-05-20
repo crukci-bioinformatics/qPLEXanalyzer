@@ -12,7 +12,7 @@ Description: Tools for quantitative proteomics data analysis generated from qPLE
 License: GPL-2
 Imports: tidyr, preprocessCore, limma, ggplot2, RColorBrewer, stats, utils,
          Biostrings, GenomicRanges, IRanges, graphics, BiocGenerics,
-	       purrr, tibble, ggdendro, grDevices, dplyr, magrittr
+	 stringr, purrr, tibble, ggdendro, grDevices, dplyr, magrittr
 Depends: R (>= 3.5), Biobase, statmod, MSnbase  
 Suggests: UniProt.ws, knitr
 VignetteBuilder: knitr
