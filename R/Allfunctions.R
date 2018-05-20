@@ -52,13 +52,12 @@ convertToMSnset <- function(ExpObj,metadata,indExpData,Sequences=NULL,Accessions
 # Filters any rows with missing values.
 # Typical summarization functions are sum, mean and median.
 # For successful running of this function the annotation file must have four column "Protein","Gene","Description" and "GeneSymbol"
-# In addition the MSnSetObj must have columns "Sequences" and "Accessions" denoting its a peptide dataset
+# In addition the MSnSetObj must have column "Sequences" denoting its a peptide dataset
 
 summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation){
   if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
   if(!is.data.frame(annotation)){ stop('annotation has to be of class data frame..') }
-  columns <- c("Sequences","Accessions")
-  if(!all(columns %in% colnames(fData(MSnSetObj)))){ stop('This MSnSet is not a peptide dataset ..') }
+  if(!"Sequences" %in% colnames(fData(MSnSetObj))){ stop('This MSnSet is not a peptide dataset ..') }
   Proteins <- as.character(fData(MSnSetObj)$Accessions)
   features <- fData(MSnSetObj)
   features <- as.data.frame(features[,c("Sequences","Accessions")], stringsAsFactors=FALSE)
