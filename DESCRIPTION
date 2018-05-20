@@ -14,7 +14,7 @@ Imports: tidyr, preprocessCore, limma, ggplot2, RColorBrewer, stats, utils,
          Biostrings, GenomicRanges, IRanges, graphics, BiocGenerics,
 	       purrr, tibble, ggdendro, grDevices, dplyr, magrittr
 Depends: R (>= 3.5), Biobase, statmod, MSnbase  
-Suggests: knitr
+Suggests: UniProt.ws, knitr
 VignetteBuilder: knitr
 biocViews: Proteomics, MassSpectrometry, Normalization, Preprocessing, QualityControl, DataImport
 BugReports: https://github.com/crukci-bioinformatics/qPLEXanalyzer/issues
