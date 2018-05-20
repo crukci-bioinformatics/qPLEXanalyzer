@@ -106,15 +106,15 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
   ## get intensity for protein level (summarised) data if present
   summIntensities <- data.frame(SampleName = vector(), 
                                 logIntensity = vector(), 
-                                Protein = vector())
+                                Accessions = vector())
   if (!is.null(combinedIntensities)) {
     summIntensities <- exprs(combinedIntensities) %>%
       as.data.frame() %>%
-      rownames_to_column("Protein") %>%
-      gather(SampleName, Intensity, -Protein) %>%
-      left_join(fData(combinedIntensities), "Protein") %>%
+      rownames_to_column("Accessions") %>%
+      gather(SampleName, Intensity, -Accessions) %>%
+      left_join(fData(combinedIntensities), "Accessions") %>%
       mutate(logIntensity = log2xplus1(Intensity)) %>%
-      filter(Protein == ProteinID)
+      filter(Accessions == ProteinID)
   }
 
   if (!nrow(intensities)) {
@@ -138,7 +138,7 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
                shape = 21,
                size = 2.5) +
     ## plot the summarised intensities if present
-    geom_line(data = summIntensities, aes(group = Protein),
+    geom_line(data = summIntensities, aes(group = Accessions),
               colour = "#AAAAAA",
               size = 1.2,
               linetype = 6) +
