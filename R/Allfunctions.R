@@ -48,37 +48,42 @@ convertToMSnset <- function(ExpObj,metadata,indExpData,Sequences=NULL,Accessions
 
 # Summarizes multiple peptide measurements for a protein.
 # Assumes that there are columns for each of the samples specified and uses
-# Protein column for grouping peptide-level measurements.
+# Accessions column for grouping peptide-level measurements.
 # Filters any rows with missing values.
 # Typical summarization functions are sum, mean and median.
-# For successful running of this function the annotation file must have four column "Protein","Gene","Description" and "GeneSymbol"
+# For successful running of this function the annotation file must have four column "Accessions","Gene","Description" and "GeneSymbol"
 # In addition the MSnSetObj must have column "Sequences" denoting its a peptide dataset
 
 summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation){
   if(!is(MSnSetObj,"MSnSet")){ stop('MSnSetObj has to be of class MSnSet..') }
   if(!is.data.frame(annotation)){ stop('annotation has to be of class data frame..') }
   if(!"Sequences" %in% colnames(fData(MSnSetObj))){ stop('This MSnSet is not a peptide dataset ..') }
-  Proteins <- as.character(fData(MSnSetObj)$Accessions)
-  features <- fData(MSnSetObj)
-  features <- as.data.frame(features[,c("Sequences","Accessions")], stringsAsFactors=FALSE)
-  features <- unique(features)
-  features$Sequences <- as.character(features$Sequences)
-  features$Accessions <- as.character(features$Accessions)
-  counts <- features %>% count(Accessions) %>% rename(Protein=Accessions,Count = n)
-  intensities <- cbind.data.frame(exprs(MSnSetObj),Protein=Proteins)
-  summIntensities <- intensities %>%
-    group_by(Protein) %>%
-    summarize_all(funs(summarizationFunction))
-  summIntensities$Protein <- as.character(summIntensities$Protein)
-  summarizedProteinIntensities <- left_join(counts, summIntensities, by ="Protein")
-  summarizedProteinIntensities <- right_join(annotation, summarizedProteinIntensities, by = "Protein")
-  expInd <- ncol(annotation)+2
-  obj <- readMSnSet2(summarizedProteinIntensities, ecol=seq(expInd, ncol(summarizedProteinIntensities)))
+  
+  counts <- as.data.frame(fData(MSnSetObj)) %>%
+    select(Accessions, Sequences) %>% 
+    distinct %>% 
+    count(Accessions) %>%
+    mutate(Accessions=as.character(Accessions)) %>% 
+    rename(Count = n)
+  
+  summarizedIntensities <- as.data.frame(exprs(MSnSetObj)) %>%
+    mutate(Accessions=as.character(fData(MSnSetObj)$Accessions)) %>%
+    group_by(Accessions) %>%
+    summarize_all(funs(summarizationFunction)) %>% 
+    left_join(counts, by="Accessions") %>% 
+    left_join(annotation, by = "Accessions") %>% 
+    select(Accessions, colnames(annotation), Count, everything())
+  
+  expInd <- seq(grep("Count", colnames(summarizedIntensities)) + 1,
+                ncol(summarizedIntensities))
+  
+  obj <- readMSnSet2(summarizedIntensities, ecol=expInd)
   pData(obj) <- pData(MSnSetObj)
-  featureNames(obj) <- fData(obj)$Protein
+  featureNames(obj) <- fData(obj)$Accessions
   sampleNames(obj) <- pData(obj)$SampleName
   return(obj)
 }
+
 
 
 ############### Normalization functions ################

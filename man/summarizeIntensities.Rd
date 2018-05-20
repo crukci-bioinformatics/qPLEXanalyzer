@@ -10,7 +10,7 @@
   \item{summarizationFunction}{function; method used to aggregate the peptides 
   into proteins. Sum, mean or median}
   \item{annotation}{data.frame; a data.frame of protein annotation of four columns: 
-                        "Protein", "Gene", "Description" and "GeneSymbol"}
+                        "Accessions", "Gene", "Description" and "GeneSymbol"}
 }
 \value{An instance of class "MSnSet".}
 \examples{
