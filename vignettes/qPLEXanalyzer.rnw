@@ -104,8 +104,9 @@ replicates of each group.
 \begin{center}
 <<Import,fig.width=6,fig.height=5,out.width='.85\\textwidth',message=FALSE,cache=TRUE>>=
 MSnset_data <- convertToMSnset(exp2_Xlink$intensities,
-                               metadata=exp2_Xlink$metadata,
-                               indExpData=c(7:16), Sequences=2, Accessions=6)
+  metadata = exp2_Xlink$metadata,
+  indExpData = c(7:16), Sequences = 2, Accessions = 6
+)
 @
 \end{center}
 
@@ -173,7 +174,7 @@ avoid errors while generating dendrogram.
 
 \begin{center}
 <<hierarchicalplot,fig.width=7.1,fig.height=5,out.width='0.85\\textwidth', fig.cap="Clustering plot of peptide intensitites", message=FALSE,cache=TRUE,fig.asp=0.8>>=
-exprs(MSnset_data) <- exprs(MSnset_data)+0.01
+exprs(MSnset_data) <- exprs(MSnset_data) + 0.01
 hierarchicalPlot(MSnset_data)
 @
 \end{center}
@@ -188,7 +189,7 @@ of potential batch effects.
 
 \begin{center}
 <<pcaplot,fig.width=6,fig.height=5,out.width='.85\\textwidth', fig.cap="PCA plot of peptide intensitites", message=FALSE,cache=TRUE,fig.asp=0.7>>=
-pcaPlot(MSnset_data, labelColumn="BioRep", pointsize=2)
+pcaPlot(MSnset_data, labelColumn = "BioRep", pointsize = 2)
 @
 \end{center}
 \newpage
@@ -203,10 +204,12 @@ observed bait protein coverage with the theoretical coverage from peptides
 predicted by known cleavage sites.
 
 \begin{center}
-<<coverageplot,fig.width=6,fig.height=1.5,out.width='.85\\textwidth', fig.cap="Peptide sequence coverage plot", message=FALSE,cache=TRUE>>=
-mySequenceFile <- system.file('extdata', "P03372.fasta", package="qPLEXanalyzer")
-coveragePlot(MSnset_data, ProteinID="P03372", ProteinName="ESR1", 
-             fastaFile=mySequenceFile)
+<<coverageplot, fig.width=6, fig.height=1.5, out.width='.85\\textwidth', fig.cap="Peptide sequence coverage plot", message=FALSE, cache=TRUE>>=
+mySequenceFile <- system.file("extdata", "P03372.fasta", package = "qPLEXanalyzer")
+coveragePlot(MSnset_data,
+  ProteinID = "P03372", ProteinName = "ESR1",
+  fastaFile = mySequenceFile
+)
 @
 \end{center}
 
@@ -238,7 +241,9 @@ by subtracting from each central tendency the mean of all the central
 tendencies. The raw intensities are then divided by the scaling factor to get 
 normalized ones.
 
-\item {Row scaling:} In this normalization method each peptide/protein intensity is divided by the mean/median of its intensity across all samples and log2 transformed.
+\item {Row scaling:} In this normalization method each peptide/protein intensity 
+is divided by the mean/median of its intensity across all samples and log2 
+transformed.
 
 \end{itemize}
 
@@ -260,19 +265,21 @@ normalization methods on the peptide intensities distribution.
 
 \begin{center}
 <<norm,fig.width=10,fig.height=9,out.width='.85\\textwidth', fig.cap="Peptide intensity distribution with various normalization methods", message=FALSE,cache=TRUE>>=
-MSnset_data <- MSnset_data[,-5]
+MSnset_data <- MSnset_data[, -5]
 p1 <- intensityPlot(MSnset_data, title = "No normalization")
 
 MSnset_norm_q <- normalizeQuantiles(MSnset_data)
 p2 <- intensityPlot(MSnset_norm_q, title = "Quantile")
 
-MSnset_norm_ns <- normalizeScaling(MSnset_data, scalingFunction=median)
+MSnset_norm_ns <- normalizeScaling(MSnset_data, scalingFunction = median)
 p3 <- intensityPlot(MSnset_norm_ns, title = "Scaling")
 
-MSnset_norm_gs <- groupScaling(MSnset_data, scalingFunction=median, groupingColumn="SampleGroup")
+MSnset_norm_gs <- groupScaling(MSnset_data, 
+                               scalingFunction = median, 
+                               groupingColumn = "SampleGroup")
 p4 <- intensityPlot(MSnset_norm_gs, title = "WithinGrp Scaling")
 
-grid.arrange(p1, p2, p3, p4, ncol=2, nrow=2)
+grid.arrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
 
 @
 \end{center}
@@ -299,12 +306,14 @@ library(UniProt.ws)
 library(dplyr)
 proteins <- unique(fData(MSnset_data)$Accessions)[1:10]
 columns <- c("ENTRY-NAME", "PROTEIN-NAMES", "GENES")
-hs <- UniProt.ws::UniProt.ws(taxId=9606)
+hs <- UniProt.ws::UniProt.ws(taxId = 9606)
 first_ten_anno <- UniProt.ws::select(hs, proteins, columns, "UNIPROTKB") %>%
-  as_tibble() %>% 
-  mutate(GeneSymbol=gsub(" .*", "", GENES)) %>%
-  select(Accessions="UNIPROTKB", Gene="ENTRY-NAME", 
-         Description="PROTEIN-NAMES", GeneSymbol)
+  as_tibble() %>%
+  mutate(GeneSymbol = gsub(" .*", "", GENES)) %>%
+  select(
+    Accessions = "UNIPROTKB", Gene = "ENTRY-NAME",
+    Description = "PROTEIN-NAMES", GeneSymbol
+  )
 head(first_ten_anno)
 @
 \end{center}
@@ -323,8 +332,11 @@ MSnset_Pnorm <- summarizeIntensities(MSnset_norm_gs, sum, human_anno)
 
 \begin{center}
 <<pepIntensity,fig.width=6,fig.height=5,out.width='.85\\textwidth', fig.cap="Summarized protein intensity", message=FALSE,cache=TRUE>>=
-peptideIntensityPlot(MSnset_data,combinedIntensities=MSnset_Pnorm, 
-                           ProteinID="P03372", ProteinName= "ESR1")
+peptideIntensityPlot(MSnset_data,
+  combinedIntensities = MSnset_Pnorm,
+  ProteinID = "P03372", 
+  ProteinName = "ESR1"
+)
 @
 \end{center}
 
@@ -360,12 +372,15 @@ pull down samples in each experiment.
 <<regress,fig.width=6,fig.height=5,out.width='.85\\textwidth', fig.cap="Correlation between bait protein and enriched proteins before and after regression", message=FALSE,cache=TRUE,fig.asp=0.7>>=
 data(exp3_OHT_ESR1)
 MSnset_reg <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX2,
-                               metadata=exp3_OHT_ESR1$metadata_qPLEX2,
-                               indExpData=c(7:16), Sequences=2, Accessions=6)
+  metadata = exp3_OHT_ESR1$metadata_qPLEX2,
+  indExpData = c(7:16), Sequences = 2, Accessions = 6
+)
 MSnset_P <- summarizeIntensities(MSnset_reg, sum, human_anno)
 MSnset_P <- rowScaling(MSnset_P, mean)
 IgG_ind <- which(pData(MSnset_P)$SampleGroup == "IgG")
-Reg_data <- regressIntensity(MSnset_P, controlInd=IgG_ind, ProteinId="P03372")
+Reg_data <- regressIntensity(MSnset_P, 
+                             controlInd = IgG_ind,
+                             ProteinId = "P03372")
 @
 \end{center}
 
@@ -404,16 +419,22 @@ significance level.
 \begin{center}
 <<diffexp,fig.width=5,fig.height=4,out.width='.85\\textwidth', fig.cap="MA plot of the quantified proteins", message=FALSE,cache=TRUE,fig.asp=0.65>>=
 contrasts <- c(DSG.FA_vs_FA = "DSG.FA - FA")
-diffstats <- computeDiffStats(MSnset_Pnorm, contrasts=contrasts)
-diffexp <- getContrastResults(diffstats=diffstats, contrast=contrasts, 
-                              controlGroup = "IgG")
-maVolPlot(diffstats, contrast = contrasts, plotType="MA", title= contrasts)
+diffstats <- computeDiffStats(MSnset_Pnorm, contrasts = contrasts)
+diffexp <- getContrastResults(
+  diffstats = diffstats, 
+  contrast = contrasts,
+  controlGroup = "IgG"
+)
+maVolPlot(diffstats, contrast = contrasts, plotType = "MA", title = contrasts)
 @
 \end{center}
 
 \begin{center}
 <<volcano,fig.width=5,fig.height=4,out.width='.85\\textwidth', fig.cap="Volcano plot of the quantified proteins", message=FALSE,cache=TRUE,fig.asp=0.65>>=
-maVolPlot(diffstats, contrast = contrasts, plotType="Volcano", title= contrasts)
+maVolPlot(diffstats, 
+          contrast = contrasts, 
+          plotType = "Volcano", 
+          title = contrasts)
 @
 \end{center}
 
