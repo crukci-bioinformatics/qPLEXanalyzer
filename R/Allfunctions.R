@@ -176,7 +176,7 @@ groupScaling <- function(MSnSetObj, scalingFunction=median,
         stop("groupingColumn has to be of class character..")
     }
     if (!is.function(scalingFunction)) {
-        stop("scalingFunction should be a summary function, e.g. mean or median")
+        stop("scalingFunction must be a summary function, e.g. mean or median")
     }
     
     exprs(MSnSetObj) <- as.data.frame(exprs(MSnSetObj)) %>%
