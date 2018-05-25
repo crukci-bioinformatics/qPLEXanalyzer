@@ -9,54 +9,19 @@ log2xplus1 <- function(x) {
 
 convertToMSnset <- function(ExpObj, metadata, indExpData, Sequences=NULL, 
                             Accessions, type="peptide", rmMissing=TRUE) {
-    if (!is.data.frame(ExpObj)) {
-        stop("ExpObj has to be of class dataframe")
-    }
-    if (!is.data.frame(metadata)) {
-        stop("metadata has to be of class dataframe")
-    }
-    if (!is.numeric(indExpData)) {
-        stop("indExpData has to be of class numeric ..")
-    }
-    if (!is.numeric(Sequences) & !is.null(Sequences)) {
-        stop("Sequences has to be either numeric or NULL..")
-    }
-    if (!is.numeric(Accessions)) {
-        stop("Accessions has to be of class numeric ..")
-    }
-    if (!is.character(type)) {
-        stop("type has to be of class character ..")
-    }
-    if (!(type %in% c("peptide", "protein"))){
-        stop("type has to be either peptide or protein")
-    }
-    columns <- c("SampleName", "SampleGroup", "BioRep", "TechRep")
-    if (!all(columns %in% colnames(metadata))){
-        stop('metadata must contain"', columns, '" columns ..')
-    }
-    if (!is.logical(rmMissing)) {
-        stop("rmMissing has to be of class logical")
-    }
+    .args <- as.list(match.call()[-1])
+    do.call(checkArg_convertToMSnset, .args)
     
     colnames(ExpObj)[Accessions] <- "Accessions"
-    if (type == "peptide") {
-        if (!is.numeric(Sequences)) {
-            stop("Sequences has to be numeric when type is peptide..")
-        }
-        colnames(ExpObj)[Sequences] <- "Sequences"
-    }
+    colnames(ExpObj)[Sequences] <- "Sequences"
+    
     if (rmMissing) {
         ExpObj %<>% filter_at(vars(indExpData), all_vars(!is.na(.)))
     }
     obj <- readMSnSet2(ExpObj, ecol = indExpData)
     rownames(metadata) <- as.character(metadata$SampleName)
-    check <- all(rownames(metadata) %in% sampleNames(obj))
-    if (check) {
-        ind <- match(sampleNames(obj), rownames(metadata))
-        metadata <- metadata[ind, ]
-    } else {
-        stop("Columns in expression data do not match SampleNames in metadata")
-    }
+    ind <- match(sampleNames(obj), rownames(metadata))
+    metadata <- metadata[ind, ]
     pData(obj) <- metadata
     if (type == "protein") {
         featureNames(obj) <- fData(obj)$Accessions
@@ -82,15 +47,8 @@ convertToMSnset <- function(ExpObj, metadata, indExpData, Sequences=NULL,
 # The MSnSetObj must have column "Sequences" denoting its a peptide dataset
 
 summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation) {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
-    if (!is.data.frame(annotation)) {
-        stop("annotation has to be of class data frame..")
-    }
-    if (!"Sequences" %in% colnames(fData(MSnSetObj))) {
-        stop("This MSnSet is not a peptide dataset ..")
-    }
+    .args <- as.list(match.call()[-1])
+    do.call(checkArg_summarizeIntensities, .args)
     
     counts <- as.data.frame(fData(MSnSetObj)) %>%
         select(Accessions, Sequences) %>%
@@ -128,18 +86,18 @@ summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation) {
 # Performs quantile normalization on the intensities within columns
 
 normalizeQuantiles <- function(MSnSetObj) {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
+    .args <- as.list(match.call()[-1])
+    do.call(checkArg_normalizeQuantiles, .args)
+    
     exprs(MSnSetObj) <- normalize.quantiles(exprs(MSnSetObj))
     return(MSnSetObj)
 }
 
 # Performs scaling normalization on the intensities within columns
 normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId = NULL) {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
+    .args <- as.list(match.call()[-1])
+    do.call(checkArg_normalizeScaling, .args)
+    
     intensities <- as.data.frame(exprs(MSnSetObj))
     intensitiesForScaling <- intensities
     
@@ -169,15 +127,8 @@ normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId = NULL) {
 
 groupScaling <- function(MSnSetObj, scalingFunction=median, 
                          groupingColumn="SampleGroup") {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
-    if (!is.character(groupingColumn)) {
-        stop("groupingColumn has to be of class character..")
-    }
-    if (!is.function(scalingFunction)) {
-        stop("scalingFunction must be a summary function, e.g. mean or median")
-    }
+    .args <- as.list(match.call()[-1])
+    do.call(checkArg_groupScaling, .args)
     
     exprs(MSnSetObj) <- as.data.frame(exprs(MSnSetObj)) %>%
         rownames_to_column("PeptideID") %>%
@@ -203,9 +154,9 @@ groupScaling <- function(MSnSetObj, scalingFunction=median,
 
 #### Row scaling based on mean or median of row
 rowScaling <- function(MSnSetObj, scalingFunction) {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
+    .args <- as.list(match.call()[-1])
+    do.call(checkArg_rowScaling, .args)
+    
     intensities <- exprs(MSnSetObj)
     rwm <- apply(intensities, 1, scalingFunction)
     res <- intensities / rwm
@@ -216,19 +167,10 @@ rowScaling <- function(MSnSetObj, scalingFunction) {
 
 #### Function to regress expression values based on single protein ####
 regressIntensity <- function(MSnSetObj, controlInd=NULL, ProteinId) {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
-    if (!is.null(controlInd)) {
-        MSnSetObj <- MSnSetObj[, -controlInd]
-    }
-    if (!is.character(ProteinId)) {
-        stop("ProteinId has to be of class character")
-    }
+    .args <- as.list(match.call()[-1])
+    do.call(checkArg_regressIntensity, .args)
+    
     ind <- which(fData(MSnSetObj)$Accessions == ProteinId)
-    if (!length(ind)) {
-        stop("ProteinId not found or this is not protein intensities dataset")
-    }
     prot <- exprs(MSnSetObj)[ind, ]
     dep <- exprs(MSnSetObj)
     indep <- exprs(MSnSetObj)
@@ -261,21 +203,9 @@ regressIntensity <- function(MSnSetObj, controlInd=NULL, ProteinId) {
 # The intensities table must contain a column for each sample in PhenoData
 computeDiffStats <- function(MSnSetObj, batchEffect = NULL, transform = TRUE, 
                              contrasts, trend = TRUE, robust = TRUE) {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
-    if (!is.logical(transform)) {
-        stop("transform has to either TRUE or FALSE..")
-    }
-    if (!is.logical(trend)) {
-        stop("trend has to be of either TRUE or FALSE..")
-    }
-    if (!is.logical(robust)) {
-        stop("robust has to be of either TRUE or FALSE..")
-    }
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
+    .args <- as.list(match.call()[-1])
+    do.call(checkArg_computeDiffStats, .args)
+    
     message("Fitting linear model")
     intensities <- as.data.frame(exprs(MSnSetObj))
     if (transform) {
@@ -319,14 +249,10 @@ computeDiffStats <- function(MSnSetObj, batchEffect = NULL, transform = TRUE,
 
 getContrastResults <- function(diffstats, contrast, controlGroup = NULL, 
                                transform = TRUE, writeFile= FALSE) {
-    if (!is.logical(transform)) {
-        stop("transform has to either TRUE or FALSE..")
-    }
-    if (!is.logical(writeFile)) {
-        stop("writeFile has to either TRUE or FALSE..")
-    }
-    message("Obtaining results for contrast", contrast, "\n")
+    .args <- as.list(match.call()[-1])
+    do.call(checkArg_getContrastResults, .args)
     
+    message("Obtaining results for contrast", contrast, "\n")
     contrast <- contrast %>%
         gsub(pattern = " ", replacement = "_") %>%
         sub(pattern = "_-_", replacement = " - ") %>%
