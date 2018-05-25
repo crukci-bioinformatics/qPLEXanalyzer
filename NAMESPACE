@@ -4,6 +4,7 @@ import(limma)
 import(ggplot2)
 import(RColorBrewer)
 import(MSnbase)
+import(assertthat)
 importFrom(tidyr, spread, gather)
 importFrom(dplyr, filter_at, mutate, mutate_all, mutate_at, one_of,
            left_join, right_join,desc, distinct, rename,count, n,
@@ -11,7 +12,7 @@ importFrom(dplyr, filter_at, mutate, mutate_all, mutate_at, one_of,
            bind_rows, everything, funs, group_by, rename_at, rename_all)
 importFrom(magrittr,"%>%", "use_series", "%$%", "%<>%")
 importFrom(stringr, str_replace)
-importFrom(purrr, map_dfr)
+importFrom(purrr, map_dfr, map_lgl)
 importFrom(GenomicRanges,GRanges,union)
 importFrom(BiocGenerics, start, end, width)
 importFrom(IRanges, IRanges, reduce)
