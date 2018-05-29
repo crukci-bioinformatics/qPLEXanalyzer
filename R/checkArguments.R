@@ -8,7 +8,7 @@ is_validMetadata <- function(metadata){
   all(columns%in%colnames(metadata))
 }
 on_failure(is_validMetadata) <- function(call, env) {
-  "Metadata must include the columns SampleName, SampleGroup, BioRep, and TechRep"
+  "Metadata must have the columns SampleName, SampleGroup, BioRep, and TechRep"
 }
 
 # check the sample dat ####
@@ -54,7 +54,8 @@ is_validAnnotationData <- function(annotation){
     all(columns%in%colnames(annotation))
 }
 on_failure(is_validAnnotationData) <- function(call, env) {
-    "annotation must have the columns Accessions, Gene, Description and GeneSymbol"
+    paste0("annotation must have the columns ",
+           "Accessions, Gene, Description and GeneSymbol")
 }
 
 # check MSnSetOBj is a peptide level data set ####
@@ -99,7 +100,7 @@ on_failure(is_validGroupingColumn) <- function(call, env){
 # check the summarisation function is appropriate ####
 is_validSummarizationFunction <- function(summarizationFunction){
   assert_that(is.function(summarizationFunction))
-  length(summarizationFunction(1:10)) == 1
+  length(summarizationFunction(seq(10))) == 1
 }
 on_failure(is_validSummarizationFunction) <- function(call, env){
   "summarizationFunction should be a summary function, e.g. mean or sum'"
@@ -156,8 +157,8 @@ on_failure(is_validContrast) <- function(call, env){
 # check the control group #####
 is_validControlGroup <- function(controlGroup, diffstats){
   assert_that(is.string(controlGroup) | is.null(controlGroup),
-              msg = paste0("controlGroup has to be a string (character vector ", 
-              "of length 1) or NULL"))
+              msg = paste0("controlGroup has to be a string ", 
+              "(character vector of length 1) or NULL"))
   is.null(controlGroup) ||
       controlGroup%in%colnames(diffstats$fittedLM$coefficients)
 }
