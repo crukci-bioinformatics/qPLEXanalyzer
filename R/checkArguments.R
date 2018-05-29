@@ -1,5 +1,4 @@
 #### Argument checking functions ###############################################
-
 ## Custom assertions ###########################################################
 
 # check metadata ####
@@ -69,7 +68,9 @@ on_failure(is_PeptideSet) <- function(call, env){
 # Check scaling function is appropriate ####
 is_validScalingFunction <- function(scalingFunction){
     assert_that(is.function(scalingFunction))
-    are_equal(scalingFunction, mean) | are_equal(scalingFunction, median)
+    are_equal(scalingFunction, BiocGenerics::mean) |
+        are_equal(scalingFunction, mean) | 
+        are_equal(scalingFunction, median)
 }
 on_failure(is_validScalingFunction) <- function(call, env){
     "scalingFunction should be mean or median'"
@@ -145,8 +146,8 @@ on_failure(is_validDiffstats) <- function(call, env){
 # check contrast requested is valid ####
 is_validContrast <- function(contrast, diffstats){
   assert_that(is.string(contrast))
-  contrasts <- colnames(diffstats$fittedContrasts$coefficients)
-  contrast%in%contrasts
+  contrasts_available <- colnames(diffstats$fittedContrasts$coefficients)
+  contrast%in%contrasts_available
 }
 on_failure(is_validContrast) <- function(call, env){
     paste0("'", call$contrast, "' is not a valid contrast")
@@ -217,7 +218,7 @@ checkArg_regressIntensity <- function(MSnSetObj, controlInd, ProteinId){
     assert_that(is_validProteinId(ProteinId, MSnSetObj))
 }
 
-checkArg_computeDiffStats <- function(MSnSetObj, batchEffect, transform, 
+checkArg_computeDiffStats <- function(MSnSetObj, batchEffect, transform,
                                       contrasts, trend, robust){
     assert_that(is_MSnSet(MSnSetObj), is_ProteinSet(MSnSetObj))
     assert_that(is_validBatchEffect(batchEffect, MSnSetObj))
@@ -227,7 +228,7 @@ checkArg_computeDiffStats <- function(MSnSetObj, batchEffect, transform,
     assert_that(is.flag(robust))
 }
 
-checkArg_getContrastResults <- function(diffstats, contrast, controlGroup, 
+checkArg_getContrastResults <- function(diffstats, contrast, controlGroup,
                                         transform, writeFile){
     assert_that(is_validDiffstats(diffstats))
     assert_that(is_validContrast(contrast, diffstats))
