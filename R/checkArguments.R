@@ -3,12 +3,12 @@
 
 # check metadata ####
 is_validMetadata <- function(metadata){
-  assert_that(is.data.frame(metadata))
-  columns <- c("SampleName","SampleGroup","BioRep","TechRep")
-  all(columns%in%colnames(metadata))
+    assert_that(is.data.frame(metadata))
+    columns <- c("SampleName","SampleGroup","BioRep","TechRep")
+    all(columns%in%colnames(metadata))
 }
 on_failure(is_validMetadata) <- function(call, env) {
-  "Metadata must have the columns SampleName, SampleGroup, BioRep, and TechRep"
+    "Metadata must have columns SampleName, SampleGroup, BioRep, and TechRep"
 }
 
 # check the sample dat ####
@@ -17,8 +17,8 @@ is_validSampleData <- function(ExpObj, metadata, indExpData){
     assert_that(all(colnames(sampleData)%in%metadata$SampleName)&
                     all(metadata$SampleName%in%colnames(sampleData)),
                 msg=paste0("The sample names in the ExpObj columns indicated",
-                          " by indExp do not match the sample names in the ",
-                          "metadata table"))
+                           " by indExp do not match the sample names in the ",
+                           "metadata table"))
     all(map_lgl(sampleData, is.numeric))
 }
 on_failure(is_validSampleData) <- function(call, env) {
@@ -41,10 +41,10 @@ on_failure(is_validSequencesColumn) <- function(call, env){
 
 # check MSnSetObj ####
 is_MSnSet <- function(MSnSetObj){
-  class(MSnSetObj) == "MSnSet"
+    is(MSnSetObj, "MSnSet")
 }
 on_failure(is_MSnSet) <- function(call, env){
-  "MSnSetObj has to be of class MSnSet"
+    "MSnSetObj has to be of class MSnSet"
 }
 
 # check the annotation table ####
@@ -90,30 +90,30 @@ on_failure(is_validProteinId) <- function(call, env){
 
 # check the grouping column exists ####
 is_validGroupingColumn <- function(groupingColumn, MSnSetObj){
-  assert_that(is.string(groupingColumn))
-  groupingColumn%in%colnames(pData(MSnSetObj))
+    assert_that(is.string(groupingColumn))
+    groupingColumn%in%colnames(pData(MSnSetObj))
 }
 on_failure(is_validGroupingColumn) <- function(call, env){
-  "The grouping column provided is not found the MSnset metadata"
+    "The grouping column provided is not found the MSnset metadata"
 }
 
 # check the summarisation function is appropriate ####
 is_validSummarizationFunction <- function(summarizationFunction){
-  assert_that(is.function(summarizationFunction))
-  length(summarizationFunction(seq(10))) == 1
+    assert_that(is.function(summarizationFunction))
+    length(summarizationFunction(seq(10))) == 1
 }
 on_failure(is_validSummarizationFunction) <- function(call, env){
-  "summarizationFunction should be a summary function, e.g. mean or sum'"
+    "summarizationFunction should be a summary function, e.g. mean or sum'"
 }
 
 # check the control column index ####
 is_validControlColumn <- function(controlInd, MSnSetObj){
-  assert_that(is.numeric(controlInd)|is.null(controlInd),
-              msg = "controlInd has to be either numeric or NULL")
-  is.null(controlInd) || all(controlInd <= ncol(MSnSetObj))
+    assert_that(is.numeric(controlInd)|is.null(controlInd),
+                msg = "controlInd has to be either numeric or NULL")
+    is.null(controlInd) || all(controlInd <= ncol(MSnSetObj))
 }
 on_failure(is_validControlColumn) <- function(call, env){
-  "controlInd includes indexes for columns not present in the MSnSet"
+    "controlInd includes indexes for columns not present in the MSnSet"
 }
 
 # check the MSnSeis a protein level data set ####
@@ -126,12 +126,12 @@ on_failure(is_ProteinSet) <- function(call, env){
 
 # check the batch effect column ####
 is_validBatchEffect <- function(batchEffect, MSnSetObj){
-  assert_that(is.character(batchEffect) | is.null(batchEffect),
-              msg = "batchEffect has to be either character or NULL")
-  is.null(batchEffect) || all(batchEffect%in%colnames(pData(MSnSetObj)))
+    assert_that(is.character(batchEffect) | is.null(batchEffect),
+                msg = "batchEffect has to be either character or NULL")
+    is.null(batchEffect) || all(batchEffect%in%colnames(pData(MSnSetObj)))
 }
 on_failure(is_validBatchEffect) <- function(call, env){
-  "batchEffect includes columns not found the MSnset metadata"
+    "batchEffect includes columns not found the MSnset metadata"
 }
 
 # check list is a computeDiffStats output ####
@@ -146,9 +146,9 @@ on_failure(is_validDiffstats) <- function(call, env){
 
 # check contrast requested is valid ####
 is_validContrast <- function(contrast, diffstats){
-  assert_that(is.string(contrast))
-  contrasts_available <- colnames(diffstats$fittedContrasts$coefficients)
-  contrast%in%contrasts_available
+    assert_that(is.string(contrast))
+    contrasts_available <- colnames(diffstats$fittedContrasts$coefficients)
+    contrast%in%contrasts_available
 }
 on_failure(is_validContrast) <- function(call, env){
     paste0("'", call$contrast, "' is not a valid contrast")
@@ -156,16 +156,16 @@ on_failure(is_validContrast) <- function(call, env){
 
 # check the control group #####
 is_validControlGroup <- function(controlGroup, diffstats){
-  assert_that(is.string(controlGroup) | is.null(controlGroup),
-              msg = paste0("controlGroup has to be a string ", 
-              "(character vector of length 1) or NULL"))
-  is.null(controlGroup) ||
-      controlGroup%in%colnames(diffstats$fittedLM$coefficients)
+    assert_that(is.string(controlGroup) | is.null(controlGroup),
+                msg = paste0("controlGroup has to be a string ", 
+                             "(character vector of length 1) or NULL"))
+    is.null(controlGroup) ||
+        controlGroup%in%colnames(diffstats$fittedLM$coefficients)
 }
 on_failure(is_validControlGroup) <- function(call, env){
-  paste0(call$controlGroup, 
-        " is not found in the diffstats object. ", 
-        "It should be one of the SampleGroups in the original MSnSet object.")
+    paste0(call$controlGroup, 
+           " is not found in the diffstats object. It should be one ", 
+           "of the SampleGroups in the original MSnSet object.")
 }
 
 ################################################################################
