@@ -9,8 +9,8 @@ log2xplus1 <- function(x) {
 
 convertToMSnset <- function(ExpObj, metadata, indExpData, Sequences=NULL, 
                             Accessions, type="peptide", rmMissing=TRUE) {
-    .args <- as.list(match.call()[-1])
-    do.call(checkArg_convertToMSnset, .args)
+    checkArg_convertToMSnset(ExpObj, metadata, indExpData, Sequences, 
+                             Accessions, type, rmMissing)
     
     colnames(ExpObj)[Accessions] <- "Accessions"
     colnames(ExpObj)[Sequences] <- "Sequences"
@@ -47,8 +47,7 @@ convertToMSnset <- function(ExpObj, metadata, indExpData, Sequences=NULL,
 # The MSnSetObj must have column "Sequences" denoting its a peptide dataset
 
 summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation) {
-    .args <- as.list(match.call()[-1])
-    do.call(checkArg_summarizeIntensities, .args)
+    checkArg_summarizeIntensities(MSnSetObj, summarizationFunction, annotation)
     
     counts <- as.data.frame(fData(MSnSetObj)) %>%
         select(Accessions, Sequences) %>%
@@ -86,8 +85,7 @@ summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation) {
 # Performs quantile normalization on the intensities within columns
 
 normalizeQuantiles <- function(MSnSetObj) {
-    .args <- as.list(match.call()[-1])
-    do.call(checkArg_normalizeQuantiles, .args)
+    checkArg_normalizeQuantiles(MSnSetObj)
     
     exprs(MSnSetObj) <- normalize.quantiles(exprs(MSnSetObj))
     return(MSnSetObj)
@@ -95,8 +93,7 @@ normalizeQuantiles <- function(MSnSetObj) {
 
 # Performs scaling normalization on the intensities within columns
 normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId = NULL) {
-    .args <- as.list(match.call()[-1])
-    do.call(checkArg_normalizeScaling, .args)
+    checkArg_normalizeScaling(MSnSetObj, scalingFunction, ProteinId)
     
     intensities <- as.data.frame(exprs(MSnSetObj))
     intensitiesForScaling <- intensities
@@ -127,8 +124,7 @@ normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId = NULL) {
 
 groupScaling <- function(MSnSetObj, scalingFunction=median, 
                          groupingColumn="SampleGroup") {
-    .args <- as.list(match.call()[-1])
-    do.call(checkArg_groupScaling, .args)
+    checkArg_groupScaling(MSnSetObj, scalingFunction, groupingColumn)
     
     exprs(MSnSetObj) <- as.data.frame(exprs(MSnSetObj)) %>%
         rownames_to_column("PeptideID") %>%
@@ -154,8 +150,7 @@ groupScaling <- function(MSnSetObj, scalingFunction=median,
 
 #### Row scaling based on mean or median of row
 rowScaling <- function(MSnSetObj, scalingFunction) {
-    .args <- as.list(match.call()[-1])
-    do.call(checkArg_rowScaling, .args)
+    checkArg_rowScaling(MSnSetObj, scalingFunction)
     
     intensities <- exprs(MSnSetObj)
     rwm <- apply(intensities, 1, scalingFunction)
@@ -167,8 +162,7 @@ rowScaling <- function(MSnSetObj, scalingFunction) {
 
 #### Function to regress expression values based on single protein ####
 regressIntensity <- function(MSnSetObj, controlInd=NULL, ProteinId) {
-    .args <- as.list(match.call()[-1])
-    do.call(checkArg_regressIntensity, .args)
+    checkArg_regressIntensity(MSnSetObj, controlInd, ProteinId)
     
     ind <- which(fData(MSnSetObj)$Accessions == ProteinId)
     prot <- exprs(MSnSetObj)[ind, ]
@@ -203,8 +197,8 @@ regressIntensity <- function(MSnSetObj, controlInd=NULL, ProteinId) {
 # The intensities table must contain a column for each sample in PhenoData
 computeDiffStats <- function(MSnSetObj, batchEffect = NULL, transform = TRUE, 
                              contrasts, trend = TRUE, robust = TRUE) {
-    .args <- as.list(match.call()[-1])
-    do.call(checkArg_computeDiffStats, .args)
+    checkArg_computeDiffStats(MSnSetObj, batchEffect, transform, contrasts,
+                              trend, robust)
     
     message("Fitting linear model")
     intensities <- as.data.frame(exprs(MSnSetObj))
@@ -249,8 +243,8 @@ computeDiffStats <- function(MSnSetObj, batchEffect = NULL, transform = TRUE,
 
 getContrastResults <- function(diffstats, contrast, controlGroup = NULL, 
                                transform = TRUE, writeFile= FALSE) {
-    .args <- as.list(match.call()[-1])
-    do.call(checkArg_getContrastResults, .args)
+    checkArg_getContrastResults(diffstats, contrast, controlGroup, transform,
+                                writeFile)
     
     message("Obtaining results for contrast", contrast, "\n")
     contrast <- contrast %>%
