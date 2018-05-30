@@ -1,7 +1,7 @@
 Package: qPLEXanalyzer
 Type: Package
 Title: Tools for qPLEX-RIME data analysis
-Version: 0.99.6
+Version: 0.99.7
 Date: 2018-05-11
 Authors@R: c(person("Matthew Eldridge", "Developer", role = "aut"),
              person("Kamal Kishore", "Developer", role = "aut", 
@@ -14,7 +14,7 @@ Imports: tidyr, preprocessCore, limma, ggplot2, RColorBrewer, stats, utils,
          Biostrings, GenomicRanges, IRanges, graphics, BiocGenerics,
 	 stringr, purrr, tibble, ggdendro, grDevices, dplyr, magrittr, assertthat
 Depends: R (>= 3.5), Biobase, statmod, MSnbase  
-Suggests: UniProt.ws, knitr, qPLEXdata
+Suggests: UniProt.ws, knitr
 VignetteBuilder: knitr
 biocViews: Proteomics, MassSpectrometry, Normalization, Preprocessing, QualityControl, DataImport
 BugReports: https://github.com/crukci-bioinformatics/qPLEXanalyzer/issues
