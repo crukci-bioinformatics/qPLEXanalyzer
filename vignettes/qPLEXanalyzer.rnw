@@ -291,7 +291,7 @@ The quantitative dataset could consist of peptide or protein intensities. If
 the dataset consists of peptide information, they can be aggregated to protein 
 intensities for further analysis. For this, an annotation file consisting of 
 proteins with unique ID must be provided. An example file can be found with the 
-package corresponding to uniprot annotation of human and mouse proteins. It 
+package corresponding to uniprot annotation of human proteins. It 
 consists of four columns: 'Accessions', 'Gene', 'Description' and 'GeneSymbol'. 
 The columns 'Accessions'and 'GeneSymbol' are mandatory for successful downstream 
 analysis while the other two columns are optional. The \Rpackage{UniProt.ws} 
