@@ -492,6 +492,8 @@ coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile,
         gsub("^\\[.\\]\\.([A-Z]+)\\.\\[.\\]$", "\\1", .) %>%
         map_dfr(getPosition)
     
+    features <- unique(features)
+    
     # get percent coverage
     protWidth <- width(Protein_seq)
     coverage <- GRanges("feature", IRanges(features$start, features$end)) %>%
