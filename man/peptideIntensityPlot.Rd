@@ -25,8 +25,8 @@ An intensity plot for selected protein and associated peptides.
 \examples{
 data(human_anno)
 data(exp3_OHT_ESR1)
-MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,metadata=exp3_OHT_ESR1$metadata_qPLEX1,
-indExpData=c(7:16),Sequences=2,Accessions=6)
+MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+indExpData=c(7:16), Sequences=2, Accessions=6)
 MSnset_P <- summarizeIntensities(MSnSet_data, sum, human_anno)
-peptideIntensityPlot(MSnSet_data,combinedIntensities=MSnset_P, ProteinID="P03372", ProteinName= "ESR1")
+peptideIntensityPlot(MSnSet_data, combinedIntensities=MSnset_P, ProteinID="P03372", ProteinName= "ESR1")
 }

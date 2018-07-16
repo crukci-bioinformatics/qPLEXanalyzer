@@ -161,7 +161,7 @@ rowScaling <- function(MSnSetObj, scalingFunction) {
 
 
 #### Function to regress expression values based on single protein ####
-regressIntensity <- function(MSnSetObj, controlInd=NULL, ProteinId) {
+regressIntensity <- function(MSnSetObj, ProteinId, controlInd=NULL, plot=TRUE) {
     checkArg_regressIntensity(MSnSetObj, controlInd, ProteinId)
     
     ind <- which(fData(MSnSetObj)$Accessions == ProteinId)
@@ -173,8 +173,6 @@ regressIntensity <- function(MSnSetObj, controlInd=NULL, ProteinId) {
     }
     combdata <- cbind(dep, indep)
     originalCorrelation <- apply(dep[-ind, ], 1, function(x) cor(x, dep[ind, ]))
-    par(mfrow = c(1, 2))
-    hist(originalCorrelation, main = "Corr Raw data")
     calculateResiduals <- function(x){
         resid(lm(x[seq_len(ncol(dep))] ~ x[seq(ncol(dep) + 1, ncol(combdata))]))
     }
@@ -185,7 +183,18 @@ regressIntensity <- function(MSnSetObj, controlInd=NULL, ProteinId) {
     reg_dep <- exprs(MSnSetObj)
     transformedCorrelation <- apply(reg_dep[-ind, ], 1, 
                                      function(x) cor(x, dep[ind, ]))
-    hist(transformedCorrelation, main = "Corr Regressed data")
+    if(plot){
+        tryCatch({
+            par(mfrow = c(1, 2))
+            hist(originalCorrelation, main = "Corr Raw data")
+            hist(transformedCorrelation, main = "Corr Regressed data")
+            }, 
+            error = function(err) {
+                message("QC histograms not plotted:")
+                message(err)
+                }
+            )
+    }
     return(MSnSetObj)
 }
 

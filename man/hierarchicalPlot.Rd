@@ -19,8 +19,8 @@ A hierarchical clustering plot for quantitative proteomics data.
 \examples{
 data(human_anno)
 data(exp3_OHT_ESR1)
-MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,metadata=exp3_OHT_ESR1$metadata_qPLEX1,
-indExpData=c(7:16),Sequences=2,Accessions=6)
+MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+indExpData=c(7:16), Sequences=2, Accessions=6)
 exprs(MSnSet_data) <- exprs(MSnSet_data)+0.01
 hierarchicalPlot(MSnSet_data, title="qPLEX_RIME_ER")
 }

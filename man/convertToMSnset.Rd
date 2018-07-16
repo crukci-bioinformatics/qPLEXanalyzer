@@ -4,7 +4,7 @@
 \description{
   Converts processed TMT peptide intensities to MSnSet
 }
-\usage{convertToMSnset(ExpObj,metadata,indExpData,Sequences,Accessions,type="peptide",rmMissing=TRUE)}
+\usage{convertToMSnset(ExpObj, metadata, indExpData, Sequences, Accessions, type="peptide", rmMissing=TRUE)}
 \arguments{
   \item{ExpObj}{data.frame; a data.frame consisting of quantitative peptide intensities and peptide annotation}
   \item{metadata}{data.frame; a data.frame describing the samples}
@@ -25,6 +25,6 @@ The function can be used for either peptide intensities or data that has already
 \examples{
 data(human_anno)
 data(exp3_OHT_ESR1)
-MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,metadata=exp3_OHT_ESR1$metadata_qPLEX1,
-indExpData=c(7:16),Sequences=2,Accessions=6)
+MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+indExpData=c(7:16), Sequences=2, Accessions=6)
 }
