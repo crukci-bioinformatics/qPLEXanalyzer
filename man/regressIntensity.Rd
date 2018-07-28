@@ -4,7 +4,7 @@
 \description{
   Performs linear regression on protein intensities based on selected protein (qPLEX-RIME bait)
 }
-\usage{regressIntensity(MSnSetObj, ProteinId, controlInd=NULL, plot=FALSE)}
+\usage{regressIntensity(MSnSetObj, ProteinId, controlInd=NULL, plot=TRUE)}
 \arguments{
   \item{MSnSetObj}{MSnSet; an object of class MSnSet}
   \item{controlInd}{numeric; index of IgG within MSnSet}
