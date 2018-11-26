@@ -1,3 +1,21 @@
+VERSION 1.0.1
+------------------------
+ o Fixed bug in maVolPlot - github Issue 12:
+    Previously the 'selectedGenes' argument used GeneSymbols to match genes to
+highlight in the plot. Not all accessions are annotated with a GeneSymbol, and 
+some GeneSymbols are linked to more than one Accession. This could lead to 
+situations where incorrect genes were being highlighted due to duplicate 
+entries or NAs. The function now accepts and matches to accessions instead - 
+this is now noted in the man pages.
+ o Fixed bug in convertToMSnset - github Issue 11:
+    The function previously threw and error if the metadata was a tibble as it
+needs to set row names. The function now tranforms the metadata object to a
+data frame.
+
+VERSION 1.0.0
+------------------------
+ o First Bioconductor Release (Bioconductor 3.8)
+
 VERSION 0.99.0
 ------------------------
  o initial version with the following functions implemented:
