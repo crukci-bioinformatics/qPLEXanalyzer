@@ -19,6 +19,9 @@ convertToMSnset <- function(ExpObj, metadata, indExpData, Sequences=NULL,
         ExpObj %<>% filter_at(vars(indExpData), all_vars(!is.na(.)))
     }
     obj <- readMSnSet2(ExpObj, ecol = indExpData)
+
+    # if the meta data is a tibble, we can't set rownames
+    metadata <- as.data.frame(metadata)
     rownames(metadata) <- as.character(metadata$SampleName)
     ind <- match(sampleNames(obj), rownames(metadata))
     metadata <- metadata[ind, ]
