@@ -237,6 +237,11 @@ maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
         stop("plotType should be 'MA' or 'Volcano'..")
     }
     
+    if (!all(selectedGenes%in%fData(diffstats$MSnSetObj)$Accessions)) {
+        stop("Some of the genes provided in 'selectedGenes' were not found in ",
+             "the data table")
+    }
+
     testSignficant <- function(dat) {
         dat$adj.P.Val <= fdrCutOff &
             !is.na(dat$adj.P.Val) &
@@ -257,7 +262,7 @@ maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
                    ifelse(testSignficant(.), 
                           "Significant", 
                           "Non-significant")) %>%
-        mutate(group = ifelse(GeneSymbol %in% selectedGenes, 
+        mutate(group = ifelse(Accessions %in% selectedGenes, 
                               "Selected", 
                               group)) %>%
         mutate(group = factor(group, 

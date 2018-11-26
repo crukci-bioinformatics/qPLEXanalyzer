@@ -13,10 +13,21 @@
    \item{title}{character: title for the plot}
    \item{controlGroup}{character; control group such as IgG}
    \item{selectedGenes}{character: a vector defining genes to plot}
-   \item{fdrCutOff}{numeric: cutoff for adj.P.Val}
-   \item{lfcCutOff}{numeric: cutoff for log2FC}
+   \item{fdrCutOff}{numeric: False Discovery Rate (adj.P.Val) cut off}
+   \item{lfcCutOff}{numeric: Log Fold Change (log2FC) cutoff for }
    \item{controlLfcCutOff}{numeric: only plot genes above controlLogFoldChange cutoff}
    \item{plotType}{character: which type of plot to generate: "MA" or "Volcano"}
+}
+\details{
+    Genes determined as significant according to the Log Fold Change and False
+    Discovery Rate cutoffs are highlighted in red.
+
+    A user specified selection of genes can be highlighted by passing a 
+    character vector of Accessions to the selectedGenes argument. The contents
+    of this vector will be matched with the Accessions column of the diffstats
+    object to identify rows to highlight. These will be plotted in blue and 
+    labelled with the contents of the GeneSymbol column. Note that if the 
+    GeneSymbol for a selected gene is missing, no label will be apparent.
 }
 \value{
 A "MA" or "Volcano" plot to visualize differential statistics results.
