@@ -301,7 +301,7 @@ protein accessions, as shown in the section below. The
 format.
 
 \begin{center}
-<<annotation,out.width='.85\\textwidth',message=FALSE,cache=TRUE>>=
+<<annotation,out.width='.85\\textwidth',eval=FALSE>>=
 library(UniProt.ws)
 library(dplyr)
 proteins <- unique(fData(MSnset_data)$Accessions)[1:10]
@@ -314,7 +314,16 @@ first_ten_anno <- UniProt.ws::select(hs, proteins, columns, "UNIPROTKB") %>%
     Accessions = "UNIPROTKB", Gene = "ENTRY-NAME",
     Description = "PROTEIN-NAMES", GeneSymbol
   )
-head(first_ten_anno)
+head(arrange(first_ten_anno, Accessions))
+@
+
+<<annotationReal,out.width='.85\\textwidth',message=FALSE,cache=TRUE,echo=FALSE>>=
+library(dplyr)
+proteins <- unique(fData(MSnset_data)$Accessions)[1:10]
+filter(human_anno, Accessions%in%proteins) %>%
+    tbl_df() %>%
+    arrange(Accessions) %>%
+    head()
 @
 \end{center}
 

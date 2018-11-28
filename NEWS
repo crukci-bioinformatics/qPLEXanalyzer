@@ -1,4 +1,8 @@
-VERSION 1.0.1
+VERSION 1.1.2
+------------------------
+Updates to vignette to avoid build errors when attempting to connect to Uniprot
+
+VERSION 1.1.1
 ------------------------
  o Fixed bug in maVolPlot - github Issue 12:
     Previously the 'selectedGenes' argument used GeneSymbols to match genes to
@@ -11,6 +15,10 @@ this is now noted in the man pages.
     The function previously threw and error if the metadata was a tibble as it
 needs to set row names. The function now tranforms the metadata object to a
 data frame.
+
+VERSION 1.1.0
+------------------------
+ o First Bioconductor Devel (Bioconductor 3.9)
 
 VERSION 1.0.0
 ------------------------
