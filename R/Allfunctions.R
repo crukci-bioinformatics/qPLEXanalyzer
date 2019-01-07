@@ -104,7 +104,7 @@ normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId = NULL) {
     if (!is.null(ProteinId)) {
         featuredata <- fData(MSnSetObj)
         ### use protein identifier here
-        ind <- which(featuredata$Accessions == ProteinId)
+        ind <- which(featuredata$Accessions %in% ProteinId)
         if (!length(ind)) {
             stop("Protein not found")
         }
