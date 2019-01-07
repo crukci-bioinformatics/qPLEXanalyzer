@@ -79,9 +79,8 @@ on_failure(is_validScalingFunction) <- function(call, env){
 
 # check the provided protein ID is in the MSnSetObj ####
 is_validProteinId <- function(ProteinID, MSnSetObj){
-    assert_that(is.string(ProteinID) | is.null(ProteinID),
-                msg=paste0("ProteinID should be a string (a length one ", 
-                           "character vector) or NULL"))
+    assert_that(is.character(ProteinID) | is.null(ProteinID),
+                msg=paste0("ProteinID should be a charater or NULL"))
     is.null(ProteinID) || ProteinID%in%fData(MSnSetObj)$Accessions
 }
 on_failure(is_validProteinId) <- function(call, env){
