@@ -479,7 +479,10 @@ coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile,
     if (!"Sequences" %in% colnames(fData(MSnSetObj))) {
         stop('MSnSetObj feature data must include a "Sequences" column')
     }
-    
+    if(!(ProteinID %in% fData(MSnSetObj)$Accessions)) {
+        stop("Protein ID ", ProteinID, " not found in MSnset Object")
+    }
+
     ## read protein sequence from fastafile
     Protein_seq <- readAAStringSet(fastaFile)
     
@@ -494,7 +497,7 @@ coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile,
     features <- fData(MSnSetObj) %>%
         filter(Accessions == ProteinID) %>%
         use_series(Sequence) %>%
-        gsub("^\\[.\\]\\.([A-Z]+)\\.\\[.\\]$", "\\1", .) %>%
+        gsub("^[^.]+\\.|\\.[^.]+", "", .) %>%
         map_dfr(getPosition)
     
     features <- unique(features)
