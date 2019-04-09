@@ -1,3 +1,16 @@
+VERSION 1.1.4
+------------------------
+ o Fixed bug in coveragePlot - github Issue 15:
+     Previously function cleaned the beginning of each peptide sequence by 
+gsub("^\[.\]\.([A-Z]+)\.\[.\]$", "\1", .). However, it is not always the case
+that the terminal amino acids are surround by square brackets. I have put a 
+more general regex in place that removes everything up to the first '.' and
+everything after the last '.'. 
+
+VERSION 1.1.3
+------------------------
+'ImmunoOncology' added to BiocViews.
+
 VERSION 1.1.2
 ------------------------
 Updates to vignette to avoid build errors when attempting to connect to Uniprot
