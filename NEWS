@@ -1,66 +1,55 @@
-VERSION 1.1.4
-------------------------
- o Fixed bug in coveragePlot - github Issue 15:
-     Previously function cleaned the beginning of each peptide sequence by 
-gsub("^\[.\]\.([A-Z]+)\.\[.\]$", "\1", .). However, it is not always the case
-that the terminal amino acids are surround by square brackets. I have put a 
-more general regex in place that removes everything up to the first '.' and
-everything after the last '.'. 
+Changes in version 1.1.4
++ Fixed bug in coveragePlot - github Issue 15: Previously the function cleaned
+the beginning of each peptide sequence by gsub("^\[.\]\.([A-Z]+)\.\[.\]$",
+"\1", .).  However, it is not always the case that the terminal amino acids are
+surround by square brackets. I have put a more general regex in place that
+removes everything up to the first '.' and everything after the last '.'. 
 
-VERSION 1.1.3
-------------------------
-'ImmunoOncology' added to BiocViews.
+Changes in version 1.1.3
++ 'ImmunoOncology' added to BiocViews.
 
-VERSION 1.1.2
-------------------------
-Updates to vignette to avoid build errors when attempting to connect to Uniprot
+Changes in version 1.1.2
++ Updates to vignette to avoid build errors when attempting to connect to Uniprot
 
-VERSION 1.1.1
-------------------------
- o Fixed bug in maVolPlot - github Issue 12:
-    Previously the 'selectedGenes' argument used GeneSymbols to match genes to
-highlight in the plot. Not all accessions are annotated with a GeneSymbol, and 
-some GeneSymbols are linked to more than one Accession. This could lead to 
-situations where incorrect genes were being highlighted due to duplicate 
-entries or NAs. The function now accepts and matches to accessions instead - 
-this is now noted in the man pages.
- o Fixed bug in convertToMSnset - github Issue 11:
-    The function previously threw and error if the metadata was a tibble as it
-needs to set row names. The function now tranforms the metadata object to a
-data frame.
+Changes in version 1.1.1
++ Fixed bug in maVolPlot - github Issue 12: Previously the 'selectedGenes'
+argument used GeneSymbols to match genes to highlight in the plot. Not all
+accessions are annotated with a GeneSymbol, and some GeneSymbols are linked to
+more than one Accession. This could lead to situations where incorrect genes
+were being highlighted due to duplicate entries or NAs. The function now accepts
+and matches to accessions instead - this is now noted in the man pages.
++ Fixed bug in convertToMSnset - github Issue 11: The function previously threw
+and error if the metadata was a tibble as it needs to set row names. The
+function now tranforms the metadata object to a data frame.
 
-VERSION 1.1.0
-------------------------
- o First Bioconductor Devel (Bioconductor 3.9)
+Changes in version 1.1.0
++ First Bioconductor Devel (Bioconductor 3.9)
 
-VERSION 1.0.0
-------------------------
- o First Bioconductor Release (Bioconductor 3.8)
+Changes in version 1.0.0
++ First Bioconductor Release (Bioconductor 3.8)
 
-VERSION 0.99.0
-------------------------
- o initial version with the following functions implemented:
-
-   + convertToMSnset
-   + summarizeIntensities
-   + normalizeQuantiles
-   + normalizeScaling
-   + groupScaling
-   + rowScaling
-   + regressIntensity
-   + computeDiffStats
-   + getContrastResults
-   + assignColours
-   + intensityPlot
-   + intensityBoxplot
-   + peptideIntensityPlot
-   + pcaPlot
-   + maVolPlot
-   + corrPlot
-   + rliPlot
-   + hierarchicalPlot
-   + plotMeanVar
-   + coveragePlot
+Changes in version 0.99.0
++ Initial version with the following functions implemented:       
+    + convertToMSnset
+    + summarizeIntensities
+    + normalizeQuantiles
+    + normalizeScaling
+    + groupScaling
+    + rowScaling
+    + regressIntensity
+    + computeDiffStats
+    + getContrastResults
+    + assignColours
+    + intensityPlot
+    + intensityBoxplot
+    + peptideIntensityPlot
+    + pcaPlot
+    + maVolPlot
+    + corrPlot
+    + rliPlot
+    + hierarchicalPlot
+    + plotMeanVar
+    + coveragePlot
 
   
 
