@@ -115,7 +115,7 @@ on_failure(is_validControlColumn) <- function(call, env){
     "controlInd includes indexes for columns not present in the MSnSet"
 }
 
-# check the MSnSeis a protein level data set ####
+# check the MSnSet is a protein level data set ####
 is_ProteinSet <- function(MSnSetObj){
     !grepl("peptide", rownames(MSnSetObj)[1])
 }
@@ -189,6 +189,12 @@ checkArg_summarizeIntensities <- function(MSnSetObj, summarizationFunction,
     assert_that(is_validAnnotationData(annotation))
 }
 
+checkArg_mergePeptides <- function(MSnSetObj, summarizationFunction, 
+                                          annotation){
+  assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
+  assert_that(is_validSummarizationFunction(summarizationFunction))
+  assert_that(is_validAnnotationData(annotation))
+}
 
 checkArg_normalizeQuantiles <- function(MSnSetObj){
     assert_that(is_MSnSet(MSnSetObj))
@@ -220,7 +226,7 @@ checkArg_regressIntensity <- function(MSnSetObj, controlInd, ProteinId){
 
 checkArg_computeDiffStats <- function(MSnSetObj, batchEffect, transform,
                                       contrasts, trend, robust){
-    assert_that(is_MSnSet(MSnSetObj), is_ProteinSet(MSnSetObj))
+    assert_that(is_MSnSet(MSnSetObj))
     assert_that(is_validBatchEffect(batchEffect, MSnSetObj))
     assert_that(is.flag(transform))
     assert_that(is.character(contrasts))
