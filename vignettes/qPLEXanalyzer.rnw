@@ -331,7 +331,12 @@ The aggregation can be performed by calculating the sum, mean or median of the
 raw or normalized peptide intensities. The summarized intensity for a selected 
 protein could be visualized using \Rfunction{peptideIntensityPlot}. It plots 
 all peptides intensities for a selected protein along with summarized intensity 
-across all the samples (Figure 9).
+across all the samples (Figure 9). Phosphopeptide data is usually analysed at 
+peptide level instead of protein. This is achieved by either performing analysis 
+separately at each peptide or merging identical peptides (having phospho modification)
+belonging to same protein into single peptide intensity. The downstream analysis is then
+carried out on these merged peptides. The \Rfunction{mergePeptides} function performs this
+merging of peptides intensities.
 
 \begin{center}
 <<summarize,fig.width=6,fig.height=5,out.width='.85\\textwidth',message=FALSE,cache=TRUE>>=
