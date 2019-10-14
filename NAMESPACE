@@ -36,5 +36,5 @@ export(
   ,"groupScaling","hierarchicalPlot","intensityBoxplot"    
   ,"intensityPlot","maVolPlot","normalizeQuantiles","normalizeScaling",
   "pcaPlot","peptideIntensityPlot","plotMeanVar","regressIntensity"    
-  ,"rliPlot","rowScaling","summarizeIntensities"
+  ,"rliPlot","rowScaling","summarizeIntensities","mergePeptides"
 )
