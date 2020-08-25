@@ -190,7 +190,7 @@ checkArg_summarizeIntensities <- function(MSnSetObj, summarizationFunction,
 }
 
 checkArg_mergePeptides <- function(MSnSetObj, summarizationFunction, 
-                                          annotation){
+                                   annotation, PosMasterProt){
   assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
   assert_that(is_validSummarizationFunction(summarizationFunction))
   assert_that(is_validAnnotationData(annotation))
