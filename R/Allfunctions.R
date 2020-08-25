@@ -79,14 +79,25 @@ summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation) {
     return(obj)
 }
 
-mergePeptides <- function(MSnSetObj, summarizationFunction, annotation) {
-  checkArg_mergePeptides(MSnSetObj, summarizationFunction, annotation)
+mergePeptides <- function(MSnSetObj, summarizationFunction, annotation, PosMasterProt=NULL) {
+  checkArg_mergePeptides(MSnSetObj, summarizationFunction, annotation, PosMasterProt=NULL)
   
-  counts <- as.data.frame(fData(MSnSetObj)) %>%
-    select(Accessions, Sequences) %>%
-    mutate(phosseqid = paste0(fData(MSnSetObj)$Sequences,"_",as.character(fData(MSnSetObj)$Accessions))) %>%
-    count(phosseqid) %>%
-    rename(Count = n)
+  if(!is.null(PosMasterProt)){
+    colnames(fData(MSnSetObj))[PosMasterProt] <- "PosInMasterProtein"
+    counts <- as.data.frame(fData(MSnSetObj)) %>%
+      select(Accessions, Sequences, PosInMasterProtein) %>%
+      mutate(phosseqid = paste0(fData(MSnSetObj)$Sequences,"_",as.character(fData(MSnSetObj)$Accessions))) %>%
+      count(phosseqid, PosInMasterProtein) %>%
+      rename(Count = n)
+  }
+  else
+  {
+    counts <- as.data.frame(fData(MSnSetObj)) %>%
+      select(Accessions, Sequences) %>%
+      mutate(phosseqid = paste0(fData(MSnSetObj)$Sequences,"_",as.character(fData(MSnSetObj)$Accessions))) %>%
+      count(phosseqid) %>%
+      rename(Count = n)
+  }
   
   summarizedIntensities <- as.data.frame(exprs(MSnSetObj)) %>%
     mutate(phosseqid = paste0(fData(MSnSetObj)$Sequences,"_",as.character(fData(MSnSetObj)$Accessions))) %>%
@@ -99,12 +110,21 @@ mergePeptides <- function(MSnSetObj, summarizationFunction, annotation) {
   
   summarizedIntensities <- summarizedIntensities %>%
     left_join(annotation, by = "Accessions") %>%
-    select(Accessions, colnames(annotation), Count, everything())
+    select(Accessions, colnames(annotation), Count, contains("PosInMasterProtein"), everything())
   
-  expInd <- seq(
-    grep("Count", colnames(summarizedIntensities)) + 2,
-    ncol(summarizedIntensities)
-  )
+  if(!is.null(PosMasterProt)){
+    expInd <- seq(
+      grep("Count", colnames(summarizedIntensities)) + 3,
+      ncol(summarizedIntensities)
+    )
+  }
+  else
+  {
+    expInd <- seq(
+      grep("Count", colnames(summarizedIntensities)) + 2,
+      ncol(summarizedIntensities)
+    )
+  }
   
   obj <- readMSnSet2(summarizedIntensities, ecol = expInd)
   pData(obj) <- pData(MSnSetObj)
@@ -250,7 +270,7 @@ computeDiffStats <- function(MSnSetObj, batchEffect = NULL, transform = TRUE,
         intensities <- log2xplus1(intensities)
     }
     batchEffect <- unique(c("SampleGroup", batchEffect))
-    model <- as.formula(paste(c("~ 0", batchEffect), collapse = " + "))
+    model <- as.formula(paste(c("~0", batchEffect), collapse = " + "))
     design <- model.matrix(model, data = pData(MSnSetObj))
     colnames(design) <- colnames(design) %>%
         sub(pattern = "^SampleGroup", replacement = "") %>%
