@@ -10,11 +10,32 @@ Authors@R: c(person("Matthew Eldridge", role = "aut"),
                      email="ads2202cu@gmail.com"))
 Description: Tools for quantitative proteomics data analysis generated from qPLEX-RIME method.
 License: GPL-2
-Imports: tidyr, preprocessCore, limma, ggplot2, RColorBrewer, stats, utils,
-         Biostrings, GenomicRanges, IRanges, graphics, BiocGenerics,
-	 stringr, purrr, tibble, ggdendro, grDevices, dplyr, magrittr, assertthat
+Imports: assertthat,
+         BiocGenerics,
+         Biostrings, 
+         dplyr (>= 1.0.0), 
+         GenomicRanges, 
+         ggdendro, 
+         ggplot2, 
+         graphics, 
+         grDevices, 
+         IRanges, 
+         limma, 
+         magrittr, 
+         preprocessCore, 
+         purrr, 
+         RColorBrewer, 
+         stats, 
+         stringr, 
+         tibble, 
+         tidyr, 
+         utils
 Depends: R (>= 3.6), Biobase, statmod, MSnbase  
-Suggests: UniProt.ws, knitr, qPLEXdata
+Suggests: 
+    UniProt.ws,
+    knitr,
+    qPLEXdata,
+    testthat
 VignetteBuilder: knitr
 biocViews: ImmunoOncology, Proteomics, MassSpectrometry, Normalization, Preprocessing, QualityControl, DataImport
 BugReports: https://github.com/crukci-bioinformatics/qPLEXanalyzer/issues
