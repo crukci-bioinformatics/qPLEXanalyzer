@@ -5,7 +5,7 @@ import(ggplot2)
 import(limma)
 import(preprocessCore)
 import(statmod)
-importFrom(tidyr, pivot_longer, pivot_wider)
+importFrom(tidyr, drop_na, pivot_longer, pivot_wider)
 importFrom(dplyr,
           across,
           arrange,
@@ -29,7 +29,7 @@ importFrom(dplyr,
           ungroup,
           vars)
 importFrom(magrittr,"%>%", "use_series", "%$%", "%<>%")
-importFrom(stringr, str_replace)
+importFrom(stringr, str_c, str_replace)
 importFrom(purrr, map_dfr, map_lgl)
 importFrom(GenomicRanges,GRanges,union)
 importFrom(BiocGenerics, start, end, width)
