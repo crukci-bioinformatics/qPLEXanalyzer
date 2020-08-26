@@ -7,7 +7,7 @@ convertToMSnset <- function(ExpObj, metadata, indExpData, Sequences=NULL,
     colnames(ExpObj)[Sequences] <- "Sequences"
     
     if (rmMissing) {
-        ExpObj %<>% filter_at(vars(indExpData), all_vars(!is.na(.)))
+        ExpObj %<>% filter(across(indExpData, ~!is.na(.x)))
     }
     obj <- readMSnSet2(ExpObj, ecol = indExpData)
 

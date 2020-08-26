@@ -1,6 +1,7 @@
 context("Convert to MSnSet")
 library(qPLEXanalyzer)
-data("exp2_Xlink")
+data(exp2_Xlink)
+data(exp3_OHT_ESR1)
 
 test_that("Convert works", {
   expect_equal_to_reference(

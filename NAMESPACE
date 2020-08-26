@@ -7,6 +7,7 @@ import(preprocessCore)
 import(statmod)
 importFrom(tidyr, pivot_longer, pivot_wider)
 importFrom(dplyr,
+          across,
           arrange,
           bind_rows,
           count,
