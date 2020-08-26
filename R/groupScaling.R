@@ -6,20 +6,19 @@ groupScaling <- function(MSnSetObj, scalingFunction=median,
     
     exprs(MSnSetObj) <- as.data.frame(exprs(MSnSetObj)) %>%
         rownames_to_column("PeptideID") %>%
-        gather("SampleName", "RawIntensity", -PeptideID) %>%
+        pivot_longer(names_to = "SampleName", values_to = "RawIntensity", -PeptideID) %>%
         left_join(pData(MSnSetObj), "SampleName") %>%
-        rename_at(vars(groupingColumn), ~ "Grouping_column") %>%
         group_by(SampleName) %>%
         mutate(scaledIntensity = scalingFunction(RawIntensity) %>% log()) %>%
-        group_by(Grouping_column) %>%
+        group_by(across(groupingColumn)) %>%
         mutate(meanscaledIntensity = mean(scaledIntensity)) %>%
         ungroup() %>%
         mutate(scalingFactors = exp(scaledIntensity - meanscaledIntensity)) %>%
         mutate(normalizedIntensities = RawIntensity / scalingFactors) %>%
         select(PeptideID, SampleName, normalizedIntensities) %>%
-        spread(SampleName, normalizedIntensities) %>%
+        pivot_wider(names_from = "SampleName", 
+                    values_from = "normalizedIntensities") %>%
         arrange(factor(PeptideID, levels = rownames(MSnSetObj))) %>%
-        as.data.frame() %>%
         column_to_rownames("PeptideID") %>%
         select(colnames(MSnSetObj)) %>%
         as.matrix()
