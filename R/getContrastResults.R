@@ -5,9 +5,9 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL,
     
     message("Obtaining results for contrast", contrast, "\n")
     contrast <- contrast %>%
-        gsub(pattern = " ", replacement = "_") %>%
-        sub(pattern = "_-_", replacement = " - ") %>%
-        sub(pattern = "_vs_", replacement = " - ")
+        str_replace_all(pattern = " ", replacement = "_") %>%
+        str_replace(pattern = "_-_", replacement = " - ") %>%
+        str_replace(pattern = "_vs_", replacement = " - ")
     
     MSnSetObj <- diffstats$MSnSetObj
     fittedContrasts <- diffstats$fittedContrasts
@@ -31,10 +31,8 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL,
         intensities <- log2xplus1(intensities)
     }
     SamplesCol <- as.character(MSnSetObj$SampleName)
-    results <- cbind(fData(MSnSetObj), intensities, results)
-    results <- results %>%
-        arrange(desc(B))
-    results <- results %>%
+    results <- bind_cols(fData(MSnSetObj), intensities, results) %>%
+        arrange(desc(B)) %>%
         mutate(across(c("logFC", "t", "B", SamplesCol), round, digits = 2)) %>%
         mutate(across(c("P.Value", "adj.P.Val"), signif, digits = 2)) %>% 
         rename_with(str_replace, 
@@ -43,10 +41,7 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL,
         rename(AvgIntensity=AveExpr, log2FC=logFC)
     
     if (writeFile == TRUE) {
-        write.table(results, paste0(names(contrast), ".txt"), 
-                    quote = FALSE, 
-                    sep = "\t", 
-                    row.names = FALSE)
+        write_tsv(results, paste0(names(contrast), ".txt"))
     }
     return(results)
 }
