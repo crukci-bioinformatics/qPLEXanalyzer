@@ -24,7 +24,7 @@ summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation) {
     summarizedIntensities <- as.data.frame(exprs(MSnSetObj)) %>%
         mutate(Accessions = as.character(fData(MSnSetObj)$Accessions)) %>%
         group_by(Accessions) %>%
-        summarize_all(funs(summarizationFunction)) %>%
+        summarize(across(everything(), summarizationFunction)) %>%
         left_join(counts, by = "Accessions") %>%
         left_join(annotation, by = "Accessions") %>%
         select(Accessions, colnames(annotation), Count, everything())
