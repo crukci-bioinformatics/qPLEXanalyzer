@@ -2,15 +2,24 @@
 \alias{mergePeptides}
 \title{Merge identical peptides intensities}
 \description{
-  Merge identical peptides intensities belonging to same protein to single peptide intensity. This function is especially useful for phosphopeptide analysis.
+  Merge identical peptides to single peptide intensity. This function is especially useful for phosphopeptide analysis.
 }
-\usage{mergePeptides(MSnSetObj, summarizationFunction, annotation, PosMasterProt=NULL)}
+\usage{mergePeptides(MSnSetObj, summarizationFunction, annotation, keepCols=NULL)}
 \arguments{
   \item{MSnSetObj}{MSnSet; an object of class MSnSet}
-  \item{summarizationFunction}{function; method used to aggregate the peptides. Sum, mean or median}
+  \item{summarizationFunction}{function; method used to aggregate the peptides. sum, mean or median}
   \item{annotation}{data.frame; a data.frame of protein annotation of four columns: 
                         "Accessions", "Gene", "Description" and "GeneSymbol"}
-  \item{PosMasterProt}{numeric; Denote the column number of "Position in Master Protein" within fData(MSnSetObj)}
+  \item{keepCols}{a vector of additional columns from fData(MSnSetObj) to keep.
+                  either be a numeric vector of column numbers of a character vector
+                  of column names}
+}
+\details{
+  Rows of the intensity matrix with identical peptide sequences are merged by 
+  summarising the intensities using \code{summarizationFunction}. 
+  
+  Columns specified with \code{keepCols} are retained in the final output. 
+  Non-unique entries in different rows are concatenated with ';'.
 }
 \value{An instance of class "MSnSet".}
 \examples{

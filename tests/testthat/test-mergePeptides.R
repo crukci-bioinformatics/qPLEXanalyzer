@@ -15,10 +15,22 @@ data(human_anno)
 
 test_that("Merge peptides works", {
   expect_equal_to_reference(
-    mergePeptides(MSnSet_data, sum, human_anno), 
-    file="mergePeptides_msnset.rds")
+    mergePeptides(MSnSet_data, 
+                  summarizationFunction = sum, 
+                  annotation = human_anno), 
+    file="mergePeptides_msnset.rds")  
   expect_equal_to_reference(
-    mergePeptides(MSnSet_phos, sum, human_anno, 7), 
+      mergePeptides(MSnSet_phos, 
+                    summarizationFunction = sum, 
+                    annotation = human_anno, 
+                    keepCols = 7:8), 
+      file="mergePeptides_phos_msnset.rds")
+  expect_equal_to_reference(
+    mergePeptides(MSnSet_phos, 
+                  summarizationFunction = sum, 
+                  annotation = human_anno, 
+                  keepCols = c("Positions in Master Proteins", 
+                               "Modifications in Master Proteins")), 
     file="mergePeptides_phos_msnset.rds")
 })
 

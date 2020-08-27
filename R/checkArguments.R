@@ -105,6 +105,31 @@ on_failure(is_validSummarizationFunction) <- function(call, env){
     "summarizationFunction should be a summary function, e.g. mean or sum'"
 }
 
+# check the column indices are valid ####
+is_validColNumber <- function(cols, tab){
+  max(cols) <= ncol(tab)
+}
+
+# check the column names are valid ####
+is_validColName <- function(cols, tab){
+  all(cols%in%colnames(tab))
+}
+
+# check if the columns are in the fData ####
+is_validfDataColumn <- function(cols, MSnSetObj){
+  tab <- fData(MSnSetObj)
+  errMsg1 <- str_c("keepCols should be NULL, a character vector of column ",
+                   "names or a numeric vector of column indices.")
+  errMsg2 <- str_c("One or more of keepCols exceeds the number of columns in ",
+                   "fData(MSnSetObj).")
+  errMsg3 <- "One or more of keepCols is not found in fData(MSnSetObj)."
+  assert_that(is.numeric(cols) | is.character(cols) | is.null(cols),
+              msg = errMsg1)
+  if(is.numeric(cols)){ assert_that(is_validColNumber(cols, tab), msg = errMsg2) }
+  if(is.character(cols)){ assert_that(is_validColName(cols, tab), msg = errMsg3) }
+  TRUE
+}
+
 # check the control column index ####
 is_validControlColumn <- function(controlInd, MSnSetObj){
     assert_that(is.numeric(controlInd)|is.null(controlInd),
@@ -190,11 +215,11 @@ checkArg_summarizeIntensities <- function(MSnSetObj, summarizationFunction,
 }
 
 checkArg_mergePeptides <- function(MSnSetObj, summarizationFunction, 
-                                   annotation, PosMasterProt){
+                                   annotation, keepCols){
   assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
   assert_that(is_validSummarizationFunction(summarizationFunction))
   assert_that(is_validAnnotationData(annotation))
-  assert_that(is.count(PosMasterProt) | is.null(PosMasterProt))
+  assert_that(is_validfDataColumn(keepCols, MSnSetObj))
 }
 
 checkArg_normalizeQuantiles <- function(MSnSetObj){
