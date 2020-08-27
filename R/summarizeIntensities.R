@@ -14,27 +14,17 @@
 summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation) {
     checkArg_summarizeIntensities(MSnSetObj, summarizationFunction, annotation)
     
-    counts <- as.data.frame(fData(MSnSetObj)) %>%
-        select(Accessions, Sequences) %>%
-        distinct() %>%
-        count(Accessions) %>%
-        mutate(Accessions = as.character(Accessions)) %>%
-        rename(Count = n)
+   summarizedIntensities <- fData(MSnSetObj) %>%
+       select(Accessions, Sequences) %>%
+       mutate(across(c(Accessions, Sequences), as.character)) %>% 
+       bind_cols(as.data.frame(exprs(MSnSetObj))) %>% 
+       group_by(Accessions) %>%
+       summarize(across(where(is.numeric), summarizationFunction), 
+                 Count=n_distinct(Sequences)) %>% 
+       left_join(annotation, by = "Accessions") %>%
+       select(Accessions, colnames(annotation), Count, everything())
     
-    summarizedIntensities <- as.data.frame(exprs(MSnSetObj)) %>%
-        mutate(Accessions = as.character(fData(MSnSetObj)$Accessions)) %>%
-        group_by(Accessions) %>%
-        summarize(across(everything(), summarizationFunction)) %>%
-        left_join(counts, by = "Accessions") %>%
-        left_join(annotation, by = "Accessions") %>%
-        select(Accessions, colnames(annotation), Count, everything())
-    
-    expInd <- seq(
-        grep("Count", colnames(summarizedIntensities)) + 1,
-        ncol(summarizedIntensities)
-    )
-    
-    obj <- readMSnSet2(summarizedIntensities, ecol = expInd)
+    obj <- readMSnSet2(summarizedIntensities, ecol = sampleNames(MSnSetObj))
     pData(obj) <- pData(MSnSetObj)
     featureNames(obj) <- fData(obj)$Accessions
     sampleNames(obj) <- pData(obj)$SampleName
