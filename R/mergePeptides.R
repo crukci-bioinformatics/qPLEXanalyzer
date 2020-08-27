@@ -21,7 +21,7 @@ mergePeptides <- function(MSnSetObj, summarizationFunction, annotation, PosMaste
   summarizedIntensities <- as.data.frame(exprs(MSnSetObj)) %>%
     mutate(phosseqid = paste0(fData(MSnSetObj)$Sequences,"_",as.character(fData(MSnSetObj)$Accessions))) %>%
     group_by(phosseqid) %>%
-    summarize_all(funs(summarizationFunction)) %>%
+    summarize(across(everything(), summarizationFunction)) %>%
     left_join(counts, by = "phosseqid") 
   
   summarizedIntensities$Accessions <- unlist(lapply(strsplit(summarizedIntensities$phosseqid,split="_"),
