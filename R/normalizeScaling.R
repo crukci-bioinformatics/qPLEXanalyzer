@@ -16,8 +16,8 @@ normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId = NULL) {
     }
     
     scaledIntensities <- intensitiesForScaling %>%
-        summarize_all(funs(scalingFunction)) %>%
-        mutate_all(funs(log)) %>%
+        summarize(across(everything(), scalingFunction)) %>%
+        mutate(across(everything(), log)) %>%
         as.numeric()
     
     scalingFactors <- exp(scaledIntensities - mean(scaledIntensities))
