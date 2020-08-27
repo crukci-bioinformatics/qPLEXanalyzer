@@ -10,12 +10,16 @@ library(qPLEXanalyzer)
 #                                Accessions = 6)
 
 MSnSet_data <- readRDS("convertToMSnset_oht_esr1_msnset.rds")
+MSnSet_phos <- readRDS("convertToMSnset_phospho_msnset.rds")
 data(human_anno)
 
 test_that("Merge peptides works", {
   expect_equal_to_reference(
     mergePeptides(MSnSet_data, sum, human_anno), 
     file="mergePeptides_msnset.rds")
+  expect_equal_to_reference(
+    mergePeptides(MSnSet_phos, sum, human_anno, 7), 
+    file="mergePeptides_phos_msnset.rds")
 })
 
 
