@@ -194,6 +194,7 @@ checkArg_mergePeptides <- function(MSnSetObj, summarizationFunction,
   assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
   assert_that(is_validSummarizationFunction(summarizationFunction))
   assert_that(is_validAnnotationData(annotation))
+  assert_that(is.count(PosMasterProt) | is.null(PosMasterProt))
 }
 
 checkArg_normalizeQuantiles <- function(MSnSetObj){
