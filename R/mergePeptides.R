@@ -3,23 +3,23 @@ mergePeptides <- function(MSnSetObj, summarizationFunction, annotation, PosMaste
   
   if(!is.null(PosMasterProt)){
     colnames(fData(MSnSetObj))[PosMasterProt] <- "PosInMasterProtein"
-    counts <- as.data.frame(fData(MSnSetObj)) %>%
+    counts <- fData(MSnSetObj) %>%
       select(Accessions, Sequences, PosInMasterProtein) %>%
-      mutate(phosseqid = paste0(fData(MSnSetObj)$Sequences,"_",as.character(fData(MSnSetObj)$Accessions))) %>%
-      count(phosseqid, PosInMasterProtein) %>%
-      rename(Count = n)
+      mutate(phosseqid = str_c(Sequences, "_", Accessions)) %>%
+      count(phosseqid, PosInMasterProtein, name = "Count")
   }
   else
   {
-    counts <- as.data.frame(fData(MSnSetObj)) %>%
+    counts <- fData(MSnSetObj) %>%
       select(Accessions, Sequences) %>%
-      mutate(phosseqid = paste0(fData(MSnSetObj)$Sequences,"_",as.character(fData(MSnSetObj)$Accessions))) %>%
-      count(phosseqid) %>%
-      rename(Count = n)
+      mutate(phosseqid = str_c(Sequences, "_", Accessions)) %>%
+      count(phosseqid, name = "Count")
   }
   
   summarizedIntensities <- as.data.frame(exprs(MSnSetObj)) %>%
-    mutate(phosseqid = paste0(fData(MSnSetObj)$Sequences,"_",as.character(fData(MSnSetObj)$Accessions))) %>%
+    mutate(phosseqid = str_c(fData(MSnSetObj)$Sequences,
+                             "_",
+                             fData(MSnSetObj)$Accessions)) %>%
     group_by(phosseqid) %>%
     summarize(across(everything(), summarizationFunction)) %>%
     left_join(counts, by = "phosseqid") 
