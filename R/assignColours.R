@@ -9,15 +9,9 @@ assignColours <- function(MSnSetObj, colourBy="SampleGroup") {
         sort() %>% 
         unique()
     len <- length(colourGroups)
-    if (len < 3) {
-        sampleColours <- setNames(brewer.pal(3, "Dark2")[seq_len(len)], 
-                                  colourGroups)
-    } else if (len <= 8) {
-        sampleColours <- setNames(brewer.pal(len, "Dark2"), colourGroups)
-    } else {
-        coloursF <- brewer.pal(8, "Dark2") %>% colorRampPalette()
-        sampleColours <- setNames(coloursF(len), colourGroups)
-    }
+    clen <- c(len, 3) %>% max() %>% c(8) %>% min()
+    coloursF <- brewer.pal(clen, "Dark2") %>% colorRampPalette()
+    sampleColours <- setNames(coloursF(len), colourGroups)
     return(sampleColours)
 }
 
