@@ -35,7 +35,8 @@ Suggests:
     UniProt.ws,
     knitr,
     qPLEXdata,
-    testthat
+    testthat,
+    vdiffr
 VignetteBuilder: knitr
 biocViews: ImmunoOncology, Proteomics, MassSpectrometry, Normalization, Preprocessing, QualityControl, DataImport
 BugReports: https://github.com/crukci-bioinformatics/qPLEXanalyzer/issues

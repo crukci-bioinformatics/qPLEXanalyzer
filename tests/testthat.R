@@ -1,4 +1,5 @@
 library(testthat)
+library(vdiffr)
 library(qPLEXanalyzer)
 
 options(lifecycle_verbosity = "warning")
