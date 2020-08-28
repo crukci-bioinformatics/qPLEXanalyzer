@@ -26,5 +26,5 @@ corrPlot(MSnSet_data, addValues=TRUE, title="Correlation plot")
 
 # change colours
 corrPlot(MSnSet_data, addValues=TRUE, title="Correlation plot", 
-    low_cor_colour="yellow", high_cor_colour="green")
+    low_cor_colour="yellow", high_cor_colour="pink")
 }
