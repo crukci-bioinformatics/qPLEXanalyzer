@@ -4,11 +4,11 @@
 \description{
   Computes and display hierarchical clustering plot for samples in MSnSet
 }
-\usage{hierarchicalPlot(MSnSetObj, sampleColours=NULL, colourBy="SampleGroup", horizontal=TRUE,
-                             title="")}
+\usage{hierarchicalPlot(MSnSetObj, sampleColours=NULL, colourBy="SampleGroup", 
+                        horizontal=TRUE, title="")}
 \arguments{
    \item{MSnSetObj}{MSnSet; an object of class MSnSet}
-   \item{sampleColours}{character: a vector of colors for samples}
+   \item{sampleColours}{character: a named vector of colors for samples, names should be values of \code{colourBy} column}
    \item{colourBy}{character: column name from pData(MSnSetObj) to use for coloring samples}
    \item{horizontal}{logical: define orientation of the dendrogram}
    \item{title}{character: the main title for the dendrogram}
