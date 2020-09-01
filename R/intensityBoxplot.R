@@ -13,11 +13,13 @@ intensityBoxplot <- function(MSnSetObj, title="", sampleColours=NULL,
     
     exprs(MSnSetObj) %>%
         as.data.frame() %>%
-        gather("SampleName", "Intensity", everything()) %>%
+        pivot_longer(names_to = "SampleName", 
+                     values_to = "Intensity", 
+                     everything()) %>%
         mutate(logInt = log2(Intensity)) %>%
         filter(is.finite(logInt)) %>%
         left_join(pData(MSnSetObj), "SampleName") %>%
-        mutate_at(vars(colourBy), funs(as.factor)) %>%
+        mutate(across(one_of(colourBy), as.factor)) %>%
         ggplot() +
         geom_boxplot(aes_string(x = "SampleName", 
                                 y = "logInt", 

@@ -18,7 +18,9 @@ rliPlot <- function(MSnSetObj, title="", sampleColours=NULL,
     exprs(MSnSetObj) %>%
         as.data.frame() %>%
         rownames_to_column("RowID") %>%
-        gather("SampleName", "Intensity", -RowID) %>%
+        pivot_longer(names_to = "SampleName", 
+                     values_to = "Intensity", 
+                     -RowID) %>%
         mutate(logInt = log2(Intensity)) %>%
         filter(is.finite(logInt)) %>%
         group_by(RowID) %>%
@@ -26,7 +28,7 @@ rliPlot <- function(MSnSetObj, title="", sampleColours=NULL,
         ungroup() %>%
         mutate(RLI = logInt - medianLogInt) %>%
         left_join(pData(MSnSetObj), "SampleName") %>%
-        mutate_at(vars(colourBy), funs(as.factor)) %>%
+        mutate(across(one_of(colourBy), as.factor)) %>%
         ggplot(aes_string(x = "SampleName", y = "RLI", fill = colourBy)) +
         geom_boxplot(alpha = 0.6) +
         scale_fill_manual(values = sampleColours, 

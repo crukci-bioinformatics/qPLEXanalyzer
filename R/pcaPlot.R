@@ -32,7 +32,7 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL,
     plotDat <- as.data.frame(pca$x) %>%
         rownames_to_column("SampleName") %>%
         left_join(pData(MSnSetObj), "SampleName") %>%
-        mutate_at(vars(colourBy), funs(as.factor))
+        mutate(across(one_of(colourBy), as.factor))
     xPC <- paste0("PC", x.PC)
     yPC <- paste0("PC", x.PC + 1)
     ggplot(plotDat, 

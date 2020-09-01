@@ -12,7 +12,7 @@ corrPlot <- function(MSnSetObj, addValues=TRUE, title="",
     cor(exprs(MSnSetObj)) %>%
         as.data.frame() %>%
         rownames_to_column("X") %>%
-        gather("Y", "Cor", -1) %>%
+        pivot_longer(names_to = "Y", values_to = "Cor", -X) %>%
         mutate(addValues = addValues) %>%
         mutate(CorTxt = ifelse(addValues == TRUE, round(Cor, 3), "")) %>%
         ggplot(aes(x = X, y = Y, fill = Cor)) +

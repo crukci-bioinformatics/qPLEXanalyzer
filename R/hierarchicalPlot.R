@@ -20,7 +20,7 @@ hierarchicalPlot <- function(MSnSetObj, sampleColours=NULL,
     labelDat <- dendro.dat$labels %>%
         mutate(SampleName = as.character(label)) %>%
         left_join(pData(MSnSetObj), "SampleName") %>%
-        mutate_at(vars(colourBy), funs(as.factor))
+        mutate(across(one_of(colourBy), as.factor))
     axisBreaks <- pretty(dendro.dat$segments$yend)[-1] %>% head(-1)
     
     if (horizontal) {

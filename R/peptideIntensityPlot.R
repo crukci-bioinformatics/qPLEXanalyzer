@@ -19,7 +19,9 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
     intensities <- exprs(MSnSetObj) %>%
         as.data.frame() %>%
         rownames_to_column("PeptideID") %>%
-        gather(SampleName, Intensity, -PeptideID) %>%
+        pivot_longer(names_to = "SampleName", 
+                     values_to = "Intensity", 
+                     -PeptideID) %>%
         left_join(fData(MSnSetObj) %>% 
                       rownames_to_column("PeptideID"), "PeptideID") %>%
         mutate(logIntensity = log2xplus1(Intensity)) %>%
@@ -39,7 +41,9 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
         summIntensities <- exprs(combinedIntensities) %>%
             as.data.frame() %>%
             rownames_to_column("Accessions") %>%
-            gather(SampleName, Intensity, -Accessions) %>%
+            pivot_longer(names_to = "SampleName", 
+                         values_to = "Intensity", 
+                         -Accessions) %>%
             left_join(fData(combinedIntensities), "Accessions") %>%
             mutate(logIntensity = log2xplus1(Intensity)) %>%
             filter(Accessions == ProteinID)

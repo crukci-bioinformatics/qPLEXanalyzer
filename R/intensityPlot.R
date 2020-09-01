@@ -15,9 +15,11 @@ intensityPlot <- function(MSnSetObj, sampleColours=NULL, title="",
     }
     exprs(MSnSetObj) %>%
         as.data.frame() %>%
-        gather(SampleName, Intensity) %>%
+        pivot_longer(names_to = "SampleName", 
+                     values_to = "Intensity", 
+                     everything()) %>%
         left_join(pData(MSnSetObj), "SampleName") %>%
-        mutate_at(vars(colourBy), funs(as.factor)) %>%
+        mutate(across(one_of(colourBy), as.factor)) %>%
         mutate(Intensity = trFunc(Intensity)) %>%
         filter(!is.na(Intensity)) %>%
         ggplot(aes_string(x = "Intensity", 
