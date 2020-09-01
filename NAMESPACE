@@ -16,7 +16,6 @@ importFrom(dplyr,
           distinct,
           everything,
           filter,
-          funs,
           group_by,
           left_join,
           mutate,
@@ -28,8 +27,7 @@ importFrom(dplyr,
           right_join,
           select,
           summarize,
-          ungroup,
-          vars)
+          ungroup)
 importFrom(magrittr,"%>%", "use_series", "%$%", "%<>%")
 importFrom(stringr, str_c, str_replace, str_replace_all)
 importFrom(purrr, map_dfr, map_lgl)
