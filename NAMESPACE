@@ -1,11 +1,16 @@
-import(MSnbase)
-import(RColorBrewer)
 import(assertthat)
 import(ggplot2)
 import(limma)
+import(MSnbase)
 import(preprocessCore)
+import(RColorBrewer)
 import(statmod)
-importFrom(tidyr, drop_na, pivot_longer, pivot_wider)
+importFrom(Biobase, fData, pData, exprs, featureNames, sampleNames, "exprs<-",
+           "pData<-","featureNames<-")
+importFrom(BiocGenerics, start, end, width)
+importFrom(Biostrings,readAAStringSet,startIndex,endIndex,vmatchPattern)
+importFrom("graphics", "axis", "hist", "lines", "par", "rect",
+             "smoothScatter", "text")
 importFrom(dplyr,
           across,
           arrange,
@@ -28,25 +33,20 @@ importFrom(dplyr,
           select,
           summarize,
           ungroup)
-importFrom(magrittr,"%>%", "use_series", "%$%", "%<>%")
-importFrom(stringr, str_c, str_replace, str_replace_all)
-importFrom(purrr, map_dfr, map_lgl)
 importFrom(GenomicRanges,GRanges,union)
-importFrom(BiocGenerics, start, end, width)
-importFrom(IRanges, IRanges, reduce)
-importFrom(Biobase, fData, pData, exprs, featureNames, sampleNames, "exprs<-",
-           "pData<-","featureNames<-")
-importFrom(Biostrings,readAAStringSet,startIndex,endIndex,vmatchPattern)
-importFrom("graphics", "axis", "hist", "lines", "par", "rect",
-             "smoothScatter", "text")
-importFrom("stats", "as.dendrogram", "median", "na.omit", "setNames", 
-           "as.formula", "complete.cases", "contrasts", "cor", "dist",
-           "hclust", "lm", "model.matrix", "prcomp", "resid", "smooth.spline",
-           "var")
-importFrom("utils", "head", "tail", "write.table")
-importFrom("tibble", "column_to_rownames", "rownames_to_column")
-importFrom(grDevices, colorRampPalette)
 importFrom(ggdendro, dendro_data, label)
+importFrom(grDevices, colorRampPalette)
+importFrom(IRanges, IRanges, reduce)
+importFrom(magrittr,"%>%", "use_series", "%$%", "%<>%")
+importFrom(purrr, map_dfr, map_lgl)
+importFrom(stringr, str_c, str_replace, str_replace_all)
+importFrom(stats, as.dendrogram, median, na.omit, setNames, 
+           as.formula, complete.cases, contrasts, cor, dist,
+           hclust, lm, model.matrix, prcomp, resid, smooth.spline,
+           var)
+importFrom(tibble, column_to_rownames, rownames_to_column)
+importFrom(tidyr, drop_na, pivot_longer, pivot_wider)
+importFrom(utils, head, tail, write.table)
 
 export(
   "assignColours","computeDiffStats","convertToMSnset"     
