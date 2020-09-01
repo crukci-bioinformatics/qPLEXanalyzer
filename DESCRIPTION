@@ -25,10 +25,12 @@ Imports: assertthat,
          preprocessCore, 
          purrr, 
          RColorBrewer, 
+         readr,
          stats, 
          stringr, 
          tibble, 
          tidyr, 
+         tidyselect,
          utils
 Depends: R (>= 3.6), Biobase, statmod, MSnbase  
 Suggests: 

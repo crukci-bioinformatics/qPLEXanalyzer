@@ -9,8 +9,7 @@ importFrom(Biobase, fData, pData, exprs, featureNames, sampleNames, "exprs<-",
            "pData<-","featureNames<-")
 importFrom(BiocGenerics, start, end, width)
 importFrom(Biostrings,readAAStringSet,startIndex,endIndex,vmatchPattern)
-importFrom("graphics", "axis", "hist", "lines", "par", "rect",
-             "smoothScatter", "text")
+importFrom(graphics, axis, hist, lines, par, rect, smoothScatter, text)
 importFrom(dplyr,
           across,
           arrange,
@@ -26,7 +25,6 @@ importFrom(dplyr,
           mutate,
           n,
           n_distinct,
-          one_of,
           rename,
           rename_with,
           right_join,
@@ -37,8 +35,9 @@ importFrom(GenomicRanges,GRanges,union)
 importFrom(ggdendro, dendro_data, label)
 importFrom(grDevices, colorRampPalette)
 importFrom(IRanges, IRanges, reduce)
-importFrom(magrittr,"%>%", "use_series", "%$%", "%<>%")
+importFrom(magrittr,"%>%", use_series, "%$%", "%<>%")
 importFrom(purrr, map_dfr, map_lgl)
+importFrom(readr, write_tsv)
 importFrom(stringr, str_c, str_replace, str_replace_all)
 importFrom(stats, as.dendrogram, median, na.omit, setNames, 
            as.formula, complete.cases, contrasts, cor, dist,
@@ -46,7 +45,8 @@ importFrom(stats, as.dendrogram, median, na.omit, setNames,
            var)
 importFrom(tibble, column_to_rownames, rownames_to_column)
 importFrom(tidyr, drop_na, pivot_longer, pivot_wider)
-importFrom(utils, head, tail, write.table)
+importFrom(tidyselect, all_of, one_of)
+importFrom(utils, head, tail)
 
 export(
   "assignColours","computeDiffStats","convertToMSnset"     
