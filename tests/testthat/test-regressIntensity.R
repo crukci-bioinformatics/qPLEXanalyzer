@@ -17,6 +17,6 @@ IgG_ind <- which(pData(MSnset_P)$SampleGroup == "IgG")
 
 test_that("Regeression analysis works", {
   expect_equal_to_reference(
-    regressIntensity(MSnset_P, controlInd = IgG_ind, ProteinId = "P03372"), 
+    regressIntensity(MSnset_P, controlInd = IgG_ind, ProteinId = "P03372", plot=FALSE), 
     file="regressIntensities_msnset.rds")
 })
