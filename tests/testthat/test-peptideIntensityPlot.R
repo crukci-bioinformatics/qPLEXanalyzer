@@ -32,8 +32,8 @@ plt4 <- peptideIntensityPlot(MSnSet_data,
 
 
 test_that("Peptide plot works", {
-  vdiffr::expect_doppelganger("Peptide intensity plot", plt1)
-  vdiffr::expect_doppelganger("Peptide intensity plot no combined intensity", plt2)
-  vdiffr::expect_doppelganger("Peptide intensity plot with selected sequence", plt3)
-  vdiffr::expect_doppelganger("Peptide intensity plot with selected modification", plt4)
+  vdiffr::expect_doppelganger("Standard", plt1)
+  vdiffr::expect_doppelganger("No combined intensity", plt2)
+  vdiffr::expect_doppelganger("With selected sequence", plt3)
+  vdiffr::expect_doppelganger("With selected modification", plt4)
 })
