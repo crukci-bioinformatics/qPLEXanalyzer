@@ -32,7 +32,7 @@ Imports: assertthat,
          tidyr, 
          tidyselect,
          utils
-Depends: R (>= 3.6), Biobase, statmod, MSnbase  
+Depends: R (>= 4.0), Biobase, statmod, MSnbase  
 Suggests: 
     UniProt.ws,
     knitr,
