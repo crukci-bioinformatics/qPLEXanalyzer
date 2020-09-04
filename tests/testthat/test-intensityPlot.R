@@ -1,13 +1,20 @@
 context("Intensity density plot")
 library(qPLEXanalyzer)
 
-MSnSet_data <- readRDS("convertToMSnset_oht_esr1_msnset.rds")
+data(exp3_OHT_ESR1)
+exp3Met <- exp3_OHT_ESR1$metadata_qPLEX1[c(1,2,7,10),]
+exp3Int <- exp3_OHT_ESR1$intensities_qPLEX1[,c(1:6, c(1,2,7,10)+6)]
+MSnSet_data <- convertToMSnset(exp3Int,
+                               metadata = exp3Met,
+                               indExpData = c(7:10),
+                               Sequences = 2,
+                               Accessions = 6)
 
 # default settings
 plt1 <- intensityPlot(MSnSet_data, title = "qPLEX_RIME_ER")
 
 # colour by replicate
-plt2 <- intensityBoxplot(MSnSet_data, colourBy = "BioRep")
+plt2 <- intensityPlot(MSnSet_data, colourBy = "BioRep")
 
 # custom colours
 customCols <- rainbow(length(unique(pData(MSnSet_data)$SampleGroup)))
