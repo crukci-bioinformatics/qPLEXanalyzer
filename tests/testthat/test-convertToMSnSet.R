@@ -40,3 +40,4 @@ test_that("Metadata correctly imported", {
   expect_equal(colnames(exp2MSnSet), exp2_Xlink$metadata$SampleName)
   expect_equal(ncol(pData(exp2MSnSet)), ncol(exp2_Xlink$metadata))
 })
+

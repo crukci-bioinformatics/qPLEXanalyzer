@@ -25,3 +25,4 @@ test_that("RLI plot works", {
   vdiffr::expect_doppelganger("RLI plot colour by BioRep include IgG", plt2)
   vdiffr::expect_doppelganger("RLI plot custom colours", plt3)
 })
+

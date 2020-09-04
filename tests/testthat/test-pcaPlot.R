@@ -25,3 +25,4 @@ test_that("PCA plot works", {
   vdiffr::expect_doppelganger("PCA plot colour by BioRep omit IgG", plt2)
   vdiffr::expect_doppelganger("PCA plot custom colours and PC2 v PC3", plt3)
 })
+

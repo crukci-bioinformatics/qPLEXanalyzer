@@ -45,3 +45,4 @@ test_that("Peptide plot works", {
   vdiffr::expect_doppelganger("With selected sequence", plt3)
   vdiffr::expect_doppelganger("With selected modification", plt4)
 })
+
