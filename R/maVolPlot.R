@@ -1,4 +1,48 @@
 # MA or volcano plot
+
+
+#' MA or Volcano Plot
+#' 
+#' MA or Volcano plot of differential statistics results
+#' 
+#' Genes determined as significant according to the Log Fold Change and False
+#' Discovery Rate cutoffs are highlighted in red.
+#' 
+#' A user specified selection of genes can be highlighted by passing a character
+#' vector of Accessions to the \code{selectedGenes} argument. The contents of
+#' this vector will be matched with the Accessions column of the
+#' \code{diffstats} object to identify rows to highlight. These will be plotted
+#' in blue and labeled with the contents of the \code{GeneSymbol} column. Note
+#' that if the \code{GeneSymbol} for a selected gene is missing, no label will
+#' be apparent.
+#' 
+#' @param diffstats list; output of computeDiffStats function
+#' @param contrast character; contrast of interest to plot differential
+#' statistics results
+#' @param title character: title for the plot
+#' @param controlGroup character; control group such as IgG
+#' @param selectedGenes character: a vector defining genes to plot
+#' @param fdrCutOff numeric: False Discovery Rate (adj.P.Val) cut off
+#' @param lfcCutOff numeric: Log Fold Change (log2FC) cutoff for
+#' @param controlLfcCutOff numeric: only plot genes above controlLogFoldChange
+#' cutoff
+#' @param plotType character: which type of plot to generate: "MA" or "Volcano"
+#' @return A "MA" or "Volcano" plot to visualize differential statistics
+#' results.
+#' @examples
+#' 
+#' data(human_anno)
+#' data(exp3_OHT_ESR1)
+#' MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+#' indExpData=c(7:16), Sequences=2, Accessions=6)
+#' MSnset_norm <- groupScaling(MSnSet_data, scalingFunction=median)
+#' MSnset_Pnorm <- summarizeIntensities(MSnset_norm, sum, human_anno)
+#' contrasts <- c(tam.24h_vs_vehicle = "tam.24h - vehicle")
+#' diffstats <- computeDiffStats(MSnset_Pnorm, contrasts=contrasts)
+#' maVolPlot(diffstats, contrast = contrasts, plotType="MA")
+#' maVolPlot(diffstats, contrast = contrasts, plotType="Volcano")
+#' 
+#' @export maVolPlot
 maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
                       selectedGenes=NULL, fdrCutOff=0.05,
                       lfcCutOff=1, controlLfcCutOff=1, plotType="MA") {
