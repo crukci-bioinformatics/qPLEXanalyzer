@@ -1,3 +1,32 @@
+#' Merge identical peptides intensities
+#' 
+#' Merge identical peptides to single peptide intensity. This function is
+#' especially useful for phosphopeptide analysis.
+#' 
+#' Rows of the intensity matrix with identical peptide sequences are merged by
+#' summarising the intensities using \code{summarizationFunction}.
+#' 
+#' Columns specified with \code{keepCols} are retained in the final output.
+#' Non-unique entries in different rows are concatenated with ';'.
+#' 
+#' @param MSnSetObj MSnSet; an object of class MSnSet
+#' @param summarizationFunction function; method used to aggregate the
+#' peptides. sum, mean or median
+#' @param annotation data.frame; a data.frame of protein annotation of four
+#' columns: "Accessions", "Gene", "Description" and "GeneSymbol"
+#' @param keepCols a vector of additional columns from fData(MSnSetObj) to
+#' keep.  either be a numeric vector of column numbers of a character vector of
+#' column names
+#' @return An instance of class "MSnSet".
+#' @examples
+#' 
+#' data(human_anno)
+#' data(exp3_OHT_ESR1)
+#' MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+#' indExpData=c(7:16), Sequences=2, Accessions=6)
+#' MSnset_P <- mergePeptides(MSnSet_data, sum, human_anno)
+#' 
+#' @export mergePeptides
 mergePeptides <- function(MSnSetObj, summarizationFunction, annotation, keepCols=NULL) {
   checkArg_mergePeptides(MSnSetObj, summarizationFunction, annotation, keepCols)
   
