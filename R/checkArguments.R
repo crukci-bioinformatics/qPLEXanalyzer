@@ -1,6 +1,8 @@
 #### Argument checking functions ###############################################
 ## Custom assertions ###########################################################
 
+#' @import assertthat
+
 # check metadata ####
 is_validMetadata <- function(metadata){
     assert_that(is.data.frame(metadata))
