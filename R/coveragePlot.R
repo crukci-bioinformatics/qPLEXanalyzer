@@ -1,4 +1,32 @@
 # Protein coverage plot
+
+
+#' Plot peptide sequence coverage
+#' 
+#' Computes and displays peptide sequence coverage in proteomics experiment
+#' 
+#' In the qPLEX-RIME experiment it is imperative for bait protein to have good
+#' sequence coverage.  This function plots the protein sequence coverage of the
+#' bait protein in the qPLEX-RIME experiment. It requires the fasta sequence
+#' file of bait protein as input to generate the plot.
+#' 
+#' @param MSnSetObj MSnSet: an object of class MSnSet
+#' @param ProteinID character: Uniprot ID of the protein
+#' @param ProteinName character: name of the protein
+#' @param fastaFile character: fasta file of protein sequence
+#' @param myCol character: colour for plotting
+#' @return A protein coverage plot of selected protein for quantitative
+#' proteomics data.
+#' @examples
+#' 
+#' data(human_anno)
+#' data(exp3_OHT_ESR1)
+#' MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+#' indExpData=c(7:16), Sequences=2, Accessions=6)
+#' mySequenceFile <- system.file('extdata', "P03372.fasta", package="qPLEXanalyzer")
+#' coveragePlot(MSnSet_data, ProteinID="P03372", ProteinName="ERa", fastaFile=mySequenceFile)
+#' 
+#' @export coveragePlot
 coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile, 
                          myCol="brown") {
     if (!is(MSnSetObj, "MSnSet")) {
