@@ -20,7 +20,7 @@
 #' @param controlInd numeric; index of IgG within MSnSet
 #' @param ProteinId character; Uniprot protein ID
 #' @param plot character; Whether or not to plot the QC histograms
-#' @return An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}}).
+#' @return An object of class \code{MSnSet} (see \code{\link{MSnSet-class}}).
 #' This consists of corrected protein levels. In addition, the function can
 #' also plot histograms of correlation of target protein with all other
 #' proteins before and after this correction.

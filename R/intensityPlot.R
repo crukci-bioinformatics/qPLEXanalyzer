@@ -22,7 +22,7 @@
 #' @param transform logical: whether to log transform intensities
 #' @param xlab character: label for x-axis
 #' @param trFunc func: internal helper function for log transformation
-#' @return An intensity distribution plot for quantitative proteomics data.
+#' @return An object created by \code{ggplot}
 #' @examples
 #' 
 #' data(human_anno)

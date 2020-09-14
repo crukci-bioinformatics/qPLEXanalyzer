@@ -27,7 +27,7 @@
 #'   the plotting points
 #' @param x.PC numeric: The principle component to plot on the x-axis; the
 #'   following PC will be plotted on the y-axis
-#' @return An instance of class "MSnSet".
+#' @return An object created by \code{ggplot}
 #' @examples
 #'
 #' data(human_anno)

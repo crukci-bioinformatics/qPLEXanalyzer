@@ -27,8 +27,7 @@
 #' @param controlLfcCutOff numeric: only plot genes above controlLogFoldChange
 #' cutoff
 #' @param plotType character: which type of plot to generate: "MA" or "Volcano"
-#' @return A "MA" or "Volcano" plot to visualize differential statistics
-#' results.
+#' @return An object created by \code{ggplot}
 #' @examples
 #' 
 #' data(human_anno)

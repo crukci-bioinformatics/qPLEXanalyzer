@@ -13,7 +13,7 @@
 #' for coloring samples
 #' @param horizontal logical: define orientation of the dendrogram
 #' @param title character: the main title for the dendrogram
-#' @return A hierarchical clustering plot for quantitative proteomics data.
+#' @return An object created by \code{ggplot}
 #' @examples
 #' 
 #' data(human_anno)

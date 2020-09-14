@@ -18,7 +18,7 @@
 #' samples
 #' @param colourBy character: column name from pData(MSnSetObj) to use for
 #' coloring samples
-#' @return An intensity distribution boxplot for quantitative proteomics data.
+#' @return An object created by \code{ggplot}
 #' @examples
 #' 
 #' data(human_anno)

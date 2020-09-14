@@ -19,7 +19,7 @@
 #' @param scalingFunction function; median or mean
 #' @param groupingColumn character; the feature on which groups would be based;
 #' default="SampleGroup"
-#' @return An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}}) 
+#' @return An object of class \code{MSnSet} (see \code{\link{MSnSet-class}}) 
 #' @examples
 #' 
 #' data(human_anno)

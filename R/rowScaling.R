@@ -8,7 +8,7 @@
 #' 
 #' @param MSnSetObj MSnSet; an object of class MSnSet
 #' @param scalingFunction function; median or mean
-#' @return An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}}).
+#' @return An object of class \code{MSnSet} (see \code{\link{MSnSet-class}}).
 #' @examples
 #' 
 #' data(human_anno)

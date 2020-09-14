@@ -8,7 +8,7 @@
 #' 
 #' @param MSnSetObj MSnSet; an object of class MSnSet
 #' @param title character: title for the plot
-#' @return Plot of variance versus mean intensity for each peptide/protein.
+#' @return An object created by \code{ggplot}
 #' @examples
 #' 
 #' data(human_anno)

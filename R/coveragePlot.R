@@ -15,8 +15,7 @@
 #' @param ProteinName character: name of the protein
 #' @param fastaFile character: fasta file of protein sequence
 #' @param myCol character: colour for plotting
-#' @return A protein coverage plot of selected protein for quantitative
-#' proteomics data.
+#' @return An object created by \code{ggplot}
 #' @examples
 #' 
 #' data(human_anno)

@@ -21,7 +21,7 @@
 #' @param colourBy character: column name to use for colouring samples from
 #' pData(MSnSetObj)
 #' @param omitIgG logical: whether to remove IgG from the RLI plot
-#' @return An instance of class "MSnSet".
+#' @return An object created by \code{ggplot}
 #' @references Gandolfo LC, Speed TP (2018) RLE plots: Visualizing unwanted
 #' variation in high dimensional data. PLoS ONE 13(2): e0191629.
 #' \url{https://doi.org/10.1371/journal.pone.0191629}

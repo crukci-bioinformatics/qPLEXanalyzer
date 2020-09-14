@@ -23,7 +23,7 @@
 #' 'protein'
 #' @param rmMissing logical; TRUE or FALSE to indicate whether to remove
 #' missing data or not
-#' @return An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}}) 
+#' @return An object of class \code{MSnSet} (see \code{\link{MSnSet-class}}) 
 #' object).
 #' @examples
 #' 

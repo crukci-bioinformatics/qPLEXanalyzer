@@ -23,7 +23,7 @@
 #' into proteins. Sum, mean or median
 #' @param annotation data.frame; a data.frame of protein annotation of four
 #' columns: "Accessions", "Gene", "Description" and "GeneSymbol"
-#' @return An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}})
+#' @return An object of class \code{MSnSet} (see \code{\link{MSnSet-class}})
 #' @examples
 #' 
 #' data(human_anno)

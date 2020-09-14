@@ -24,7 +24,7 @@
 #' column in \code{fData(MSnSetObj)}
 #' @param selectedModifications character: modification present in the
 #' "Modifications" column in \code{fData(MSnSetObj)}
-#' @return An intensity plot for selected protein and associated peptides.
+#' @return An object created by \code{ggplot}
 #' @examples
 #' 
 #' data(human_anno)

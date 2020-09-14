@@ -11,7 +11,7 @@
 #' @param title character; title of the plot
 #' @param low_cor_colour colour; colour for lowest correlation in scale
 #' @param high_cor_colour colour; colour for highest correlation in scale
-#' @return (Invisibly) returns a reordered correlation matrix plot.
+#' @return An object created by \code{ggplot}
 #' @examples
 #' 
 #' data(human_anno)
