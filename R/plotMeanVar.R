@@ -1,4 +1,26 @@
 # Mean variance plot
+
+
+#' Mean variance plot
+#' 
+#' Computes and plots variance v mean intensity for peptides in MSnset
+#' 
+#' 
+#' @param MSnSetObj MSnSet; an object of class MSnSet
+#' @param title character: title for the plot
+#' @return Plot of variance versus mean intensity for each peptide/protein.
+#' @examples
+#' 
+#' data(human_anno)
+#' data(exp3_OHT_ESR1)
+#' MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, 
+#'                                metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+#'                                indExpData=c(7:16), 
+#'                                Sequences=2, 
+#'                                Accessions=6)
+#' plotMeanVar(MSnSet_data, title="Mean_Variance")
+#' 
+#' @export plotMeanVar
 plotMeanVar <- function(MSnSetObj, title="") {
     if (!is(MSnSetObj, "MSnSet")) {
         stop("MSnSetObj has to be of class MSnSet..")
