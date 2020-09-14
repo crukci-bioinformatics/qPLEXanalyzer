@@ -1,3 +1,38 @@
+#' Converts proteomics TMT intensity data to MSnSet
+#' 
+#' Converts processed TMT peptide intensities to MSnSet
+#' 
+#' This function builds an object of class MSnSet from a dataframe consisting
+#' of quantitative proteomics intensities data and a meta-data describing the
+#' samples information. This function creates an MSnSet object from the
+#' intensities and metadata file.  The metadata must contain "SampleName",
+#' "SampleGroup", "BioRep" and "TechRep" columns. The function can be used for
+#' either peptide intensities or data that has already been summarized to
+#' protein level. The type argument should be set to 'protein' for the latter.
+#' 
+#' @param ExpObj data.frame; a data.frame consisting of quantitative peptide
+#' intensities and peptide annotation
+#' @param metadata data.frame; a data.frame describing the samples
+#' @param indExpData numeric; a numeric vector indicating the column indexes of
+#' intensities in ExpObj
+#' @param Sequences numeric; a numeric value indicating the index of column
+#' consisting of peptide sequence in ExpObj
+#' @param Accessions numeric; a numeric value indicating the index of column
+#' consisting of protein accession in ExpObj
+#' @param type character; what type of data set to create, either 'peptide' or
+#' 'protein'
+#' @param rmMissing logical; TRUE or FALSE to indicate whether to remove
+#' missing data or not
+#' @return An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}}) 
+#' object).
+#' @examples
+#' 
+#' data(human_anno)
+#' data(exp3_OHT_ESR1)
+#' MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+#' indExpData=c(7:16), Sequences=2, Accessions=6)
+#' 
+#' @export convertToMSnset
 convertToMSnset <- function(ExpObj, metadata, indExpData, Sequences=NULL, 
                             Accessions, type="peptide", rmMissing=TRUE) {
     checkArg_convertToMSnset(ExpObj, metadata, indExpData, Sequences, 
