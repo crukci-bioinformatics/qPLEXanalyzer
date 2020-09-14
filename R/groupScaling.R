@@ -1,5 +1,34 @@
 # Performs scaling normalization on the intensities within group 
 
+
+
+#' Normalization by scaling within group
+#' 
+#' Performs scaling normalization on the intensities within group (median or
+#' mean)
+#' 
+#' In this normalization method the central tendencies (mean or median) of the
+#' samples within groups are aligned. The argument "groupingColumn" is used to
+#' define separate groups to normalize. The function takes one of the column of
+#' pData(data) as the variable for classifying group. The default variable is
+#' "SampleGroup".  It is imperative in qPLEX-RIME experiment to define IgG as a
+#' separate group and normalize it separately from others. You could add a
+#' column into the metadata to define this classification.
+#' 
+#' @param MSnSetObj MSnSet; an object of class MSnSet
+#' @param scalingFunction function; median or mean
+#' @param groupingColumn character; the feature on which groups would be based;
+#' default="SampleGroup"
+#' @return An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}}) 
+#' @examples
+#' 
+#' data(human_anno)
+#' data(exp3_OHT_ESR1)
+#' MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+#' indExpData=c(7:16), Sequences=2, Accessions=6)
+#' MSnset_norm <- groupScaling(MSnSet_data, scalingFunction=median, groupingColumn="SampleGroup")
+#' 
+#' @export groupScaling
 groupScaling <- function(MSnSetObj, scalingFunction=median, 
                          groupingColumn="SampleGroup") {
     checkArg_groupScaling(MSnSetObj, scalingFunction, groupingColumn)
