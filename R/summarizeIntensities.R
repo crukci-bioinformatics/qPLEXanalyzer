@@ -11,6 +11,31 @@
 # two columns: "Accessions" and "GeneSymbol"
 # The MSnSetObj must have column "Sequences" denoting its a peptide dataset
 
+
+
+#' Summarizes peptides intensities to proteins
+#' 
+#' Summarizes multiple peptides intensities measurements to protein level.
+#' 
+#' 
+#' @param MSnSetObj MSnSet; an object of class MSnSet
+#' @param summarizationFunction function; method used to aggregate the peptides
+#' into proteins. Sum, mean or median
+#' @param annotation data.frame; a data.frame of protein annotation of four
+#' columns: "Accessions", "Gene", "Description" and "GeneSymbol"
+#' @return An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}})
+#' @examples
+#' 
+#' data(human_anno)
+#' data(exp3_OHT_ESR1)
+#' MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, 
+#'                                metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+#'                                indExpData=c(7:16), 
+#'                                Sequences=2, 
+#'                                Accessions=6)
+#' MSnset_P <- summarizeIntensities(MSnSet_data, sum, human_anno)
+#' 
+#' @export summarizeIntensities
 summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation) {
     checkArg_summarizeIntensities(MSnSetObj, summarizationFunction, annotation)
     
