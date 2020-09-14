@@ -24,7 +24,7 @@ corrPlot(
 \item{high_cor_colour}{colour; colour for highest correlation in scale}
 }
 \value{
-(Invisibly) returns a reordered correlation matrix plot.
+An object created by \code{ggplot}
 }
 \description{
 Computes and display correlation plot for samples within MSnSet

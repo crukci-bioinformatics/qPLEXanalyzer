@@ -49,7 +49,7 @@ the plotting points}
 following PC will be plotted on the y-axis}
 }
 \value{
-An instance of class "MSnSet".
+An object created by \code{ggplot}
 }
 \description{
 PCA plots of the samples within MSnset

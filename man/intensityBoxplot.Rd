@@ -23,7 +23,7 @@ samples}
 coloring samples}
 }
 \value{
-An intensity distribution boxplot for quantitative proteomics data.
+An object created by \code{ggplot}
 }
 \description{
 Intensity distribution boxplot of all the samples

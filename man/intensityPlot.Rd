@@ -31,7 +31,7 @@ coloring samples}
 \item{trFunc}{func: internal helper function for log transformation}
 }
 \value{
-An intensity distribution plot for quantitative proteomics data.
+An object created by \code{ggplot}
 }
 \description{
 Intensity distribution plot of all the samples

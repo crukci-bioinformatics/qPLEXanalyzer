@@ -10,7 +10,7 @@ normalizeQuantiles(MSnSetObj)
 \item{MSnSetObj}{MSnSet; an object of class MSnSet}
 }
 \value{
-An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}})
+An object of class \code{MSnSet} (see \code{\link{MSnSet-class}})
 }
 \description{
 Performs quantile normalization on the intensities within columns

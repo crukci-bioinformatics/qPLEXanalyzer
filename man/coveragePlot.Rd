@@ -18,8 +18,7 @@ coveragePlot(MSnSetObj, ProteinID, ProteinName, fastaFile, myCol = "brown")
 \item{myCol}{character: colour for plotting}
 }
 \value{
-A protein coverage plot of selected protein for quantitative
-proteomics data.
+An object created by \code{ggplot}
 }
 \description{
 Computes and displays peptide sequence coverage in proteomics experiment

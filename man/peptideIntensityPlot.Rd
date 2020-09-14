@@ -31,7 +31,7 @@ column in \code{fData(MSnSetObj)}}
 "Modifications" column in \code{fData(MSnSetObj)}}
 }
 \value{
-An intensity plot for selected protein and associated peptides.
+An object created by \code{ggplot}
 }
 \description{
 Plots all the peptide intensities for the selected protein

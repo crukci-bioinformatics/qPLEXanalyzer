@@ -14,7 +14,7 @@ normalizeScaling(MSnSetObj, scalingFunction, ProteinId = NULL)
 \item{ProteinId}{character; protein Id}
 }
 \value{
-An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}})
+An object of class \code{MSnSet} (see \code{\link{MSnSet-class}})
 }
 \description{
 Performs scaling normalization on the peptide/protein intensities (median or

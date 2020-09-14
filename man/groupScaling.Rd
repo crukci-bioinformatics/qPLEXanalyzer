@@ -19,7 +19,7 @@ groupScaling(
 default="SampleGroup"}
 }
 \value{
-An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}})
+An object of class \code{MSnSet} (see \code{\link{MSnSet-class}})
 }
 \description{
 Performs scaling normalization on the intensities within group (median or

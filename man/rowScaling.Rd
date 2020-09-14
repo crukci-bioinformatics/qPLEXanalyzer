@@ -12,7 +12,7 @@ rowScaling(MSnSetObj, scalingFunction)
 \item{scalingFunction}{function; median or mean}
 }
 \value{
-An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}}).
+An object of class \code{MSnSet} (see \code{\link{MSnSet-class}}).
 }
 \description{
 Divide each peptide/protein by the row mean/median and transform to log2

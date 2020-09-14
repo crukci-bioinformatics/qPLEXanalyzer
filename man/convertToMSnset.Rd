@@ -36,7 +36,7 @@ consisting of protein accession in ExpObj}
 missing data or not}
 }
 \value{
-An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}}) 
+An object of class \code{MSnSet} (see \code{\link{MSnSet-class}}) 
 object).
 }
 \description{

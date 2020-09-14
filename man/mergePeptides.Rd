@@ -20,7 +20,7 @@ keep.  either be a numeric vector of column numbers of a character vector of
 column names}
 }
 \value{
-An instance of class "MSnSet".
+An object of class \code{MSnSet} (see \code{\link{MSnSet-class}})
 }
 \description{
 Merge identical peptides to single peptide intensity. This function is

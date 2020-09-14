@@ -26,7 +26,7 @@ for coloring samples}
 \item{title}{character: the main title for the dendrogram}
 }
 \value{
-A hierarchical clustering plot for quantitative proteomics data.
+An object created by \code{ggplot}
 }
 \description{
 Computes and displays hierarchical clustering plot for samples in MSnSet

@@ -16,7 +16,7 @@ into proteins. Sum, mean or median}
 columns: "Accessions", "Gene", "Description" and "GeneSymbol"}
 }
 \value{
-An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}})
+An object of class \code{MSnSet} (see \code{\link{MSnSet-class}})
 }
 \description{
 Summarizes multiple peptides intensities measurements to protein level.

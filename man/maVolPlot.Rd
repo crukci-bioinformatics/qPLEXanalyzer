@@ -38,8 +38,7 @@ cutoff}
 \item{plotType}{character: which type of plot to generate: "MA" or "Volcano"}
 }
 \value{
-A "MA" or "Volcano" plot to visualize differential statistics
-results.
+An object created by \code{ggplot}
 }
 \description{
 MA or Volcano plot of differential statistics results

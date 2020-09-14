@@ -25,7 +25,7 @@ pData(MSnSetObj)}
 \item{omitIgG}{logical: whether to remove IgG from the RLI plot}
 }
 \value{
-An instance of class "MSnSet".
+An object created by \code{ggplot}
 }
 \description{
 Relative log intensity (RLI) plots of the samples within MSnset

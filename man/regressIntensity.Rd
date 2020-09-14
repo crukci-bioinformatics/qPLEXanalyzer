@@ -16,7 +16,7 @@ regressIntensity(MSnSetObj, ProteinId, controlInd = NULL, plot = TRUE)
 \item{plot}{character; Whether or not to plot the QC histograms}
 }
 \value{
-An instance of class \code{MSnSet} (see \code{\link{MSnSet-class}}).
+An object of class \code{MSnSet} (see \code{\link{MSnSet-class}}).
 This consists of corrected protein levels. In addition, the function can
 also plot histograms of correlation of target protein with all other
 proteins before and after this correction.

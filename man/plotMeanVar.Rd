@@ -12,7 +12,7 @@ plotMeanVar(MSnSetObj, title = "")
 \item{title}{character: title for the plot}
 }
 \value{
-Plot of variance versus mean intensity for each peptide/protein.
+An object created by \code{ggplot}
 }
 \description{
 Computes and plots variance v mean intensity for peptides in MSnset
