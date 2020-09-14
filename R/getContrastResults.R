@@ -1,3 +1,29 @@
+#' Get differential statistics results
+#' 
+#' Get differential statistics results for given contrasts.
+#' 
+#' 
+#' @param diffstats list; output of computeDiffStats function
+#' @param contrast character; contrast of interest for which to retrieve
+#' differential statistics results
+#' @param controlGroup character; control group such as IgG
+#' @param transform logical; apply log2 transformation to the raw intensities
+#' @param writeFile logical; whether to write the results into a text file
+#' @return A \code{\link{data.frame}} object and text file containing the
+#' result of the differential statistics.
+#' @examples
+#' 
+#' data(human_anno)
+#' data(exp3_OHT_ESR1)
+#' MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+#' indExpData=c(7:16), Sequences=2, Accessions=6)
+#' MSnset_norm <- groupScaling(MSnSet_data, scalingFunction=median)
+#' MSnset_Pnorm <- summarizeIntensities(MSnset_norm, sum, human_anno)
+#' contrasts <- c(tam.24h_vs_vehicle = "tam.24h - vehicle")
+#' diffstats <- computeDiffStats(MSnset_Pnorm, contrasts=contrasts)
+#' diffexp <- getContrastResults(diffstats=diffstats, contrast=contrasts)
+#' 
+#' @export getContrastResults
 getContrastResults <- function(diffstats, contrast, controlGroup = NULL, 
                                transform = TRUE, writeFile= FALSE) {
     checkArg_getContrastResults(diffstats, contrast, controlGroup, transform,
