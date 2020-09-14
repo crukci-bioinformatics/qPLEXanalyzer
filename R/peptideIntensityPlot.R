@@ -4,6 +4,43 @@
 ## protein-level intensities protein is the protein for which intensities will
 ## be plotted samples is a list of samples to use in the plot
 
+
+
+#' Plot peptide intensities
+#' 
+#' Plots all the peptide intensities for the selected protein
+#' 
+#' Providing a summarised protein level MSnSet object to the
+#' \code{combinedIntensities} argument will add a summed protein intensity trace
+#' to the plot along with the peptide intensities.
+#' 
+#' @param MSnSetObj MSnSet; an object of class MSnSet containing peptide level
+#' intensities
+#' @param ProteinID character: Uniprot ID of the protein
+#' @param ProteinName character: name of the protein
+#' @param combinedIntensities MSnSet; an object of class MSnSet containing
+#' protein level intensities
+#' @param selectedSequence character: sequence present in the "Sequences"
+#' column in \code{fData(MSnSetObj)}
+#' @param selectedModifications character: modification present in the
+#' "Modifications" column in \code{fData(MSnSetObj)}
+#' @return An intensity plot for selected protein and associated peptides.
+#' @examples
+#' 
+#' data(human_anno)
+#' data(exp3_OHT_ESR1)
+#' MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, 
+#'                                metadata=exp3_OHT_ESR1$metadata_qPLEX1,
+#'                                indExpData=c(7:16), 
+#'                                Sequences=2, 
+#'                                Accessions=6)
+#' MSnset_P <- summarizeIntensities(MSnSet_data, sum, human_anno)
+#' peptideIntensityPlot(MSnSet_data, 
+#'                      combinedIntensities=MSnset_P, 
+#'                      ProteinID="P03372", 
+#'                      ProteinName= "ESR1")
+#' 
+#' @export peptideIntensityPlot
 peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
                                  combinedIntensities=NULL, 
                                  selectedSequence=NULL,
