@@ -1,0 +1,448 @@
+---
+title: "qPLEXanalyzer"
+author: Matthew Eldridge, Kamal Kishore, and Ashley Sawle
+date: "`r format(Sys.Date(), '%m/%d/%Y')`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{qPLEXanalyzer}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteKeywords{Quantitative proteomics, TMT}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(tidy = FALSE,
+                      cache = FALSE,
+                      dev = "png",
+                      message = FALSE, error = FALSE, warning = TRUE)
+``` 
+
+## Overview
+
+This document provides brief tutorial of the _qPLEXanalyzer_ package, 
+a toolkit with multiple functionalities, for statistical analysis of qPLEX-RIME 
+proteomics data (see `?qPLEXanalyzer` at the R prompt for a brief overview). The 
+qPLEX-RIME approach combines the RIME method with multiplex TMT chemical 
+isobaric labelling to study the dynamics of chromatin-associated protein 
+complexes. The package can also be used for isobaric labelling (TMT or iTRAQ) 
+based total proteome analysis.
+
+- Import quantitative dataset: A pre-processed quantitative dataset 
+generated from MaxQuant, Proteome Discoverer or any other proteomic software 
+consisting of peptide intensities with associated features along with sample 
+meta-data information can be imported by _qPLEXanalyzer_. 
+
+- Quality control: Computes and displays quality control statistics plots 
+of the quantitative dataset.
+
+- Data normalization: Quantile normalization, central tendencies scaling 
+and linear regression based normalization.
+
+- Aggregation of peptide intensities into protein intensities
+
+- Differential statistical analysis: _limma_ based analysis to 
+identify differentially abundant proteins.
+
+
+## Import quantitative dataset
+
+[MSnbase](http://bioconductor.org/packages/MSnbase) [@Gatto2012; @Gatto2020]
+package by Laurent Gatto provides methods to facilitate reproducible analysis of
+MS-based proteomics data. The _MSnSet_ class of
+[MSnbase](http://bioconductor.org/packages/MSnbase) provides architecture for
+storing quantitative MS proteomics data and the experimental meta-data. In
+_qPLEXanalyzer_, we store pre-processed quantitative proteomics data within this
+standardized object. The `convertToMSnset` function creates an _MSnSet_ object
+from the quantitative dataset of peptides/protein intensities. This dataset must
+consist of peptides identified with high confidence in all the samples.
+
+The default input dataset is the pre-processed peptide intensities from
+MaxQuant, Proteome Discoverer or any other proteomic software (see
+`?convertToMSnset` at the R prompt for more details). Only peptides uniquely
+matching to a protein should be used as an input. Alternatively, the protein
+level quantification by the aggregation of the peptide TMT intensities can also
+be used as input. Peptides/Protein intensities with missing values in one or
+more samples can either be excluded or included in the _MSnSet_ object. If the
+missing values are kept in the _MSnSet_ object, these must be imputed either by
+user defined methods or by those provided in
+[MSnbase](http://bioconductor.org/packages/MSnbase) package. The downstream
+functions of _qPLEXanalyzer_ expect a matrix with no missing values in the
+_MSnSet_ object.
+
+The example dataset shown below is from an ER qPLEX-RIME experiment in MCF7 
+cells that was performed to compare two different ways of cell crosslinking: 
+DSG/formaldehyde (double) or formaldehyde alone (single). It consists of four 
+biological replicates for each condition along with two IgG samples pooled from 
+replicates of each group. 
+
+```{r libs}
+library(qPLEXanalyzer)
+library(gridExtra)
+data(human_anno)
+data(exp2_Xlink)
+```
+
+```{r Import}
+MSnset_data <- convertToMSnset(exp2_Xlink$intensities,
+                               metadata = exp2_Xlink$metadata,
+                               indExpData = c(7:16), 
+                               Sequences = 2, 
+                               Accessions = 6)
+MSnset_data
+```
+
+## Quality control
+
+Once an _MSnSet_ object has been created, various descriptive statistics methods
+can be used to check the quality of the dataset. 
+
+### Peptide intensity plots
+
+The `intensityPlot` function generates a peptide intensity distribution plot
+that helps in identifying samples with outlier distributions. [Figure
+1](#Figure1) shows the distribution of the log-intensity of peptides/proteins
+for each sample. An outlier sample DSG.FA.rep01 can be identified from this
+plot. IgG control samples representing low background intensities will have
+shifted/distinct intensity distribution curve as compared to other samples and
+should not be considered as outliers.
+
+<a name="Figure1">
+
+```{r Filter, fig.width=6, fig.height=5, fig.cap="Figure 1: Density plots of raw intensities for TMT-10plex experiment."}
+intensityPlot(MSnset_data, title = "Peptide intensity distribution")
+```
+
+The intensities can also be viewed in the form of boxplots by 
+`intensityPlot`. [Figure 2](#Figure2) shows the distribution of peptides 
+intensities for each sample. 
+<a name="Figure2">
+
+```{r boxplot, fig.width=6, fig.height=5, fig.cap="Figure 2: Boxplot of raw intensities for TMT-10plex experiment."}
+intensityBoxplot(MSnset_data, title = "Peptide intensity distribution")
+```
+
+### Relative log intensity boxplot
+
+`rliPlot` can be used to visualise unwanted variation in a data set. It is
+similar to the relative log expression plot developed for microarray analysis
+[@Gandolfo2018]. Rather than examining gene expression, the RLI plot ([Figure
+3](#Figure3)) uses the MS intensities for each peptide or the summarised protein
+intensities.
+  
+<a name="Figure3">
+
+```{r rliplot, fig.width=6, fig.height=5, fig.cap="Figure 3: RLI of raw intensities for TMT-10plex experiment."}
+rliPlot(MSnset_data, title = "Relative Peptide intensity")
+```
+
+### Sample correlation plot
+
+A Correlation plot can be generated by `corrPlot` to visualize the level of
+linear association of samples within and between groups. The plot in 
+[Figure 4](#Figure4) displays high correlation among samples within each group, 
+however an outlier sample is also identified in one of the groups (DSG.FA).
+
+<a name="Figure4">
+
+```{r Corrplot, fig.width=6, fig.height=6, fig.cap="Figure 4: Correlation plot of peptide intensities"}
+corrPlot(MSnset_data)
+```
+
+### Hierachical clustering dendrogram
+
+Hierarchical clustering can be performed by `hierarchicalPlot` to produce a
+dendrogram displaying the hierarchical relationship among samples 
+([Figure 5](#Figure5)). The horizontal axis shows the dissimilarity (measured by
+means of the Euclidean distance) between samples: similar samples appear on the
+same branches. Colors correspond to groups. If the data set contains zeros, it
+will be necessary to add a small value (e.g. 0.01) to the intentsities in order
+to avoid errors while generating dendrogram.
+
+<a name="Figure5">
+
+```{r hierarchicalplot, fig.width=6, fig.height=5, fig.cap="Figure 5: Clustering plot of peptide intensitites"}
+exprs(MSnset_data) <- exprs(MSnset_data) + 0.01
+hierarchicalPlot(MSnset_data)
+```
+
+### Principle component analysis scatterplot
+
+A visual representation of the scaled loading of the first two dimensions of a 
+PCA analysis can be obtained by `pcaPlot` ([Figure 6](#Figure6)). Co-variances 
+between samples are approximated by the inner product between samples. Highly 
+correlated samples will appear close to each other. The samples could be 
+labeled by name, replicate, group or experiment run allowing for identification 
+of potential batch effects.
+
+<a name="Figure6">
+
+```{r pcaplot, fig.width=6, fig.height=5, fig.cap="Figure 6: PCA plot of peptide intensitites"}
+pcaPlot(MSnset_data, labelColumn = "BioRep", pointsize = 3)
+```
+
+### Bait protein coverage plot
+
+A plot showing regions of the bait protein covered by captured peptides can be
+produced using `coveragePlot` ([Figure 7](#Figure7)). The plot shows the
+location of peptides that have been identified with high confidence across the
+protein sequence and the corresponding percentage of coverage. This provides a
+means of assessing the efficiency of the immunoprecipitation approach in the
+qPLEX-RIME method. For a better evaluation of the pull down assay we could
+compare the observed bait protein coverage with the theoretical coverage from
+peptides predicted by known cleavage sites.
+
+<a name="Figure7">
+
+```{r coverageplot, fig.width=6, fig.height=1.5, fig.cap="Figure 7: Peptide sequence coverage plot"}
+mySequenceFile <- system.file("extdata", "P03372.fasta", package = "qPLEXanalyzer")
+coveragePlot(MSnset_data,
+             ProteinID = "P03372", 
+             ProteinName = "ESR1",
+             fastaFile = mySequenceFile)
+```
+
+## Data normalization
+
+The data can be normalized to remove experimental artifacts (e.g. differences in
+sample loading variability, systemic variation) in order to separate biological
+variations from those introduced during the experimental process. This would
+improve downstream statistical analysis to obtain more accurate comparisons.
+Different normalization methods can be used depending on the data:
+
+- Quantiles `normalizeQuantiles`: The peptide intensities are roughly replaced
+by the order statistics on their abundance. The key assumption underneath is
+that there are only few changes between different groups. This normalization
+technique has the effect of making the distributions of intensities from the
+different samples identical in terms of their statistical properties. It is the
+strongest normalization method and should be used carefully as it erases most of
+the difference between the samples. We would recommend using it only for total
+proteome but not for qPLEX-RIME data.
+
+- Mean/median scaling `normalizeScaling`: In this normalization method the
+central tendencies (mean or median) of the samples are aligned. The central
+tendency for each sample is computed and log transformed. A scaling factor is
+determined by subtracting from each central tendency the mean of all the central
+tendencies. The raw intensities are then divided by the scaling factor to get
+normalized ones.
+
+- Row scaling `rowScaling`: In this normalization method each peptide/protein
+intensity is divided by the mean/median of its intensity across all samples and
+log2 transformed.
+
+It is imperative to check the intensity distribution plot and PCA plot before
+and after normalization to verify its effect on the dataset.
+
+In qPLEX-RIME data, the IgG (or control samples) should be normalized separately
+from the bait protein pull-down samples. As IgG samples represent the low
+background intensity, their intensity distribution profile is different from
+bait pull-downs. Hence, normalizing the two together would result in
+over-correction of the IgG intensity resulting in inaccurate computation of
+differences among groups. To this end we provide `groupScaling`, the additional
+parameter _groupingColumn_ defines a category for grouping the samples, scaling
+is then carried out within each group independently.
+
+If no normalization is necessary, skip this step and move to aggregation of 
+peptides. 
+
+For this dataset, an outlier sample was identified by quality control plots and
+removed from further analysis. [Figure 8](#Figure8) displays the effect of
+various normalization methods on the peptide intensities distribution.
+
+<a name="Figure8">
+
+```{r norm, fig.width=7, fig.height=7, fig.cap="Figure 8: Peptide intensity distribution with various normalization methods"}
+MSnset_data <- MSnset_data[, -5]
+p1 <- intensityPlot(MSnset_data, title = "No normalization")
+
+MSnset_norm_q <- normalizeQuantiles(MSnset_data)
+p2 <- intensityPlot(MSnset_norm_q, title = "Quantile")
+
+MSnset_norm_ns <- normalizeScaling(MSnset_data, scalingFunction = median)
+p3 <- intensityPlot(MSnset_norm_ns, title = "Scaling")
+
+MSnset_norm_gs <- groupScaling(MSnset_data, 
+                               scalingFunction = median, 
+                               groupingColumn = "SampleGroup")
+p4 <- intensityPlot(MSnset_norm_gs, title = "Within Group Scaling")
+
+grid.arrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
+
+```
+
+## Aggregation of peptide intensities into protein intensities
+
+The quantitative dataset could consist of peptide or protein intensities. If the
+dataset consists of peptide information, they can be aggregated to protein
+intensities for further analysis.
+
+An annotation file consisting of proteins with unique ID must be provided. An
+example file can be found with the package corresponding to uniprot annotation
+of human proteins. It consists of four columns: 'Accessions', 'Gene',
+'Description' and 'GeneSymbol'. The columns 'Accessions'and 'GeneSymbol' are
+mandatory for successful downstream analysis while the other two columns are
+optional. The [UniProt.ws](http://bioconductor.org/packages/niProt.ws) package
+provides a convenient means of obtaining these annotations using Uniprot protein
+accessions, as shown in the section below. The `summarizeIntensities` function
+expects an annotation file in this format.
+
+```{r annotation, eval=FALSE}
+library(UniProt.ws)
+library(dplyr)
+proteins <- unique(fData(MSnset_data)$Accessions)[1:10]
+columns <- c("ENTRY-NAME", "PROTEIN-NAMES", "GENES")
+hs <- UniProt.ws::UniProt.ws(taxId = 9606)
+first_ten_anno <- UniProt.ws::select(hs, proteins, columns, "UNIPROTKB") %>%
+  as_tibble() %>%
+  mutate(GeneSymbol = gsub(" .*", "", GENES)) %>%
+  select(Accessions = "UNIPROTKB", 
+         Gene = "ENTRY-NAME",
+         Description = "PROTEIN-NAMES", 
+         GeneSymbol) %>% 
+  arrange(Accessions)
+head(first_ten_anno)
+```
+
+```{r annotationReal, echo=FALSE}
+library(dplyr)
+proteins <- unique(fData(MSnset_data)$Accessions)[1:10]
+filter(human_anno, Accessions%in%proteins) %>%
+    as_tibble() %>%
+    arrange(Accessions) %>%
+    head()
+```
+
+The aggregation can be performed by calculating the sum, mean or median of the
+raw or normalized peptide intensities. The summarized intensity for a selected
+protein could be visualized using `peptideIntensityPlot`. It plots all peptides
+intensities for a selected protein along with summarized intensity across all
+the samples ([Figure 9](#Figure9)).
+
+<a name="Figure9">
+
+```{r summarize}
+MSnset_Pnorm <- summarizeIntensities(MSnset_norm_gs, 
+                                     summarizationFunction = sum, 
+                                     annotation = human_anno)
+```
+
+```{r pepIntensity, fig.width=6, fig.height=5, fig.cap="Figure 9: Summarized protein intensity"}
+peptideIntensityPlot(MSnset_data,
+                     combinedIntensities = MSnset_Pnorm,
+                     ProteinID = "P03372", 
+                     ProteinName = "ESR1")
+```
+
+Phosphopeptide data is usually analysed at peptide level instead of protein.
+This is achieved by either performing analysis separately at each peptide or
+merging identical peptides (having phospho modification) belonging to same
+protein into single peptide intensity. The downstream analysis is then carried
+out on these merged peptides. The `mergePeptides` function performs this merging
+of peptides intensities.
+
+## Regression Analysis
+
+To correct for the potential dependency of immunoprecipitated proteins (in
+qPLEX-RIME) on the bait protein, a linear regression method is available in
+_qPLEXanalyzer_. The `regressIntensity` function performs a regression analysis
+in which bait protein levels is the independent variable (x) and the profile of
+each of the other protein is the dependent variable (y). The residuals of the
+y=ax+b linear model represent the protein quantification profiles that are not
+driven by the amount of the bait protein.
+
+The advantage of this approach is that proteins with strong dependency on the
+target protein are subjected to significant correction, whereas proteins with
+small dependency on the target protein are slightly corrected. In contrast, if a
+standard correction factor were used, it would have the same magnitude of effect
+on all proteins. The control samples (such as IgG) should be excluded from the
+regression analysis. The `regressIntensity` function also generates the plot
+displaying the correlation between bait and other protein before and after
+applying this method ([Figure 10](#Figure10)).
+
+The example dataset shown below is from an ER qPLEX-RIME experiment carried out
+in MCF7 cells to investigate the dynamics of the ER complex assembly upon
+4-hydroxytamoxifen (OHT) treatment at 2h, 6h and 24h or at 24h post-treatment
+with the vehicle alone (ethanol). It consists of six biological replicates for
+each condition spanned across three TMT experiments along with two IgG mock pull
+down samples in each experiment.
+
+<a name="Figure10">
+
+```{r regress, fig.width=6, fig.height=4, fig.cap="Figure 10: Correlation between bait protein and enriched proteins before and after regression"}
+data(exp3_OHT_ESR1)
+MSnset_reg <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX2,
+                              metadata = exp3_OHT_ESR1$metadata_qPLEX2,
+                              indExpData = c(7:16), 
+                              Sequences = 2, 
+                              Accessions = 6)
+MSnset_P <- summarizeIntensities(MSnset_reg, 
+                                 summarizationFunction = sum, 
+                                 annotation = human_anno)
+MSnset_P <- rowScaling(MSnset_P, scalingFunction = mean)
+IgG_ind <- which(pData(MSnset_P)$SampleGroup == "IgG")
+Reg_data <- regressIntensity(MSnset_P, 
+                             controlInd = IgG_ind,
+                             ProteinId = "P03372")
+```
+
+## Differential statistical analysis
+
+A statistical analysis for the identification of differentially regulated or
+bound proteins is carried out using
+[limma](http://bioconductor.org/packages/limma) [@Ritchie2015]. It uses linear models to assess
+differential expression in the context of multifactor designed experiments.
+Firstly, a linear model is fitted for each protein where the model includes
+variables for each group and MS run. Then, log2 fold changes between comparisons
+are estimated using `computeDiffStats`. Multiple testing correction of p-values
+are applied using the Benjamini-Hochberg method to control the false discovery
+rate (FDR). Finally, `getContrastResults` is used to get contrast specific
+results.
+
+The qPLEX-RIME experiment can consist of IgG mock samples to discriminate
+non-specific binding. The controlGroup argument within `getContrastResults`
+function allows you to specify this group (such as IgG). It then uses the mean
+intensities from the fitted linear model to compute log2 fold change between IgG
+and each of the groups. The maximum log2 fold change over IgG control from the
+two groups being compared is reported in the _controlLogFoldChange_ column. This
+information can be used to filter non-specific binding. A _controlLogFoldChange_
+more than 1 can be used as a filter to discover specific interactors.
+
+The results of the differential protein analysis can be visualized using
+`maVolPlot` function. It plots average log2 protein intensity to log2 fold
+change between groups compared. This enables quick visualization 
+([Figure 11](#Figure11)) of significantly abundant proteins between groups.
+`maVolPlot` could also be used to view differential protein results in a volcano
+plot ([Figure 12](#Figure12) to compare the size of the fold change to the
+statistical significance level.
+
+
+```{r diffexp}
+contrasts <- c(DSG.FA_vs_FA = "DSG.FA - FA")
+diffstats <- computeDiffStats(MSnset_Pnorm, contrasts = contrasts)
+diffexp <- getContrastResults(diffstats, 
+                              contrast = contrasts,
+                              controlGroup = "IgG")
+```
+
+
+<a name="Figure11">
+
+```{r MAplot, fig.width=6,fig.height=4, fig.cap="Figure 11: MA plot of the quantified proteins"}
+maVolPlot(diffstats, contrast = contrasts, plotType = "MA", title = contrasts)
+```
+
+<a name="Figure12">
+
+```{r volcano, fig.width=6, fig.height=4, fig.cap="Figure 12: Volcano plot of the quantified proteins"}
+maVolPlot(diffstats, contrast = contrasts, plotType = "Volcano", title = contrasts)
+```
+
+
+## Session Information
+
+```{r info,echo=TRUE}
+sessionInfo()
+```
+
