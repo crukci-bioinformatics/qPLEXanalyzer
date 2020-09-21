@@ -11,6 +11,7 @@
 #' @param title character; title of the plot
 #' @param low_cor_colour colour; colour for lowest correlation in scale
 #' @param high_cor_colour colour; colour for highest correlation in scale
+#' @param textsize integer: set the size of correlation values text
 #' @return An object created by \code{ggplot}
 #' @examples
 #' 
@@ -37,7 +38,8 @@
 #'
 #' @export corrPlot
 corrPlot <- function(MSnSetObj, addValues=TRUE, title="", 
-                     low_cor_colour="#FFFFFF", high_cor_colour="#B90505") {
+                     low_cor_colour="#FFFFFF", high_cor_colour="#B90505",
+                     textsize=3) {
     if (!is(MSnSetObj, "MSnSet")) {
         stop("data has to be of class MSnSet..")
     }
@@ -54,7 +56,7 @@ corrPlot <- function(MSnSetObj, addValues=TRUE, title="",
         mutate(CorTxt = ifelse(addValues == TRUE, round(Cor, 3), "")) %>%
         ggplot(aes(x = X, y = Y, fill = Cor)) +
         geom_tile(col = "grey") +
-        geom_text(aes(label = CorTxt)) +
+        geom_text(aes(label = CorTxt), size=textsize) +
         scale_fill_gradientn(colors = col2Cols, breaks = seq(0, 1, 0.2)) +
         labs(x = NULL, y = NULL, title = title) +
         guides(fill = guide_colorbar(barheight = 10)) +
