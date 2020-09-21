@@ -16,6 +16,11 @@
 #' indExpData=c(7:16), Sequences=2, Accessions=6)
 #' sampleColours <- assignColours(MSnSet_data)
 #' 
+#' @import RColorBrewer
+#' @importFrom Biobase pData
+#' @importFrom grDevices colorRampPalette
+#' @importFrom magrittr %>%
+#' @importFrom stats setNames
 #' @export assignColours
 assignColours <- function(MSnSetObj, colourBy="SampleGroup") {
     if (!is(MSnSetObj, "MSnSet")) {

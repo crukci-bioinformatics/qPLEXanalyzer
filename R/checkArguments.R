@@ -2,6 +2,10 @@
 ## Custom assertions ###########################################################
 
 #' @import assertthat
+#' @importFrom Biobase fData pData
+#' @importFrom magrittr %>%
+#' @importFrom purrr map_lgl
+#' @importFrom stringr str_c
 
 # check metadata ####
 is_validMetadata <- function(metadata){

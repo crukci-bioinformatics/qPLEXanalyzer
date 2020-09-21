@@ -37,6 +37,13 @@
 #'                  title = "qPLEX_RIME_ER", 
 #'                  sampleColours = customCols)
 #' 
+#' @import ggplot2
+#' @importFrom Biobase exprs pData
+#' @importFrom dplyr across everything filter left_join mutate
+#' @importFrom magrittr %>%
+#' @importFrom tidyr pivot_longer
+#' @importFrom tidyselect one_of
+#'
 #' @export intensityBoxplot
 intensityBoxplot <- function(MSnSetObj, title="", sampleColours=NULL, 
                              colourBy="SampleGroup") {

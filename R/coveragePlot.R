@@ -25,6 +25,16 @@
 #' mySequenceFile <- system.file('extdata', "P03372.fasta", package="qPLEXanalyzer")
 #' coveragePlot(MSnSet_data, ProteinID="P03372", ProteinName="ERa", fastaFile=mySequenceFile)
 #' 
+#' @import ggplot2
+#' @importFrom Biobase fData
+#' @importFrom BiocGenerics start end width
+#' @importFrom Biostrings readAAStringSet vmatchPattern
+#' @importFrom dplyr distinct filter select
+#' @importFrom GenomicRanges GRanges
+#' @importFrom IRanges IRanges reduce
+#' @importFrom magrittr %>% use_series
+#' @importFrom purrr map_dfr
+#'
 #' @export coveragePlot
 coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile, 
                          myCol="brown") {

@@ -20,6 +20,11 @@
 #'                                Accessions=6)
 #' plotMeanVar(MSnSet_data, title="Mean_Variance")
 #' 
+#' @import ggplot2
+#' @importFrom Biobase exprs
+#' @importFrom magrittr %$%
+#' @importFrom stats smooth.spline var
+#'
 #' @export plotMeanVar
 plotMeanVar <- function(MSnSetObj, title="") {
     if (!is(MSnSetObj, "MSnSet")) {

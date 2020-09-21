@@ -23,6 +23,14 @@
 #' diffstats <- computeDiffStats(MSnset_Pnorm, contrasts=contrasts)
 #' diffexp <- getContrastResults(diffstats=diffstats, contrast=contrasts)
 #' 
+#' @import limma
+#' @importFrom Biobase exprs fData
+#' @importFrom dplyr across arrange bind_cols desc mutate rename rename_with select
+#' @importFrom magrittr %>%
+#' @importFrom readr write_tsv
+#' @importFrom stringr str_replace str_replace_all
+#' @importFrom tidyselect one_of
+#'
 #' @export getContrastResults
 getContrastResults <- function(diffstats, contrast, controlGroup = NULL, 
                                transform = TRUE, writeFile= FALSE) {

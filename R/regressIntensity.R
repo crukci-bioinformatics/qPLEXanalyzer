@@ -6,7 +6,7 @@
 #' 
 #' Performs linear regression on protein intensities based on selected protein
 #' (qPLEX-RIME bait)
-#' 
+#'
 #' This function performs regression based analysis upon protein intensities
 #' based on a selected protein. In qPLEX RIME this method could be used to
 #' regress out the effect of target protein on other interactors. This function
@@ -39,6 +39,10 @@
 #'                                controlInd=IgG_ind, 
 #'                                ProteinId="P03372")
 #' 
+#' @importFrom Biobase exprs exprs<- fData pData pData<-
+#' @importFrom graphics hist par
+#' @importFrom stats cor lm resid
+#'
 #' @export regressIntensity
 regressIntensity <- function(MSnSetObj, ProteinId, controlInd=NULL, plot=TRUE) {
     checkArg_regressIntensity(MSnSetObj, controlInd, ProteinId)

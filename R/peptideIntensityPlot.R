@@ -40,6 +40,13 @@
 #'                      ProteinID="P03372", 
 #'                      ProteinName= "ESR1")
 #' 
+#' @import ggplot2
+#' @importFrom Biobase exprs fData
+#' @importFrom dplyr filter left_join mutate
+#' @importFrom magrittr %<>% %>%
+#' @importFrom tibble rownames_to_column
+#' @importFrom tidyr pivot_longer
+#'
 #' @export peptideIntensityPlot
 peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
                                  combinedIntensities=NULL, 

@@ -41,6 +41,7 @@ log2xplus1 <- function(x) {
 #' getContrastResults function to get differential results.  See
 #' \code{\link{eBayes}} function of \code{\link{limma}} for more details on
 #' differential statistics.
+#'
 #' @examples
 #' 
 #' data(human_anno)
@@ -52,6 +53,11 @@ log2xplus1 <- function(x) {
 #' MSnset_Pnorm <- summarizeIntensities(MSnset_norm, sum, human_anno)
 #' contrasts <- c(tam.24h_vs_vehicle = "tam.24h - vehicle", tam.6h_vs_vehicle = "tam.6h - vehicle")
 #' diffstats <- computeDiffStats(MSnSetObj=MSnset_Pnorm, contrasts=contrasts)
+#'
+#' @import limma
+#' @importFrom Biobase exprs pData
+#' @importFrom magrittr %>%
+#' @importFrom stats as.formula model.matrix
 #' 
 #' @export computeDiffStats
 computeDiffStats <- function(MSnSetObj, batchEffect = NULL, transform = TRUE, 

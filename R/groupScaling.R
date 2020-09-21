@@ -28,6 +28,12 @@
 #' indExpData=c(7:16), Sequences=2, Accessions=6)
 #' MSnset_norm <- groupScaling(MSnSet_data, scalingFunction=median, groupingColumn="SampleGroup")
 #' 
+#' @importFrom Biobase exprs exprs<- pData
+#' @importFrom dplyr across arrange group_by left_join mutate select ungroup
+#' @importFrom magrittr %>%
+#' @importFrom tibble column_to_rownames rownames_to_column
+#' @importFrom tidyr pivot_longer pivot_wider
+#'
 #' @export groupScaling
 groupScaling <- function(MSnSetObj, scalingFunction=median, 
                          groupingColumn="SampleGroup") {

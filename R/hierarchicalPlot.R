@@ -23,6 +23,15 @@
 #' exprs(MSnSet_data) <- exprs(MSnSet_data)+0.01
 #' hierarchicalPlot(MSnSet_data, title="qPLEX_RIME_ER")
 #' 
+#' @import ggplot2
+#' @importFrom Biobase exprs pData
+#' @importFrom dplyr across left_join mutate
+#' @importFrom ggdendro dendro_data label
+#' @importFrom magrittr %>%
+#' @importFrom stats as.dendrogram dist hclust
+#' @importFrom tidyselect one_of
+#' @importFrom utils head
+#'
 #' @export hierarchicalPlot
 hierarchicalPlot <- function(MSnSetObj, sampleColours=NULL, 
                              colourBy="SampleGroup", horizontal=TRUE, 

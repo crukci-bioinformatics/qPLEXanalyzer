@@ -20,6 +20,8 @@
 #'                                Accessions=6)
 #' MSnset_norm <- rowScaling(MSnSet_data, scalingFunction=median)
 #' 
+#' @importFrom Biobase exprs exprs<-
+#'
 #' @export rowScaling
 rowScaling <- function(MSnSetObj, scalingFunction) {
     checkArg_rowScaling(MSnSetObj, scalingFunction)

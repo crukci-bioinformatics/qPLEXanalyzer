@@ -31,6 +31,10 @@
 #'                                Accessions=6)
 #' MSnset_norm <- normalizeScaling(MSnSet_data, scalingFunction=median)
 #' 
+#' @importFrom Biobase exprs exprs<- fData
+#' @importFrom dplyr across everything mutate summarize
+#' @importFrom magrittr %>%
+#'
 #' @export normalizeScaling
 normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId = NULL) {
     checkArg_normalizeScaling(MSnSetObj, scalingFunction, ProteinId)

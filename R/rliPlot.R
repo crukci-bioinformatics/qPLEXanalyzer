@@ -41,6 +41,15 @@
 #' names(customCols) <- unique(pData(MSnSet_data)$SampleGroup)
 #' rliPlot(MSnSet_data, title = "qPLEX_RIME_ER", sampleColours = customCols)
 #' 
+#' @import ggplot2
+#' @importFrom Biobase exprs pData
+#' @importFrom dplyr across filter group_by left_join mutate ungroup
+#' @importFrom magrittr %>%
+#' @importFrom stats median
+#' @importFrom tibble rownames_to_column
+#' @importFrom tidyr pivot_longer
+#' @importFrom tidyselect one_of
+#'
 #' @export rliPlot
 rliPlot <- function(MSnSetObj, title="", sampleColours=NULL, 
                     colourBy="SampleGroup", omitIgG=TRUE) {

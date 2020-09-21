@@ -26,6 +26,9 @@
 #'                                Accessions=6)
 #' MSnset_norm <- normalizeQuantiles(MSnSet_data)
 #' 
+#' @import preprocessCore
+#' @importFrom Biobase exprs exprs<-
+#'
 #' @export normalizeQuantiles
 normalizeQuantiles <- function(MSnSetObj) {
     checkArg_normalizeQuantiles(MSnSetObj)

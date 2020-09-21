@@ -26,6 +26,15 @@
 #' indExpData=c(7:16), Sequences=2, Accessions=6)
 #' MSnset_P <- mergePeptides(MSnSet_data, sum, human_anno)
 #' 
+#' @import MSnbase
+#' @importFrom Biobase exprs fData featureNames featureNames<- pData pData<- sampleNames
+#' @importFrom Biobase sampleNames
+#' @importFrom dplyr across bind_cols everything group_by left_join mutate n 
+#' @importFrom dplyr select summarize ungroup
+#' @importFrom magrittr %>%
+#' @importFrom stringr str_c
+#' @importFrom tidyselect all_of
+#'
 #' @export mergePeptides
 mergePeptides <- function(MSnSetObj, summarizationFunction, annotation, keepCols=NULL) {
   checkArg_mergePeptides(MSnSetObj, summarizationFunction, annotation, keepCols)

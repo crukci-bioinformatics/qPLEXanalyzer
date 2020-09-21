@@ -41,6 +41,11 @@
 #' maVolPlot(diffstats, contrast = contrasts, plotType="MA")
 #' maVolPlot(diffstats, contrast = contrasts, plotType="Volcano")
 #' 
+#' @import ggplot2
+#' @importFrom Biobase fData
+#' @importFrom dplyr arrange bind_rows desc mutate
+#' @importFrom magrittr %>%
+#'
 #' @export maVolPlot
 maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
                       selectedGenes=NULL, fdrCutOff=0.05,

@@ -27,6 +27,14 @@
 #' corrPlot(MSnSet_data, addValues=TRUE, title="Correlation plot", 
 #'     low_cor_colour="yellow", high_cor_colour="pink")
 #' 
+#' @import ggplot2
+#' @importFrom Biobase exprs
+#' @importFrom dplyr mutate
+#' @importFrom magrittr %>%
+#' @importFrom stats cor
+#' @importFrom tibble rownames_to_column
+#' @importFrom tidyr pivot_longer
+#'
 #' @export corrPlot
 corrPlot <- function(MSnSetObj, addValues=TRUE, title="", 
                      low_cor_colour="#FFFFFF", high_cor_colour="#B90505") {

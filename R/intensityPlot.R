@@ -39,6 +39,13 @@
 #' names(customCols) <- unique(pData(MSnSet_data)$SampleGroup)
 #' intensityPlot(MSnSet_data, title = "qPLEX_RIME_ER", sampleColours = customCols)
 #' 
+#' @import ggplot2
+#' @importFrom Biobase exprs pData
+#' @importFrom dplyr across everything filter left_join mutate
+#' @importFrom magrittr %>%
+#' @importFrom tidyr pivot_longer
+#' @importFrom tidyselect one_of
+#'
 #' @export intensityPlot
 intensityPlot <- function(MSnSetObj, sampleColours=NULL, title="", 
                           colourBy="SampleGroup", transform=TRUE, 

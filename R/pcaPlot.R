@@ -49,6 +49,14 @@
 #'         sampleColours = customCols, 
 #'         x.PC=2)
 #'
+#' @import ggplot2
+#' @importFrom Biobase exprs pData
+#' @importFrom dplyr across left_join mutate
+#' @importFrom magrittr %>%
+#' @importFrom stats na.omit prcomp
+#' @importFrom tibble rownames_to_column
+#' @importFrom tidyselect one_of
+#'
 #' @export pcaPlot
 pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL,
                     transFunc=log2xplus1, transform=TRUE, 
