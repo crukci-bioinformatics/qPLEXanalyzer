@@ -9,7 +9,8 @@ corrPlot(
   addValues = TRUE,
   title = "",
   low_cor_colour = "#FFFFFF",
-  high_cor_colour = "#B90505"
+  high_cor_colour = "#B90505",
+  textsize = 3
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ corrPlot(
 \item{low_cor_colour}{colour; colour for lowest correlation in scale}
 
 \item{high_cor_colour}{colour; colour for highest correlation in scale}
+
+\item{textsize}{integer: set the size of correlation values text}
 }
 \value{
 An object created by \code{ggplot}

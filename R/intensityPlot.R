@@ -37,7 +37,9 @@
 #' # custom colours
 #' customCols <- rainbow(length(unique(pData(MSnSet_data)$SampleGroup)))
 #' names(customCols) <- unique(pData(MSnSet_data)$SampleGroup)
-#' intensityPlot(MSnSet_data, title = "qPLEX_RIME_ER", sampleColours = customCols)
+#' intensityPlot(MSnSet_data, 
+#'               title = "qPLEX_RIME_ER", 
+#'               sampleColours = customCols)
 #' 
 #' @import ggplot2
 #' @importFrom Biobase exprs pData
