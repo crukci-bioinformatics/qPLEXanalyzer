@@ -109,7 +109,7 @@ plot. IgG control samples representing low background intensities will have
 shifted/distinct intensity distribution curve as compared to other samples and
 should not be considered as outliers.
 
-<a name="Figure1">
+<a name="Figure1" />
 
 ```{r Filter, fig.width=6, fig.height=5, fig.cap="Figure 1: Density plots of raw intensities for TMT-10plex experiment."}
 intensityPlot(MSnset_data, title = "Peptide intensity distribution")
@@ -118,7 +118,8 @@ intensityPlot(MSnset_data, title = "Peptide intensity distribution")
 The intensities can also be viewed in the form of boxplots by 
 `intensityPlot`. [Figure 2](#Figure2) shows the distribution of peptides 
 intensities for each sample. 
-<a name="Figure2">
+
+<a name="Figure2" />
 
 ```{r boxplot, fig.width=6, fig.height=5, fig.cap="Figure 2: Boxplot of raw intensities for TMT-10plex experiment."}
 intensityBoxplot(MSnset_data, title = "Peptide intensity distribution")
@@ -132,7 +133,7 @@ similar to the relative log expression plot developed for microarray analysis
 3](#Figure3)) uses the MS intensities for each peptide or the summarised protein
 intensities.
   
-<a name="Figure3">
+<a name="Figure3" />
 
 ```{r rliplot, fig.width=6, fig.height=5, fig.cap="Figure 3: RLI of raw intensities for TMT-10plex experiment."}
 rliPlot(MSnset_data, title = "Relative Peptide intensity")
@@ -145,7 +146,7 @@ linear association of samples within and between groups. The plot in
 [Figure 4](#Figure4) displays high correlation among samples within each group, 
 however an outlier sample is also identified in one of the groups (DSG.FA).
 
-<a name="Figure4">
+<a name="Figure4" />
 
 ```{r Corrplot, fig.width=6, fig.height=6, fig.cap="Figure 4: Correlation plot of peptide intensities"}
 corrPlot(MSnset_data)
@@ -161,7 +162,7 @@ same branches. Colors correspond to groups. If the data set contains zeros, it
 will be necessary to add a small value (e.g. 0.01) to the intentsities in order
 to avoid errors while generating dendrogram.
 
-<a name="Figure5">
+<a name="Figure5" />
 
 ```{r hierarchicalplot, fig.width=6, fig.height=5, fig.cap="Figure 5: Clustering plot of peptide intensitites"}
 exprs(MSnset_data) <- exprs(MSnset_data) + 0.01
@@ -177,7 +178,7 @@ correlated samples will appear close to each other. The samples could be
 labeled by name, replicate, group or experiment run allowing for identification 
 of potential batch effects.
 
-<a name="Figure6">
+<a name="Figure6" />
 
 ```{r pcaplot, fig.width=6, fig.height=5, fig.cap="Figure 6: PCA plot of peptide intensitites"}
 pcaPlot(MSnset_data, labelColumn = "BioRep", pointsize = 3)
@@ -194,7 +195,7 @@ qPLEX-RIME method. For a better evaluation of the pull down assay we could
 compare the observed bait protein coverage with the theoretical coverage from
 peptides predicted by known cleavage sites.
 
-<a name="Figure7">
+<a name="Figure7" />
 
 ```{r coverageplot, fig.width=6, fig.height=1.5, fig.cap="Figure 7: Peptide sequence coverage plot"}
 mySequenceFile <- system.file("extdata", "P03372.fasta", package = "qPLEXanalyzer")
@@ -251,7 +252,7 @@ For this dataset, an outlier sample was identified by quality control plots and
 removed from further analysis. [Figure 8](#Figure8) displays the effect of
 various normalization methods on the peptide intensities distribution.
 
-<a name="Figure8">
+<a name="Figure8" />
 
 ```{r norm, fig.width=7, fig.height=7, fig.cap="Figure 8: Peptide intensity distribution with various normalization methods"}
 MSnset_data <- MSnset_data[, -5]
@@ -320,7 +321,7 @@ protein could be visualized using `peptideIntensityPlot`. It plots all peptides
 intensities for a selected protein along with summarized intensity across all
 the samples ([Figure 9](#Figure9)).
 
-<a name="Figure9">
+<a name="Figure9" />
 
 ```{r summarize}
 MSnset_Pnorm <- summarizeIntensities(MSnset_norm_gs, 
@@ -368,7 +369,7 @@ with the vehicle alone (ethanol). It consists of six biological replicates for
 each condition spanned across three TMT experiments along with two IgG mock pull
 down samples in each experiment.
 
-<a name="Figure10">
+<a name="Figure10" />
 
 ```{r regress, fig.width=6, fig.height=4, fig.cap="Figure 10: Correlation between bait protein and enriched proteins before and after regression"}
 data(exp3_OHT_ESR1)
@@ -414,7 +415,7 @@ The results of the differential protein analysis can be visualized using
 change between groups compared. This enables quick visualization 
 ([Figure 11](#Figure11)) of significantly abundant proteins between groups.
 `maVolPlot` could also be used to view differential protein results in a volcano
-plot ([Figure 12](#Figure12) to compare the size of the fold change to the
+plot ([Figure 12](#Figure12)) to compare the size of the fold change to the
 statistical significance level.
 
 
@@ -427,13 +428,13 @@ diffexp <- getContrastResults(diffstats,
 ```
 
 
-<a name="Figure11">
+<a name="Figure11" />
 
 ```{r MAplot, fig.width=6,fig.height=4, fig.cap="Figure 11: MA plot of the quantified proteins"}
 maVolPlot(diffstats, contrast = contrasts, plotType = "MA", title = contrasts)
 ```
 
-<a name="Figure12">
+<a name="Figure12" />
 
 ```{r volcano, fig.width=6, fig.height=4, fig.cap="Figure 12: Volcano plot of the quantified proteins"}
 maVolPlot(diffstats, contrast = contrasts, plotType = "Volcano", title = contrasts)
