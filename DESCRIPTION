@@ -3,14 +3,14 @@ Type: Package
 Title: Tools for qPLEX-RIME data analysis
 Version: 1.7.1
 Date: 2020-09-01
-Authors@R: c(person("Matthew Eldridge", role = "aut"),
-             person("Kamal Kishore", role = "aut", 
+Authors@R: c(person("Matthew","Eldridge", role = "aut"),
+             person("Kamal", "Kishore", role = "aut", 
                     email = "kamal.fartiyal84@gmail.com"),
-             person("Ashley Sawle", role=c("aut", "cre"),
+             person("Ashley", "Sawle", role=c("aut", "cre"),
                      email="ads2202cu@gmail.com"))
 Description: Tools for quantitative proteomics data analysis generated from qPLEX-RIME method.
 License: GPL-2
-Imports: assertthat,
+Imports: assertthat, 
          BiocGenerics,
          Biostrings, 
          dplyr (>= 1.0.0), 
@@ -21,7 +21,7 @@ Imports: assertthat,
          grDevices, 
          IRanges, 
          limma, 
-         magrittr, 
+         magrittr,
          preprocessCore, 
          purrr, 
          RColorBrewer, 
@@ -32,12 +32,13 @@ Imports: assertthat,
          tidyr, 
          tidyselect,
          utils
-Depends: R (>= 4.0), Biobase, statmod, MSnbase  
+Depends: R (>= 4.0), Biobase, MSnbase
 Suggests: 
-    UniProt.ws,
+    gridExtra,
     knitr,
     qPLEXdata,
     testthat,
+    UniProt.ws,
     vdiffr
 VignetteBuilder: knitr
 biocViews: ImmunoOncology, Proteomics, MassSpectrometry, Normalization, Preprocessing, QualityControl, DataImport
