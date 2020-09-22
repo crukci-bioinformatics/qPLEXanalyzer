@@ -36,19 +36,15 @@
 #' @importFrom magrittr %>%
 #'
 #' @export normalizeScaling
-normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId = NULL) {
+normalizeScaling <- function(MSnSetObj, scalingFunction=median, ProteinId = NULL) {
     checkArg_normalizeScaling(MSnSetObj, scalingFunction, ProteinId)
     
     intensities <- as.data.frame(exprs(MSnSetObj))
     intensitiesForScaling <- intensities
-    
-    # warning if NAs in intensity matrix
-    if(any(is.na(intensities))){
-        warning("There are missing values in the intensity matrix.",
-                "These will be omitted in the calculation of scaling factors.")
-    }
-    
-    if (!is.null(ProteinId)) {
+
+    # do we want to normalize against a specific protein
+    protNorm <- !is.null(ProteinId)
+    if (protNorm) {
         featuredata <- fData(MSnSetObj)
         ### use protein identifier here
         ind <- which(featuredata$Accessions %in% ProteinId)
@@ -56,6 +52,26 @@ normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId = NULL) {
             stop("Protein not found")
         }
         intensitiesForScaling <- intensities[ind, ]
+    }
+    
+    # check none of the samples is entirely missing in intensitiesForScaling
+    checNA <- intensitiesForScaling %>%  
+        summarise(across(everything(), ~sum(!is.na(.x)))) %>% 
+        min() %>% 
+        `==`(0)
+    if(checNA & !protNorm){
+        stop("One or more of the samples is entirely missing in the intensity ",
+             "matrix.")
+    }
+    if(checNA & protNorm){
+        stop("One or more of the samples is entirely missing in the intensity ",
+             "matrix for the protein(s) provided.")
+    }
+    
+    # warning if NAs in intensity matrix
+    if(any(is.na(intensitiesForScaling))){
+        warning("There are missing values in the intensity matrix. ",
+                "These will be omitted in the calculation of scaling factors.")
     }
     
     scaledIntensities <- intensitiesForScaling %>%

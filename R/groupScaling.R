@@ -46,6 +46,16 @@ groupScaling <- function(MSnSetObj, scalingFunction=median,
     
     intensities <- as.data.frame(exprs(MSnSetObj))
     
+    # check none of the samples is entirely missing in intensities
+    checNA <- intensities %>%  
+        summarise(across(everything(), ~sum(!is.na(.x)))) %>% 
+        min() %>% 
+        `==`(0)
+    if(checNA){
+        stop("One or more of the samples is entirely missing in the intensity ",
+             "matrix.")
+    }
+    
     # warning if NAs in intensity matrix
     if(any(is.na(intensities))){
         warning("There are missing values in the intensity matrix. ",
