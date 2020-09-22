@@ -4,7 +4,7 @@
 \alias{normalizeScaling}
 \title{Normalization by scaling}
 \usage{
-normalizeScaling(MSnSetObj, scalingFunction, ProteinId = NULL)
+normalizeScaling(MSnSetObj, scalingFunction = median, ProteinId = NULL)
 }
 \arguments{
 \item{MSnSetObj}{MSnSet; an object of class MSnSet}

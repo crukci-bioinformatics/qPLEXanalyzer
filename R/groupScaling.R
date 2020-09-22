@@ -34,7 +34,7 @@
 #'                             groupingColumn="SampleGroup")
 #' 
 #' @importFrom Biobase exprs exprs<- pData
-#' @importFrom dplyr across arrange group_by left_join mutate select ungroup
+#' @importFrom dplyr across arrange group_by left_join mutate select ungroup pull
 #' @importFrom magrittr %>%
 #' @importFrom tibble column_to_rownames rownames_to_column
 #' @importFrom tidyr pivot_longer pivot_wider
@@ -48,7 +48,7 @@ groupScaling <- function(MSnSetObj, scalingFunction=median,
     
     # check none of the samples is entirely missing in intensities
     checNA <- intensities %>%  
-        summarise(across(everything(), ~sum(!is.na(.x)))) %>% 
+        summarize(across(everything(), ~sum(!is.na(.x)))) %>% 
         min() %>% 
         `==`(0)
     if(checNA){

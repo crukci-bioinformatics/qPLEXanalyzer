@@ -56,7 +56,7 @@ normalizeScaling <- function(MSnSetObj, scalingFunction=median, ProteinId = NULL
     
     # check none of the samples is entirely missing in intensitiesForScaling
     checNA <- intensitiesForScaling %>%  
-        summarise(across(everything(), ~sum(!is.na(.x)))) %>% 
+        summarize(across(everything(), ~sum(!is.na(.x)))) %>% 
         min() %>% 
         `==`(0)
     if(checNA & !protNorm){
