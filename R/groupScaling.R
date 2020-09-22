@@ -46,9 +46,15 @@ groupScaling <- function(MSnSetObj, scalingFunction=median,
     
     intensities <- as.data.frame(exprs(MSnSetObj))
     
+    # warning if NAs in intensity matrix
+    if(any(is.na(intensities))){
+        warning("There are missing values in the intensity matrix. ",
+                "These will be omitted in the calculation of scaling factors.")
+    }
+    
     # get median/mean for each sample
     scaledIntensities <- intensities %>%
-        summarize(across(everything(), scalingFunction)) %>%
+        summarize(across(everything(), scalingFunction, na.rm=TRUE)) %>%
         mutate(across(everything(), log)) %>% 
         pivot_longer(names_to = "SampleName", values_to="sInt", everything())
     

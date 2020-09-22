@@ -2,6 +2,8 @@ VERSION 1.7.1
 ------------------------
 o Change Vignette to HTML
 o Add textsize argument to corrPlot
+o Allow missing values in scaling normalisations
+
 VERSION 1.3.2
 ------------------------
 o Added mergePeptides to NAMESPACE

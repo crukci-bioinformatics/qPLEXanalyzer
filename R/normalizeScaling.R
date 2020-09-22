@@ -42,6 +42,12 @@ normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId = NULL) {
     intensities <- as.data.frame(exprs(MSnSetObj))
     intensitiesForScaling <- intensities
     
+    # warning if NAs in intensity matrix
+    if(any(is.na(intensities))){
+        warning("There are missing values in the intensity matrix.",
+                "These will be omitted in the calculation of scaling factors.")
+    }
+    
     if (!is.null(ProteinId)) {
         featuredata <- fData(MSnSetObj)
         ### use protein identifier here
@@ -53,7 +59,7 @@ normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId = NULL) {
     }
     
     scaledIntensities <- intensitiesForScaling %>%
-        summarize(across(everything(), scalingFunction)) %>%
+        summarize(across(everything(), scalingFunction, na.rm = TRUE)) %>%
         mutate(across(everything(), log)) %>%
         as.numeric()
     
