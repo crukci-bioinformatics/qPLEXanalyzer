@@ -5,7 +5,7 @@
 #' @importFrom Biobase fData pData
 #' @importFrom magrittr %>%
 #' @importFrom purrr map_lgl
-#' @importFrom stringr str_c
+#' @importFrom stringr str_c str_detect
 
 # check metadata ####
 is_validMetadata <- function(metadata){
@@ -131,8 +131,12 @@ is_validfDataColumn <- function(cols, MSnSetObj){
   errMsg3 <- "One or more of keepCols is not found in fData(MSnSetObj)."
   assert_that(is.numeric(cols) | is.character(cols) | is.null(cols),
               msg = errMsg1)
-  if(is.numeric(cols)){ assert_that(is_validColNumber(cols, tab), msg = errMsg2) }
-  if(is.character(cols)){ assert_that(is_validColName(cols, tab), msg = errMsg3) }
+  if(is.numeric(cols)){ 
+    assert_that(is_validColNumber(cols, tab), msg = errMsg2) 
+    }
+  if(is.character(cols)){ 
+    assert_that(is_validColName(cols, tab), msg = errMsg3) 
+    }
   TRUE
 }
 
@@ -148,7 +152,7 @@ on_failure(is_validControlColumn) <- function(call, env){
 
 # check the MSnSet is a protein level data set ####
 is_ProteinSet <- function(MSnSetObj){
-    !grepl("peptide", rownames(MSnSetObj)[1])
+    !str_detect(rownames(MSnSetObj)[1], "peptide")
 }
 on_failure(is_ProteinSet) <- function(call, env){
     "This MSnSet is not a summarized protein data set"
@@ -181,7 +185,7 @@ is_validContrast <- function(contrast, diffstats){
     contrast%in%contrasts_available
 }
 on_failure(is_validContrast) <- function(call, env){
-    paste0("'", call$contrast, "' is not a valid contrast")
+    str_c("'", call$contrast, "' is not a valid contrast")
 }
 
 # check the control group #####
@@ -193,7 +197,7 @@ is_validControlGroup <- function(controlGroup, diffstats){
         controlGroup%in%colnames(diffstats$fittedLM$coefficients)
 }
 on_failure(is_validControlGroup) <- function(call, env){
-    paste0(call$controlGroup, 
+    str_c(call$controlGroup, 
            " is not found in the diffstats object. It should be one ", 
            "of the SampleGroups in the original MSnSet object.")
 }
