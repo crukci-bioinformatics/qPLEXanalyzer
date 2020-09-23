@@ -35,13 +35,12 @@
 #' 
 #' @import ggplot2
 #' @importFrom Biobase fData
-#' @importFrom BiocGenerics start end width
 #' @importFrom Biostrings readAAStringSet vmatchPattern
-#' @importFrom dplyr distinct filter select
-#' @importFrom GenomicRanges GRanges
-#' @importFrom IRanges IRanges reduce
-#' @importFrom magrittr %>% use_series
+#' @importFrom dplyr distinct filter select pull
+#' @importFrom IRanges IRanges reduce start end width 
+#' @importFrom magrittr %>%
 #' @importFrom purrr map_dfr
+#' @importFrom stringr str_c str_replace_all
 #'
 #' @export coveragePlot
 coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile, 
@@ -76,22 +75,22 @@ coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile,
             select(start, end) %>%
             return()
     }
+    
     features <- fData(MSnSetObj) %>%
         filter(Accessions == ProteinID) %>%
-        use_series(Sequence) %>%
-        gsub("^\\[.\\]\\.([A-Z]+)\\.\\[.\\]$", "\\1", .) %>%
-        map_dfr(getPosition)
-    
-    features <- unique(features)
+        pull(Sequences) %>%
+        str_replace_all("^\\[.\\]\\.([A-Z]+)\\.\\[.\\]$", "\\1") %>%
+        map_dfr(getPosition) %>% 
+        distinct()
     
     # get percent coverage
-    protWidth <- width(Protein_seq)
-    coverage <- GRanges("feature", IRanges(features$start, features$end)) %>%
-        reduce() %>%
-        width() %>%
+    protWidth <- IRanges::width(Protein_seq)
+    coverage <- IRanges(features$start, features$end) %>%
+        IRanges::reduce() %>%
+        IRanges::width() %>%
         sum()
     Perct <- round(coverage / protWidth * 100, 2)
-    SubTitle <- paste0("Number of Unique Peptides: ", 
+    SubTitle <- str_c("Number of Unique Peptides: ", 
                        nrow(features), 
                        "\n% Coverage: ", 
                        Perct)
