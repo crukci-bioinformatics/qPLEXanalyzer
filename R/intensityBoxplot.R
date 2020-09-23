@@ -42,7 +42,6 @@
 #' @importFrom dplyr across everything filter left_join mutate
 #' @importFrom magrittr %>%
 #' @importFrom tidyr pivot_longer
-#' @importFrom tidyselect one_of
 #'
 #' @export intensityBoxplot
 intensityBoxplot <- function(MSnSetObj, title="", sampleColours=NULL, 
@@ -57,7 +56,8 @@ intensityBoxplot <- function(MSnSetObj, title="", sampleColours=NULL,
         sampleColours <- assignColours(MSnSetObj, colourBy = colourBy)
     }
     
-    exprs(MSnSetObj) %>%
+    colourBy <- sym(colourBy)
+    plotDat <- exprs(MSnSetObj) %>%
         as.data.frame() %>%
         pivot_longer(names_to = "SampleName", 
                      values_to = "Intensity", 
@@ -65,14 +65,11 @@ intensityBoxplot <- function(MSnSetObj, title="", sampleColours=NULL,
         mutate(logInt = log2(Intensity)) %>%
         filter(is.finite(logInt)) %>%
         left_join(pData(MSnSetObj), "SampleName") %>%
-        mutate(across(one_of(colourBy), as.factor)) %>%
-        ggplot() +
-        geom_boxplot(aes_string(x = "SampleName", 
-                                y = "logInt", 
-                                fill = colourBy),
-                     alpha = 0.6) +
-        scale_fill_manual(values = sampleColours, 
-                          breaks = names(sampleColours)) +
+        mutate(across(!!colourBy, as.factor))
+    
+    ggplot(plotDat, aes(x = SampleName, y = logInt, fill = !!colourBy)) +
+        geom_boxplot(alpha = 0.6) +
+        scale_fill_manual(values = sampleColours) +
         labs(x = "Sample", y = "log2(Intensity)", title = title) +
         theme_bw() +
         theme(
