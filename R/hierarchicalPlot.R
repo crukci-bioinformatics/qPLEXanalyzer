@@ -27,7 +27,6 @@
 #' @importFrom ggdendro dendro_data label
 #' @importFrom magrittr %>%
 #' @importFrom stats as.dendrogram dist hclust
-#' @importFrom tidyselect one_of
 #' @importFrom utils head
 #'
 #' @export hierarchicalPlot
