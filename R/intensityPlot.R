@@ -61,21 +61,25 @@ intensityPlot <- function(MSnSetObj, sampleColours=NULL, title="",
     if (is.null(sampleColours)) {
         sampleColours <- assignColours(MSnSetObj, colourBy = colourBy)
     }
-    exprs(MSnSetObj) %>%
+    
+    colourBy <- sym(colourBy)
+
+    plotDat <- exprs(MSnSetObj) %>%
         as.data.frame() %>%
         pivot_longer(names_to = "SampleName", 
                      values_to = "Intensity", 
                      everything()) %>%
         left_join(pData(MSnSetObj), "SampleName") %>%
-        mutate(across(one_of(colourBy), as.factor)) %>%
+        mutate(across(!!colourBy, as.factor)) %>%
         mutate(Intensity = trFunc(Intensity)) %>%
-        filter(!is.na(Intensity)) %>%
-        ggplot(aes_string(x = "Intensity", 
-                          group = "SampleName", 
-                          colour = colourBy)) +
+        filter(!is.na(Intensity))
+    
+    
+    ggplot(plotDat, aes(x = Intensity, 
+                        group = SampleName, 
+                        colour = !!colourBy)) +
         stat_density(geom = "line", position = "identity") +
-        scale_colour_manual(values = sampleColours, 
-                            breaks = names(sampleColours)) +
+        scale_colour_manual(values = sampleColours) +
         labs(x = xlab, title = title) +
         theme_bw() +
         theme(
