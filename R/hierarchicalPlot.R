@@ -1,10 +1,6 @@
-# Hierachical clustering plot
-
-
-#' Hierarchical plot
+#' Hierarchical clustering plot
 #' 
 #' Computes and displays hierarchical clustering plot for samples in MSnSet
-#' 
 #' 
 #' @param MSnSetObj MSnSet; an object of class MSnSet
 #' @param sampleColours character: a named vector of colors for samples, names
@@ -16,7 +12,6 @@
 #' @return An object created by \code{ggplot}
 #' @examples
 #' 
-#' data(human_anno)
 #' data(exp3_OHT_ESR1)
 #' MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, 
 #'                                metadata=exp3_OHT_ESR1$metadata_qPLEX1,
@@ -49,15 +44,20 @@ hierarchicalPlot <- function(MSnSetObj, sampleColours=NULL,
         sampleColours <- assignColours(MSnSetObj, colourBy = colourBy)
     }
     
+
     dendro.dat <- t(log2xplus1(exprs(MSnSetObj))) %>%
         dist(method = "euclidean") %>%
         hclust() %>%
         as.dendrogram() %>%
         dendro_data()
+
+    colourBy <- sym(colourBy)
+
     labelDat <- dendro.dat$labels %>%
         mutate(SampleName = as.character(label)) %>%
         left_join(pData(MSnSetObj), "SampleName") %>%
-        mutate(across(one_of(colourBy), as.factor))
+        mutate(across(!!colourBy, as.factor))
+
     axisBreaks <- pretty(dendro.dat$segments$yend)[-1] %>% head(-1)
     
     if (horizontal) {
@@ -70,14 +70,12 @@ hierarchicalPlot <- function(MSnSetObj, sampleColours=NULL,
         ny <- -1
         ang <- 90
     }
+
     hcPlot <- ggplot(dendro.dat$segment) +
         geom_segment(aes(x = x, y = y, xend = xend, yend = yend)) +
         geom_text(
             data = labelDat,
-            aes_string(x = "x", 
-                       y = "y", 
-                       label = "SampleName", 
-                       colour = colourBy),
+            aes(x = x, y = y, label = SampleName, colour = !!colourBy),
             hjust = hj, nudge_y = ny, angle = ang
         ) +
         guides(colour = FALSE) +
