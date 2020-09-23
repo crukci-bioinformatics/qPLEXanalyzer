@@ -1,7 +1,3 @@
-# Performs scaling normalization on the intensities within group 
-
-
-
 #' Normalization by scaling within group
 #' 
 #' Performs scaling normalization on the intensities within group (median or
@@ -34,7 +30,8 @@
 #'                             groupingColumn="SampleGroup")
 #' 
 #' @importFrom Biobase exprs exprs<- pData
-#' @importFrom dplyr across arrange group_by left_join mutate select ungroup pull
+#' @importFrom dplyr across arrange group_by left_join mutate select ungroup
+#' pull
 #' @importFrom magrittr %>%
 #' @importFrom tibble column_to_rownames rownames_to_column
 #' @importFrom tidyr pivot_longer pivot_wider
