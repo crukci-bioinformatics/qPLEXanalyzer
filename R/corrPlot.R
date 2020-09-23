@@ -48,13 +48,14 @@ corrPlot <- function(MSnSetObj, addValues=TRUE, title="",
     }
     
     col2Cols <- c(low_cor_colour, high_cor_colour)
-    cor(exprs(MSnSetObj)) %>%
+    plotDat <- cor(exprs(MSnSetObj)) %>%
         as.data.frame() %>%
         rownames_to_column("X") %>%
         pivot_longer(names_to = "Y", values_to = "Cor", -X) %>%
-        mutate(addValues = addValues) %>%
-        mutate(CorTxt = ifelse(addValues == TRUE, round(Cor, 3), "")) %>%
-        ggplot(aes(x = X, y = Y, fill = Cor)) +
+        mutate(AddValues=addValues) %>% 
+        mutate(CorTxt = ifelse(AddValues, round(Cor, 3), ""))
+    
+    ggplot(plotDat, aes(x = X, y = Y, fill = Cor)) +
         geom_tile(col = "grey") +
         geom_text(aes(label = CorTxt), size=textsize) +
         scale_fill_gradientn(colors = col2Cols, breaks = seq(0, 1, 0.2)) +
