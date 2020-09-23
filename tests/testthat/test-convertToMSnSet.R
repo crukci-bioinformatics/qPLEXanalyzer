@@ -2,10 +2,15 @@ context("Convert to MSnSet")
 library(qPLEXanalyzer)
 data(exp2_Xlink)
 
+# There aren't any missing data in these sets, we need to test the removal
 exp2_Xlink$intensities[21, 7] <- NA
 exp2_Xlink$intensities[27, 9] <- NA
 exp2_Xlink$intensities[34, 11] <- NA
 exp2_Xlink$intensities[50, 15] <- NA
+
+# We also need to make sure the reordering of the metadata rows is working
+# Currently they are the correct order
+exp2_Xlink$metadata <- arrange(exp2_Xlink$metadata, SampleGroup)
 
 exp2MSnSet <- convertToMSnset(exp2_Xlink$intensities,
                               metadata = exp2_Xlink$metadata,
@@ -36,8 +41,12 @@ test_that("Feature data correctly imported", {
 })
 
 
-test_that("Metadata correctly imported", {
-  expect_equal(colnames(exp2MSnSet), exp2_Xlink$metadata$SampleName)
-  expect_equal(ncol(pData(exp2MSnSet)), ncol(exp2_Xlink$metadata))
-})
+# test_that("Metadata correctly imported", {
+#  This test is wrong as the script reorders the metadata according to the 
+# order of the samples in the intensity matrix
+#   expect_equal(colnames(exp2MSnSet), exp2_Xlink$metadata$SampleName)
+#  This test is not necessary as `pData(obj) <- x` will fail if the metadata 
+# does not match the intensity matrix colnames.
+#   expect_equal(ncol(pData(exp2MSnSet)), ncol(exp2_Xlink$metadata))
+# })
 

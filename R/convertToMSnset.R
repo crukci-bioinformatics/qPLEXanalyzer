@@ -36,8 +36,9 @@
 #'                                Accessions=6)
 #'
 #' @import MSnbase
-#' @importFrom Biobase fData featureNames featureNames<- pData pData<- sampleNames
-#' @importFrom dplyr mutate
+#' @importFrom Biobase fData featureNames featureNames<- pData pData<- 
+#' sampleNames
+#' @importFrom dplyr left_join mutate
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_c
 #' @importFrom tibble column_to_rownames
@@ -58,10 +59,10 @@ convertToMSnset <- function(ExpObj, metadata, indExpData, Sequences=NULL,
     }
     obj <- readMSnSet2(ExpObj, ecol = indExpData)
 
-    pData(obj) <- metadata %>% 
+    pData(obj) <- tibble(SampleName=sampleNames(obj)) %>% 
+        left_join(metadata, by="SampleName") %>% 
         mutate(rowname = SampleName) %>% 
-        column_to_rownames() %>% 
-        `[`(sampleNames(obj), TRUE)
+        column_to_rownames()
             
     if (type == "protein") {
         featureNames(obj) <- fData(obj)$Accessions
