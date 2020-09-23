@@ -28,7 +28,8 @@
 #' 
 #' @import limma
 #' @importFrom Biobase exprs fData
-#' @importFrom dplyr across arrange bind_cols desc mutate rename rename_with select
+#' @importFrom dplyr across arrange bind_cols desc mutate rename rename_with
+#' select
 #' @importFrom magrittr %>%
 #' @importFrom readr write_tsv
 #' @importFrom stringr str_replace str_replace_all
@@ -52,7 +53,8 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL,
     results <- topTable(fittedContrasts, 
                         coef = contrast, 
                         number = Inf, 
-                        sort.by = "none",confint=TRUE)
+                        sort.by = "none",
+                        confint=TRUE)
     contrastGroups <- contrast %>% strsplit(" - ") %>% unlist()
     fittedIntensities <- as.data.frame(fittedLinearModel$coefficients)
     contrastIntensities <- select(fittedIntensities, one_of(contrastGroups))
@@ -72,13 +74,14 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL,
         arrange(desc(B)) %>%
         mutate(across(c("logFC", "t", "B", SamplesCol), round, digits = 2)) %>%
         mutate(across(c("P.Value", "adj.P.Val"), signif, digits = 2)) %>% 
+        # Count column may not be present
         rename_with(str_replace, 
                     pattern = "^Count$", 
                     replacement = "Unique_peptides") %>%
         rename(AvgIntensity=AveExpr, log2FC=logFC)
     
     if (writeFile == TRUE) {
-        write_tsv(results, paste0(names(contrast), ".txt"))
+        write_tsv(results, str_c(names(contrast), ".txt"))
     }
     return(results)
 }
