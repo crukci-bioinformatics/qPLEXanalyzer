@@ -2,7 +2,7 @@
 % Please edit documentation in R/hierarchicalPlot.R
 \name{hierarchicalPlot}
 \alias{hierarchicalPlot}
-\title{Hierarchical plot}
+\title{Hierarchical clustering plot}
 \usage{
 hierarchicalPlot(
   MSnSetObj,
@@ -33,7 +33,6 @@ Computes and displays hierarchical clustering plot for samples in MSnSet
 }
 \examples{
 
-data(human_anno)
 data(exp3_OHT_ESR1)
 MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1, 
                                metadata=exp3_OHT_ESR1$metadata_qPLEX1,
