@@ -41,7 +41,7 @@
 #' @importFrom dplyr left_join mutate
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_c
-#' @importFrom tibble column_to_rownames
+#' @importFrom tibble column_to_rownames tibble
 #' @importFrom tidyr drop_na
 #'
 #' @export convertToMSnset
