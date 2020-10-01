@@ -30,7 +30,8 @@
 #' MSnset_P <- mergePeptides(MSnSet_data, sum, human_anno)
 #' 
 #' @import MSnbase
-#' @importFrom Biobase exprs fData featureNames featureNames<- pData pData<- sampleNames
+#' @importFrom Biobase exprs fData featureNames featureNames<- pData pData<- 
+#' sampleNames
 #' @importFrom Biobase sampleNames
 #' @importFrom dplyr across bind_cols everything group_by left_join mutate n 
 #' @importFrom dplyr select summarize ungroup
@@ -39,7 +40,10 @@
 #' @importFrom tidyselect all_of
 #'
 #' @export mergePeptides
-mergePeptides <- function(MSnSetObj, summarizationFunction, annotation, keepCols=NULL) {
+mergePeptides <- function(MSnSetObj, 
+                          summarizationFunction, 
+                          annotation, 
+                          keepCols=NULL) {
   checkArg_mergePeptides(MSnSetObj, summarizationFunction, annotation, keepCols)
   
   concatUnique <- function(x){ unique(x) %>% str_c(collapse=";") }

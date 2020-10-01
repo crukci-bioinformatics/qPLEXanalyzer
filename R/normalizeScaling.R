@@ -1,6 +1,3 @@
-# Performs scaling normalization on the intensities within columns
-
-
 #' Normalization by scaling
 #' 
 #' Performs scaling normalization on the peptide/protein intensities (median or
@@ -36,7 +33,9 @@
 #' @importFrom magrittr %>%
 #'
 #' @export normalizeScaling
-normalizeScaling <- function(MSnSetObj, scalingFunction=median, ProteinId = NULL) {
+normalizeScaling <- function(MSnSetObj, 
+                             scalingFunction=median, 
+                             ProteinId = NULL) {
     checkArg_normalizeScaling(MSnSetObj, scalingFunction, ProteinId)
     
     intensities <- as.data.frame(exprs(MSnSetObj))

@@ -1,7 +1,3 @@
-# Performs quantile normalization on the intensities within columns
-
-
-
 #' Quantile normalization
 #' 
 #' Performs quantile normalization on the intensities within columns
