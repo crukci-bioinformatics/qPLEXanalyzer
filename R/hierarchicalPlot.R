@@ -26,6 +26,7 @@
 #' @importFrom dplyr across left_join mutate
 #' @importFrom ggdendro dendro_data label
 #' @importFrom magrittr %>%
+#' @importFrom rlang sym
 #' @importFrom stats as.dendrogram dist hclust
 #' @importFrom utils head
 #'

@@ -50,6 +50,7 @@
 #' @importFrom Biobase exprs pData
 #' @importFrom dplyr across left_join mutate
 #' @importFrom magrittr %>%
+#' @importFrom rlang sym
 #' @importFrom stats na.omit prcomp
 #' @importFrom stringr str_c
 #' @importFrom tibble rownames_to_column

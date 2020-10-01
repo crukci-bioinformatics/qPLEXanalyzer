@@ -62,6 +62,7 @@ testSignficant <- function(dat, cutoffs) {
 #' @importFrom Biobase fData
 #' @importFrom dplyr arrange bind_rows case_when desc mutate pull
 #' @importFrom magrittr %>%
+#' @importFrom rlang sym
 #' @importFrom tidyr replace_na
 #'
 #' @export maVolPlot

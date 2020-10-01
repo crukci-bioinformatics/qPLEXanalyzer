@@ -45,6 +45,7 @@
 #' @importFrom Biobase exprs pData
 #' @importFrom dplyr across everything filter left_join mutate
 #' @importFrom magrittr %>%
+#' @importFrom rlang sym
 #' @importFrom tidyr pivot_longer
 #' @importFrom tidyselect one_of
 #'

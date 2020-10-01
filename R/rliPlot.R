@@ -45,6 +45,7 @@
 #' @importFrom Biobase exprs pData
 #' @importFrom dplyr across filter group_by left_join mutate ungroup
 #' @importFrom magrittr %>%
+#' @importFrom rlang sym
 #' @importFrom stats median
 #' @importFrom tibble rownames_to_column
 #' @importFrom tidyr pivot_longer
