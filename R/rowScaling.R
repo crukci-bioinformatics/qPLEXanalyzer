@@ -1,6 +1,3 @@
-# Row scaling based on mean or median of row
-
-
 #' Normalization by scaling peptide/protein intensity across all samples
 #' 
 #' Divide each peptide/protein by the row mean/median and transform to log2

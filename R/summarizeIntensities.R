@@ -36,7 +36,8 @@
 #' MSnset_P <- summarizeIntensities(MSnSet_data, sum, human_anno)
 #' 
 #' @import MSnbase
-#' @importFrom Biobase exprs fData featureNames featureNames<- pData pData<- sampleNames
+#' @importFrom Biobase exprs fData featureNames featureNames<- pData pData<- 
+#' sampleNames
 #' @importFrom dplyr across bind_cols everything group_by left_join mutate
 #' @importFrom dplyr n_distinct select summarize
 #' @importFrom magrittr %>%
