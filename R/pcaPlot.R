@@ -86,7 +86,6 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL,
     pca <- intensities %>% t() %>% prcomp()
     pcaVariance <- round((pca$sdev^2 / sum(pca$sdev^2)) * 100)
     
-    
     colourBy <- sym(colourBy)
     plotDat <- as.data.frame(pca$x) %>%
         rownames_to_column("SampleName") %>%
@@ -98,20 +97,12 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL,
     
     xPC <- str_c("PC", x.PC) %>% sym()
     yPC <- str_c("PC", x.PC + 1) %>% sym()
-    if (!is.null(labelColumn)) { labelColumn <- sym(labelColumn) }
     
-    ggplot(plotDat, aes(x = !!xPC, y = !!yPC)) +
+    pcPlot <- ggplot(plotDat, aes(x = !!xPC, y = !!yPC)) +
         geom_point(aes(fill = !!colourBy),
                    pch = 21, 
                    colour = "black",
-                   size = pointsize) + {
-            if (!is.null(labelColumn)) {
-                geom_text(aes(label = !!labelColumn),
-                          hjust = 0,
-                          size = labelsize,
-                          nudge_x = x.nudge)
-            }
-        } +
+                   size = pointsize) +
         scale_fill_manual(values = sampleColours) +
         labs(x = xLab,y = yLab, fill = NULL, title = title) +
         theme_bw() +
@@ -120,5 +111,16 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL,
             plot.title = element_text(size = 14, hjust = 0.5),
             aspect.ratio = 1
         )
+    
+    if (!is.null(labelColumn)) {
+        labelColumn <- sym(labelColumn) 
+        pcPlot <- pcPlot +
+            geom_text(aes(label = !!labelColumn),
+                      hjust = 0,
+                      size = labelsize,
+                      nudge_x = x.nudge)
+    }
+    
+    pcPlot
 }
 
