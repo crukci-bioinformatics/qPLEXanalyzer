@@ -67,7 +67,9 @@ rliPlot <- function(MSnSetObj, title="", sampleColours=NULL,
     if (omitIgG) {
         MSnSetObj <- MSnSetObj[, toupper(MSnSetObj$SampleGroup) != "IGG"]
     }
-    exprs(MSnSetObj) %>%
+    
+    colourBy <- sym(colourBy)
+    plotDat <- exprs(MSnSetObj) %>%
         as.data.frame() %>%
         rownames_to_column("RowID") %>%
         pivot_longer(names_to = "SampleName", 
@@ -80,11 +82,12 @@ rliPlot <- function(MSnSetObj, title="", sampleColours=NULL,
         ungroup() %>%
         mutate(RLI = logInt - medianLogInt) %>%
         left_join(pData(MSnSetObj), "SampleName") %>%
-        mutate(across(one_of(colourBy), as.factor)) %>%
-        ggplot(aes_string(x = "SampleName", y = "RLI", fill = colourBy)) +
+        mutate(across(!!colourBy, as.factor))
+    
+    plotDat %>%
+        ggplot(aes(x = SampleName, y = RLI, fill = !!colourBy)) +
         geom_boxplot(alpha = 0.6) +
-        scale_fill_manual(values = sampleColours, 
-                          breaks = names(sampleColours)) +
+        scale_fill_manual(values = sampleColours) +
         labs(x = "Sample", y = "RLI", title = title) +
         theme_bw() +
         theme(
