@@ -1,6 +1,3 @@
-# Mean variance plot
-
-
 #' Mean variance plot
 #' 
 #' Computes and plots variance v mean intensity for peptides in MSnset
