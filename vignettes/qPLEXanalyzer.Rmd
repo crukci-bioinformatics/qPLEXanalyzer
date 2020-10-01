@@ -24,7 +24,7 @@ knitr::opts_chunk$set(tidy = FALSE,
 
 This document provides brief tutorial of the _qPLEXanalyzer_ package, 
 a toolkit with multiple functionalities, for statistical analysis of qPLEX-RIME 
-proteomics data (see `?qPLEXanalyzer` at the R prompt for a brief overview). The 
+proteomics data (see `?qPLEXanalyzer` at the R prompt for a brief overview). The
 qPLEX-RIME approach combines the RIME method with multiplex TMT chemical 
 isobaric labelling to study the dynamics of chromatin-associated protein 
 complexes. The package can also be used for isobaric labelling (TMT or iTRAQ) 
@@ -392,14 +392,14 @@ Reg_data <- regressIntensity(MSnset_P,
 
 A statistical analysis for the identification of differentially regulated or
 bound proteins is carried out using
-[limma](http://bioconductor.org/packages/limma) [@Ritchie2015]. It uses linear models to assess
-differential expression in the context of multifactor designed experiments.
-Firstly, a linear model is fitted for each protein where the model includes
-variables for each group and MS run. Then, log2 fold changes between comparisons
-are estimated using `computeDiffStats`. Multiple testing correction of p-values
-are applied using the Benjamini-Hochberg method to control the false discovery
-rate (FDR). Finally, `getContrastResults` is used to get contrast specific
-results.
+[limma](http://bioconductor.org/packages/limma) [@Ritchie2015]. It uses linear 
+models to assess differential expression in the context of multifactor designed
+experiments. Firstly, a linear model is fitted for each protein where the model
+includes variables for each group and MS run. Then, log2 fold changes between
+comparisons are estimated using `computeDiffStats`. Multiple testing correction
+of p-values are applied using the Benjamini-Hochberg method to control the false
+discovery rate (FDR). Finally, `getContrastResults` is used to get contrast
+specific results.
 
 The qPLEX-RIME experiment can consist of IgG mock samples to discriminate
 non-specific binding. The controlGroup argument within `getContrastResults`

@@ -117,8 +117,12 @@ maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
     xN <- diff(range(pull(daResTab, !!xFactor))) / 100
 
     # definitions for scales
-    sFill <- c(Selected = "cyan", Significant = "red", `Non-significant` = "gray50")
-    sColr <- c(Selected = "black", Significant = "black", `Non-significant` = "gray50")
+    sFill <- c(Selected = "cyan", 
+               Significant = "red", 
+               `Non-significant` = "gray50")
+    sColr <- c(Selected = "black", 
+               Significant = "black", 
+               `Non-significant` = "gray50")
     sSize <- c(Selected = 1.8, Significant = 1.5, `Non-significant` = 0.9)
     sAlph <- c(Selected = 1, Significant = 1, `Non-significant` = 0.6)
     
