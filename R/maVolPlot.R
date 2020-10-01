@@ -1,5 +1,19 @@
-# MA or volcano plot
+testSignficant <- function(dat, cutoffs) {
+    isSig <- dat$adj.P.Val <= cutoffs$FDR &
+        !is.na(dat$adj.P.Val) &
+        abs(dat$log2FC) >= cutoffs$LFC
 
+    if(any(str_detect(colnames(dat), "controlLogFoldChange"))){
+        isSig <- isSig & abs(dat$controlLogFoldChange) >= cutoffs$cLFC
+    }
+    return(isSig)
+}
+
+# MA or Volcano Plot
+# For plotting we will assign the proteins to one of 3 groups:
+# A - selected (user specified in `selectedGenes`) - highlighted blue
+# B - significant - pass cutoffs - highligted red
+# C - non-significant - fail cutoffs - small and grey
 
 #' MA or Volcano Plot
 #' 
@@ -46,17 +60,14 @@
 #' 
 #' @import ggplot2
 #' @importFrom Biobase fData
-#' @importFrom dplyr arrange bind_rows desc mutate
+#' @importFrom dplyr arrange bind_rows case_when desc mutate pull
 #' @importFrom magrittr %>%
+#' @importFrom tidyr replace_na
 #'
 #' @export maVolPlot
 maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
                       selectedGenes=NULL, fdrCutOff=0.05,
                       lfcCutOff=1, controlLfcCutOff=1, plotType="MA") {
-    # For plotting we will assign the proteins to one of 7 groups:
-    # A - selected (user specified in `selectedGenes`) - highlighted blue
-    # B - significant - pass cutoffs - highligted red
-    # C - non-significant - fail cutoffs - small and grey
     
     if (!plotType %in% c("MA", "Volcano")) {
         stop("plotType should be 'MA' or 'Volcano'..")
@@ -66,78 +77,63 @@ maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
         stop("Some of the genes provided in 'selectedGenes' were not found in ",
              "the data table")
     }
+    
+    # get contrast results
+    results <- suppressMessages(
+        getContrastResults(diffstats = diffstats,
+                           contrast = contrast,
+                           controlGroup = controlGroup
+                           ))
 
-    testSignficant <- function(dat) {
-        dat$adj.P.Val <= fdrCutOff &
-            !is.na(dat$adj.P.Val) &
-            abs(dat$log2FC) >= lfcCutOff &
-            abs(dat$controlLogFoldChange) >= controlLfcCutOff
-    }
-    
-    daResTab <- suppressMessages(getContrastResults(
-        diffstats = diffstats, contrast = contrast,
-        controlGroup = controlGroup
-    )) %>%
-        bind_rows(data.frame(controlLogFoldChange = vector())) %>%
-        mutate(controlLogFoldChange = 
-                   ifelse(is.na(controlLogFoldChange), 
-                          Inf, 
-                          controlLogFoldChange)) %>%
-        mutate(group = 
-                   ifelse(testSignficant(.), 
-                          "Significant", 
-                          "Non-significant")) %>%
-        mutate(group = ifelse(Accessions %in% selectedGenes, 
-                              "Selected", 
-                              group)) %>%
-        mutate(group = factor(group, 
-                              levels = c("Selected", 
-                                         "Significant", 
-                                         "Non-significant"))) %>%
+    # prepare plot data
+    cutOffs <- list(FDR = fdrCutOff, LFC = lfcCutOff, cLFC = controlLfcCutOff)
+    grpLevels <- c("Selected", "Significant", "Non-significant")
+    daResTab <- results  %>%
+        mutate(group = case_when(
+            Accessions %in% selectedGenes ~ "Selected",
+            testSignficant(., cutOffs) ~ "Significant",
+            TRUE ~ "Non-significant")) %>%
+        mutate(group = factor(group, levels = grpLevels)) %>%
         arrange(desc(group)) %>%
-        mutate(phredPval = -log10(adj.P.Val))
+        mutate(phredPval = -log10(adj.P.Val)) %>%
+        mutate(SymbolLab = ifelse(group == "Selected", GeneSymbol, ""))
     
+    # set axes for plot type
     if (plotType == "MA") {
-        xFactor <- "AvgIntensity"
-        yFactor <- "log2FC"
+        xFactor <- sym("AvgIntensity")
+        yFactor <- sym("log2FC")
         xLab <- "average log2(Intensity)"
         yLab <- "log2(Fold Change)"
     }
     if (plotType == "Volcano") {
-        xFactor <- "log2FC"
-        yFactor <- "phredPval"
+        xFactor <- sym("log2FC")
+        yFactor <- sym("phredPval")
         xLab <- "log2(Fold Change)"
         yLab <- "-log10(Adjusted P value)"
     }
     
-    xNudge <- diff(range(daResTab[, xFactor])) / 100
+    # an x nudge factor for the selected gene labels
+    xN <- diff(range(pull(daResTab, !!xFactor))) / 100
+
+    # definitions for scales
+    sFill <- c(Selected = "cyan", Significant = "red", `Non-significant` = "gray50")
+    sColr <- c(Selected = "black", Significant = "black", `Non-significant` = "gray50")
+    sSize <- c(Selected = 1.8, Significant = 1.5, `Non-significant` = 0.9)
+    sAlph <- c(Selected = 1, Significant = 1, `Non-significant` = 0.6)
     
-    ggplot(daResTab, aes_string(
-        x = xFactor, 
-        y = yFactor, 
-        colour = "group",
-        size = "group",
-        shape = "group",
-        alpha = "group",
-        fill = "group")) +
+    # plot
+    ggplot(daResTab, aes(x = !!xFactor, y = !!yFactor)) +
         geom_hline(yintercept = 0, color = "gray50", size = 0.5) +
-        geom_point() +
-        geom_text(
-            data = subset(daResTab, group == "Selected"), 
-            aes(label = GeneSymbol), 
-            hjust = 0,
-            size = 3.5,
-            nudge_x = xNudge
-        ) +
-        scale_colour_manual(values = c("black", "black", "gray50"), 
-                            drop = FALSE) +
-        scale_size_manual(values = c(1.8, 1.5, 0.9), drop = FALSE) +
-        scale_shape_manual(values = c(21, 21, 20), drop = FALSE) +
-        scale_alpha_manual(values = c(1, 1, 0.6), drop = FALSE) +
-        scale_fill_manual(
-            values = c("cyan", "red"), limits = levels(daResTab$group)[1:2],
-            breaks = levels(droplevels(daResTab$group)), name = ""
-        ) +
+        geom_point(aes(colour = group,
+                       size = group,
+                       alpha = group,
+                       fill = group),
+                   shape = 21) +
+        geom_text(aes(label = SymbolLab), hjust = 0, size = 3.5, nudge_x = xN) +
+        scale_colour_manual(values = sColr) +
+        scale_size_manual(values = sSize, name = "") +
+        scale_alpha_manual(values = sAlph) +
+        scale_fill_manual(values = sFill, name = "") +
         labs(x = xLab, y = yLab, title = title) +
         theme_bw() +
         theme(
@@ -145,7 +141,7 @@ maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
             plot.title = element_text(size = 14, hjust = 0.5)
         ) +
         guides(
-            colour = "none", size = "none", shape = "none", alpha = "none",
+            colour = "none", size = "legend", alpha = "none",
             fill = guide_legend(override.aes = list(shape = 21))
         )
 }
