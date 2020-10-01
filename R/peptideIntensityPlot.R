@@ -60,68 +60,28 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
     }
     
     ## get peptide intensities for plotting
+    featureDat <- fData(MSnSetObj) %>% rownames_to_column("PeptideID")
     intensities <- exprs(MSnSetObj) %>%
         as.data.frame() %>%
         rownames_to_column("PeptideID") %>%
         pivot_longer(names_to = "SampleName", 
                      values_to = "Intensity", 
                      -PeptideID) %>%
-        left_join(fData(MSnSetObj) %>% 
-                      rownames_to_column("PeptideID"), "PeptideID") %>%
+        left_join(featureDat, by = "PeptideID") %>%
         mutate(logIntensity = log2xplus1(Intensity)) %>%
         filter(Accessions == ProteinID)
-    
-    ## get intensities for selected sequences if present
-    seqIntensities <- filter(intensities, Sequences %in% selectedSequence)
-    if (!is.null(selectedModifications)) {
-        seqIntensities %<>% filter(Modifications %in% selectedModifications)
-    }
-    
-    ## get intensity for protein level (summarised) data if present
-    summIntensities <- data.frame(SampleName = vector(), 
-                                  logIntensity = vector(), 
-                                  Accessions = vector())
-    if (!is.null(combinedIntensities)) {
-        summIntensities <- exprs(combinedIntensities) %>%
-            as.data.frame() %>%
-            rownames_to_column("Accessions") %>%
-            pivot_longer(names_to = "SampleName", 
-                         values_to = "Intensity", 
-                         -Accessions) %>%
-            left_join(fData(combinedIntensities), "Accessions") %>%
-            mutate(logIntensity = log2xplus1(Intensity)) %>%
-            filter(Accessions == ProteinID)
-    }
-    
+
     if (!nrow(intensities)) {
         warning("No peptides were found for ", ProteinID)
         return(NULL)
     }
     
-    ggplot(intensities, aes(x = SampleName, y = logIntensity)) +
+    intPlot <- ggplot(intensities, aes(x = SampleName, y = logIntensity)) +
         geom_line(aes(group = PeptideID, colour = Sequences), 
                   size = 0.6, 
                   alpha = 0.5,
                   linetype = 2) +
         geom_point(aes(fill = Sequences), shape = 21, size = 2) +
-        ## plot the selected sequences if present
-        geom_line(data = seqIntensities, aes(group = PeptideID), 
-                  colour = "#6666FF", 
-                  size = 1.2,
-                  linetype = 6) +
-        geom_point(data = seqIntensities,
-                   fill = "#0000FF",
-                   shape = 21,
-                   size = 2.5) +
-        ## plot the summarised intensities if present
-        geom_line(data = summIntensities, aes(group = Accessions),
-                  colour = "#AAAAAA",
-                  size = 1.2,
-                  linetype = 6) +
-        geom_point(data = summIntensities,
-                   fill = "#888888",
-                   shape = 21,
-                   size = 2.5) +
         labs(y = "log2(Intensity)", title = ProteinName) +
         theme_bw() +
         theme(
@@ -132,5 +92,47 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
             axis.title.y = element_text(size = 14),
             legend.position = "none"
         )
+    
+    ## plot the selected sequences if present
+    if(!is.null(selectedSequence)){    
+        seqIntensities <- filter(intensities, Sequences %in% selectedSequence)
+        if (!is.null(selectedModifications)) {
+            seqIntensities %<>% filter(Modifications %in% selectedModifications)
+        }
+        
+        intPlot <- intPlot +
+            geom_line(data = seqIntensities, aes(group = PeptideID), 
+                      colour = "#6666FF", 
+                      size = 1.2,
+                      linetype = 6) +
+            geom_point(data = seqIntensities,
+                       fill = "#0000FF",
+                       shape = 21,
+                       size = 2.5)
+    }
+    
+    if (!is.null(combinedIntensities)) {
+        summIntensities <- exprs(combinedIntensities) %>%
+            as.data.frame() %>%
+            rownames_to_column("Accessions") %>%
+            pivot_longer(names_to = "SampleName", 
+                         values_to = "Intensity", 
+                         -Accessions) %>%
+            left_join(fData(combinedIntensities), "Accessions") %>%
+            mutate(logIntensity = log2xplus1(Intensity)) %>%
+            filter(Accessions == ProteinID)
+        
+        intPlot <- intPlot +
+            geom_line(data = summIntensities, 
+                      aes(group = Accessions),
+                      colour = "#AAAAAA",
+                      size = 1.2,
+                      linetype = 6) +
+            geom_point(data = summIntensities,
+                       fill = "#888888",
+                       shape = 21,
+                       size = 2.5)
+    }
+    
+    intPlot
 }
-
