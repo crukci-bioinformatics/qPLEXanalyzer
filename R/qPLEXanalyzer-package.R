@@ -76,35 +76,39 @@ NULL
 #' Data processing, normalization & analysis: 
 #' \itemize{ 
 #' \item \code{convertToMSnset}: Converts quantitative data to a MSnSet 
-#' \item \code{summarizeIntensities}: Summarizes multiple peptide measurements for a
-#' protein 
+#' \item \code{summarizeIntensities}: Summarizes multiple peptide measurements 
+#' for a protein 
 #' \item \code{normalizeQuantiles}: Performs quantile normalization on the
 #' peptides/proteins intensities 
 #' \item \code{normalizeScaling}: Performs scaling normalization on the
 #' peptides/proteins intensities (mean, median or sum) 
-#' \item \code{groupScaling}: Performs scaling normalization on the peptides/proteins
-#' intensities within group (median or mean) 
-#' \item \code{rowScaling}: Normalization by scaling peptide/protein intensity across
-#' all samples 
-#' \item \code{regressIntensity}: Performs linear regression on protein intensities
-#' based on selected protein 
+#' \item \code{groupScaling}: Performs scaling normalization on the 
+#' peptides/proteins intensities within group (median or mean) 
+#' \item \code{rowScaling}: Normalization by scaling peptide/protein intensity
+#' across all samples 
+#' \item \code{regressIntensity}: Performs linear regression on protein 
+#' intensities based on selected protein 
 #' \item \code{computeDiffStats}: Compute differential statistics for the given
 #' contrasts 
-#' \item \code{getContrastResults}: Get differential statistics results for given
-#' contrast 
+#' \item \code{getContrastResults}: Get differential statistics results for 
+#' given contrast 
 #' }
 #' Visualization: 
 #' \itemize{ 
 #' \item \code{assignColours}: Assigns colours to samples in groups 
 #' \item \code{corrPlot}: Correlation plot of all the samples 
 #' \item \code{coveragePlot}: Computes and display protein sequence coverage of
-#' \item \code{hierarchicalPlot}: Hierarchical clustering plot of all the samples 
-#' \item \code{intensityBoxplot}: Intensity distribution boxplot of all the samples
+#' \item \code{hierarchicalPlot}: Hierarchical clustering plot of all the 
+#' samples 
+#' \item \code{intensityBoxplot}: Intensity distribution boxplot of all the 
+#' samples
 #' \item \code{intensityPlot}: Intensity distribution plot of all the samples
 #' \item \code{maVolPlot}: MA or Volcano plot of differential analysis results 
 #' \item \code{pcaPlot}: PCA plot of all the samples 
-#' \item \code{peptideIntensityPlot}: Peptide intensity distribution plot of specific protein 
-#' \item \code{plotMeanVar}: Computes and plots mean-variance for samples in MSnSet 
+#' \item \code{peptideIntensityPlot}: Peptide intensity distribution plot of 
+#' specific protein 
+#' \item \code{plotMeanVar}: Computes and plots mean-variance for samples in 
+#' MSnSet 
 #' \item \code{rliPlot}: Relative intensity plot of all the samples 
 #' selected protein in proteomics experiment 
 #' }

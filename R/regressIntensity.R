@@ -1,7 +1,3 @@
-#### Function to regress expression values based on single protein ####
-
-
-
 #' Regression based analysis
 #' 
 #' Performs linear regression on protein intensities based on selected protein
