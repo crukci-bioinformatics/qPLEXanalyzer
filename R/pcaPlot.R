@@ -1,6 +1,3 @@
-# PCA plot
-
-
 #' PCA plot
 #'
 #' PCA plots of the samples within MSnset
@@ -54,6 +51,7 @@
 #' @importFrom dplyr across left_join mutate
 #' @importFrom magrittr %>%
 #' @importFrom stats na.omit prcomp
+#' @importFrom stringr str_c
 #' @importFrom tibble rownames_to_column
 #' @importFrom tidyselect one_of
 #'
@@ -76,41 +74,46 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL,
     if (omitIgG) {
         MSnSetObj <- MSnSetObj[, toupper(MSnSetObj$SampleGroup) != "IGG"]
     }
-    if (!transform) {
-        transFunc <- as.data.frame
-    }
+    
     intensities <- exprs(MSnSetObj) %>%
         as.data.frame() %>%
-        na.omit() %>%
-        transFunc()
-    if (!nrow(intensities)) {
-        return(NULL)
-    }
+        na.omit()
+    
+    if (!nrow(intensities)) { return(NULL) }
+    
+    if(transform) {  intensities <- transFunc(intensities) }
+    
     pca <- intensities %>% t() %>% prcomp()
     pcaVariance <- round((pca$sdev^2 / sum(pca$sdev^2)) * 100)
+    
+    
+    colourBy <- sym(colourBy)
     plotDat <- as.data.frame(pca$x) %>%
         rownames_to_column("SampleName") %>%
         left_join(pData(MSnSetObj), "SampleName") %>%
-        mutate(across(one_of(colourBy), as.factor))
-    xPC <- paste0("PC", x.PC)
-    yPC <- paste0("PC", x.PC + 1)
-    ggplot(plotDat, 
-           aes_string(x = xPC, 
-                      y = yPC, 
-                      fill = colourBy, 
-                      label = labelColumn)) +
-        geom_point(pch = 21, colour = "black", size = pointsize) + {
+        mutate(across(!!colourBy, as.factor))
+    
+    xLab <- str_c("PC", x.PC, ", ", pcaVariance[x.PC], "% variance")
+    yLab <- str_c("PC", x.PC + 1, ", ", pcaVariance[x.PC + 1], "% variance")
+    
+    xPC <- str_c("PC", x.PC) %>% sym()
+    yPC <- str_c("PC", x.PC + 1) %>% sym()
+    if (!is.null(labelColumn)) { labelColumn <- sym(labelColumn) }
+    
+    ggplot(plotDat, aes(x = !!xPC, y = !!yPC)) +
+        geom_point(aes(fill = !!colourBy),
+                   pch = 21, 
+                   colour = "black",
+                   size = pointsize) + {
             if (!is.null(labelColumn)) {
-                geom_text(hjust = 0, size = labelsize, nudge_x = x.nudge)
+                geom_text(aes(label = !!labelColumn),
+                          hjust = 0,
+                          size = labelsize,
+                          nudge_x = x.nudge)
             }
         } +
-        scale_fill_manual(values = sampleColours, 
-                          breaks = names(sampleColours)) +
-        labs(
-            x = paste0(xPC, ", ", pcaVariance[x.PC], "% variance"),
-            y = paste0(yPC, ", ", pcaVariance[x.PC + 1], "% variance"),
-            fill = NULL, title = title
-        ) +
+        scale_fill_manual(values = sampleColours) +
+        labs(x = xLab,y = yLab, fill = NULL, title = title) +
         theme_bw() +
         theme(
             text = element_text(size = 14),
