@@ -11,8 +11,9 @@ rawMSnSet <- convertToMSnset(exp2Int,
                              Accessions = 6)
 normMSnSet <- groupScaling(rawMSnSet)
 
-# # The MSnSet object contains the MSnbase version in teh `processingData` slot
+# # The MSnSet object contains the MSnbase version in the `processingData` slot
 # # This will cause the test to fail if the MSnbase version used in the build
+# # changes
 # test_that("Group scaling normalization works", {
 #   expect_equal_to_reference(normMSnSet, file="groupScaling_msnset.rds")
 # })
@@ -23,5 +24,5 @@ testObj <-  exprs(normMSnSet)
 
 test_that("Group scaling normalization works", {
     expect_equal_to_reference(testObj, 
-                              file="groupScaling_NormalisedIntensities.rds")
+                              file="groupScaling.rds")
 })
