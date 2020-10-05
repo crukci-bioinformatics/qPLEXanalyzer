@@ -29,6 +29,7 @@ phosProtMSnSetColname <- mergePeptides(MSnSet_phos,
 
 # # The MSnSet object contains the MSnbase version in the `processingData` slot
 # # This will cause the test to fail if the MSnbase version used in the build
+# # changes
 # test_that("Merge peptides works", {
 #   expect_equal_to_reference(protMSnSet, file="mergePeptides_msnset.rds")  
 #   expect_equal_to_reference(phosProtMSnSet, file="mergePeptides_phos_msnset.rds")

@@ -15,6 +15,7 @@ pnormMSnSet <- normalizeScaling(rawMSnSet,
 
 # # The MSnSet object contains the MSnbase version in the `processingData` slot
 # # This will cause the test to fail if the MSnbase version used in the build
+# # changes
 # test_that("Scaling normalization works", {
 #   expect_equal_to_reference(normMSnSet, file="normalizeScaling_msnset.rds")
 # })
