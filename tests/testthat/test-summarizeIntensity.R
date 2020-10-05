@@ -12,6 +12,22 @@ rawMSnSet <- convertToMSnset(exp3Int,
 
 protMSnSet <- summarizeIntensities(rawMSnSet, sum, human_anno)
 
+
+# # The MSnSet object contains the MSnbase version in the `processingData` slot
+# # This will cause the test to fail if the MSnbase version used in the build
+# test_that("Summarize intensities works", {
+#   expect_equal_to_reference(protMSnSet, 
+#                         file="summarizeIntensities_msnset.rds")
+# })
+
+# The function creates an entirely new MSnSet obj, we should compare the samples
+# features data, and merged intensities of each object
+
+protTestList <- list(Samples = pData(protMSnSet),
+                     Features = fData(protMSnSet),
+                     MergedIntensitied = exprs(protMSnSet))
+
 test_that("Summarize intensities works", {
-  expect_equal_to_reference(protMSnSet, file="summarizeIntensities_msnset.rds")
+    expect_equal_to_reference(protTestList, 
+                              file="summarizeIntensities_testList.rds")
 })
