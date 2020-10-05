@@ -15,6 +15,7 @@ protMSnSet <- summarizeIntensities(rawMSnSet, sum, human_anno)
 
 # # The MSnSet object contains the MSnbase version in the `processingData` slot
 # # This will cause the test to fail if the MSnbase version used in the build
+# # changes
 # test_that("Summarize intensities works", {
 #   expect_equal_to_reference(protMSnSet, 
 #                         file="summarizeIntensities_msnset.rds")
@@ -29,5 +30,5 @@ protTestList <- list(Samples = pData(protMSnSet),
 
 test_that("Summarize intensities works", {
     expect_equal_to_reference(protTestList, 
-                              file="summarizeIntensities_testList.rds")
+                              file="summarizeIntensities.rds")
 })
