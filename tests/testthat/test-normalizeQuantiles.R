@@ -10,7 +10,7 @@ rawMSnSet <- convertToMSnset(exp2Int,
                              Accessions = 6)
 normMSnSet <- normalizeQuantiles(rawMSnSet)
 
-# # The MSnSet object contains the MSnbase version in teh `processingData` slot
+# # The MSnSet object contains the MSnbase version in the `processingData` slot
 # # This will cause the test to fail if the MSnbase version used in the build
 # test_that("Quantile normalization works", {
 #   expect_equal_to_reference(normMSnSet, file="normalizeQuantiles_msnset.rds")
@@ -22,5 +22,5 @@ testObj <-  exprs(normMSnSet)
 
 test_that("Quantile normalization works", {
     expect_equal_to_reference(testObj, 
-                              file="normalizeQuantiles_NormalisedIntensities.rds")
+                              file="normalizeQuantiles.rds")
 })
