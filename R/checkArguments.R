@@ -93,13 +93,15 @@ on_failure(is_validProteinId) <- function(call, env){
     "The ProteinID provided is not found the MSnset feature data"
 }
 
-# check the grouping column exists ####
-is_validGroupingColumn <- function(groupingColumn, MSnSetObj){
-    assert_that(is.string(groupingColumn))
-    groupingColumn%in%colnames(pData(MSnSetObj))
+# check a metadata column given in `varName` exists ####
+is_validMetadataColumn <- function(metaColumn, MSnSetObj){
+    assert_that(is.string(metaColumn))
+    metaColumn%in%colnames(pData(MSnSetObj))
 }
-on_failure(is_validGroupingColumn) <- function(call, env){
-    "The grouping column provided is not found the MSnset metadata"
+on_failure(is_validMetadataColumn) <- function(call, env){
+    varNam <- deparse(call$metaColumn)
+    colNam <- eval(call$metaColumn, env)
+    str_c(varNam, ": column ", colNam, " not found in the MSnset metadata")
 }
 
 # check the summarisation function is appropriate ####
@@ -246,7 +248,7 @@ checkArg_getContrastResults <- function(diffstats,
 checkArg_groupScaling <- function(MSnSetObj, scalingFunction, groupingColumn){
     assert_that(is_MSnSet(MSnSetObj))
     assert_that(is_validScalingFunction(scalingFunction))
-    assert_that(is_validGroupingColumn(groupingColumn, MSnSetObj))
+    assert_that(is_validMetadataColumn(groupingColumn, MSnSetObj))
 }
 
 checkArg_mergePeptides <- function(MSnSetObj, 
