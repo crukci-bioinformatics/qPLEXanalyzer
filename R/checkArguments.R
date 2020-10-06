@@ -204,7 +204,12 @@ on_failure(is_validControlGroup) <- function(call, env){
            "of the SampleGroups in the original MSnSet object.")
 }
 
-################################################################################
+# Main argument check functions ################################################
+
+checkArg_assignColours <- function(MSnSetObj, colourBy){
+  assert_that(is_MSnSet(MSnSetObj))
+  assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
+}
 
 checkArg_computeDiffStats <- function(MSnSetObj, batchEffect, transform, contrasts, trend, robust){
     assert_that(is_MSnSet(MSnSetObj))

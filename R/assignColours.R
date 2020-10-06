@@ -23,9 +23,8 @@
 #' @importFrom stats setNames
 #' @export assignColours
 assignColours <- function(MSnSetObj, colourBy="SampleGroup") {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
+    checkArg_assignColours(MSnSetObj, colourBy)
+    
     colourGroups <- as.character(pData(MSnSetObj)[, colourBy]) %>%
         sort() %>% 
         unique()
