@@ -204,8 +204,22 @@ on_failure(is_validControlGroup) <- function(call, env){
 
 ################################################################################
 
-checkArg_convertToMSnset <- function(ExpObj, metadata, indExpData, Sequences, 
-                                     Accessions, type, rmMissing){
+checkArg_computeDiffStats <- function(MSnSetObj, batchEffect, transform, contrasts, trend, robust){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is_validBatchEffect(batchEffect, MSnSetObj))
+    assert_that(is.flag(transform))
+    assert_that(is.character(contrasts))
+    assert_that(is.flag(trend))
+    assert_that(is.flag(robust))
+}
+
+checkArg_convertToMSnset <- function(ExpObj, 
+                                     metadata, 
+                                     indExpData, 
+                                     Sequences, 
+                                     Accessions, 
+                                     type, 
+                                     rmMissing){
     assert_that(is.data.frame(ExpObj))
     assert_that(is_validMetadata(metadata))
     assert_that(is.numeric(indExpData), noNA(indExpData))
@@ -217,19 +231,32 @@ checkArg_convertToMSnset <- function(ExpObj, metadata, indExpData, Sequences,
     assert_that(is.flag(rmMissing))
 }
 
-checkArg_summarizeIntensities <- function(MSnSetObj, summarizationFunction, 
-                                          annotation){
+checkArg_getContrastResults <- function(diffstats, 
+                                        contrast, 
+                                        controlGroup, 
+                                        transform, 
+                                        writeFile){
+    assert_that(is_validDiffstats(diffstats))
+    assert_that(is_validContrast(contrast, diffstats))
+    assert_that(is_validControlGroup(controlGroup, diffstats))
+    assert_that(is.flag(transform))
+    assert_that(is.flag(writeFile))
+}
+
+checkArg_groupScaling <- function(MSnSetObj, scalingFunction, groupingColumn){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is_validScalingFunction(scalingFunction))
+    assert_that(is_validGroupingColumn(groupingColumn, MSnSetObj))
+}
+
+checkArg_mergePeptides <- function(MSnSetObj, 
+                                   summarizationFunction, 
+                                   annotation, 
+                                   keepCols){
     assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
     assert_that(is_validSummarizationFunction(summarizationFunction))
     assert_that(is_validAnnotationData(annotation))
-}
-
-checkArg_mergePeptides <- function(MSnSetObj, summarizationFunction, 
-                                   annotation, keepCols){
-  assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
-  assert_that(is_validSummarizationFunction(summarizationFunction))
-  assert_that(is_validAnnotationData(annotation))
-  assert_that(is_validfDataColumn(keepCols, MSnSetObj))
+    assert_that(is_validfDataColumn(keepCols, MSnSetObj))
 }
 
 checkArg_normalizeQuantiles <- function(MSnSetObj){
@@ -242,17 +269,6 @@ checkArg_normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId){
     assert_that(is_validProteinId(ProteinId, MSnSetObj))
 }
 
-checkArg_groupScaling <- function(MSnSetObj, scalingFunction, groupingColumn){
-    assert_that(is_MSnSet(MSnSetObj))
-    assert_that(is_validScalingFunction(scalingFunction))
-    assert_that(is_validGroupingColumn(groupingColumn, MSnSetObj))
-}
-
-checkArg_rowScaling <- function(MSnSetObj, scalingFunction){
-    assert_that(is_MSnSet(MSnSetObj))
-    assert_that(is_validScalingFunction(scalingFunction))
-}
-
 checkArg_regressIntensity <- function(MSnSetObj, controlInd, ProteinId){
     assert_that(is_MSnSet(MSnSetObj), is_ProteinSet(MSnSetObj))
     assert_that(is_validControlColumn(controlInd, MSnSetObj))
@@ -260,24 +276,17 @@ checkArg_regressIntensity <- function(MSnSetObj, controlInd, ProteinId){
     assert_that(is_validProteinId(ProteinId, MSnSetObj))
 }
 
-checkArg_computeDiffStats <- function(MSnSetObj, batchEffect, transform,
-                                      contrasts, trend, robust){
+checkArg_rowScaling <- function(MSnSetObj, scalingFunction){
     assert_that(is_MSnSet(MSnSetObj))
-    assert_that(is_validBatchEffect(batchEffect, MSnSetObj))
-    assert_that(is.flag(transform))
-    assert_that(is.character(contrasts))
-    assert_that(is.flag(trend))
-    assert_that(is.flag(robust))
+    assert_that(is_validScalingFunction(scalingFunction))
 }
 
-checkArg_getContrastResults <- function(diffstats, contrast, controlGroup,
-                                        transform, writeFile){
-    assert_that(is_validDiffstats(diffstats))
-    assert_that(is_validContrast(contrast, diffstats))
-    assert_that(is_validControlGroup(controlGroup, diffstats))
-    assert_that(is.flag(transform))
-    assert_that(is.flag(writeFile))
+checkArg_summarizeIntensities <- function(MSnSetObj, 
+                                          summarizationFunction, 
+                                          annotation){
+    assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
+    assert_that(is_validSummarizationFunction(summarizationFunction))
+    assert_that(is_validAnnotationData(annotation))
 }
-
 
 ################################################################################
