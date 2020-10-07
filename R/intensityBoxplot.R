@@ -1,6 +1,3 @@
-# Intensity boxplots
-
-
 #' Intensity Distribution boxplot
 #' 
 #' Intensity distribution boxplot of all the samples
@@ -47,16 +44,11 @@
 #' @export intensityBoxplot
 intensityBoxplot <- function(MSnSetObj, title="", sampleColours=NULL, 
                              colourBy="SampleGroup") {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
-    if (!colourBy %in% colnames(pData(MSnSetObj))) {
-        stop("colourBy must a column names in the pData of the MSnSetObj")
-    }
     if (is.null(sampleColours)) {
         sampleColours <- assignColours(MSnSetObj, colourBy = colourBy)
     }
-    
+    checkArg_intensityBoxplot(MSnSetObj, title, sampleColours, colourBy)
+
     colourBy <- sym(colourBy)
     plotDat <- exprs(MSnSetObj) %>%
         as.data.frame() %>%

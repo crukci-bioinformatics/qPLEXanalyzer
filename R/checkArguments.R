@@ -136,7 +136,6 @@ on_failure(is_validProteinId) <- function(call, env){
 
 # check a metadata column given in `varName` exists ####
 is_validMetadataColumn <- function(metaColumn, MSnSetObj){
-    assert_that(is.string(metaColumn))
     metaColumn%in%colnames(pData(MSnSetObj))
 }
 on_failure(is_validMetadataColumn) <- function(call, env){
@@ -249,6 +248,7 @@ on_failure(is_validControlGroup) <- function(call, env){
 
 checkArg_assignColours <- function(MSnSetObj, colourBy){
   assert_that(is_MSnSet(MSnSetObj))
+  assert_that(is.string(colourBy))
   assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
 }
 
@@ -310,7 +310,7 @@ checkArg_coveragePlot <- function(MSnSetObj,
                                   ProteinName,
                                   fastaFile,
                                   myCol){
-  assert_that(is_MSnSet(MSnSetObj))
+  assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
   assert_that("Sequences" %in% colnames(fData(MSnSetObj)),
               msg= 'MSnSetObj feature data must include a "Sequences" column')
   assert_that(is_validProteinId(ProteinID, MSnSetObj, allowNull=FALSE))
@@ -335,6 +335,7 @@ checkArg_getContrastResults <- function(diffstats,
 checkArg_groupScaling <- function(MSnSetObj, scalingFunction, groupingColumn){
     assert_that(is_MSnSet(MSnSetObj))
     assert_that(is_validScalingFunction(scalingFunction))
+    assert_that(is.string(groupingColumn))
     assert_that(is_validMetadataColumn(groupingColumn, MSnSetObj))
 }
 
@@ -343,10 +344,22 @@ checkArg_hierarchicalPlot <- function(MSnSetObj,
                                       colourBy, 
                                       horizontal,
                                       title){
-  assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
+  assert_that(is_MSnSet(MSnSetObj))
+  assert_that(is.string(colourBy))
   assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
   assert_that(is_validSampleColours(sampleColours, colourBy, MSnSetObj))
   assert_that(is.flag(horizontal))
+  assert_that(is.string(title))
+}
+
+checkArg_intensityBoxplot <- function(MSnSetObj, 
+                                      title, 
+                                      sampleColours,
+                                      colourBy){
+  assert_that(is_MSnSet(MSnSetObj))
+  assert_that(is.string(colourBy))
+  assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
+  assert_that(is_validSampleColours(sampleColours, colourBy, MSnSetObj))
   assert_that(is.string(title))
 }
 
