@@ -34,16 +34,11 @@
 hierarchicalPlot <- function(MSnSetObj, sampleColours=NULL, 
                              colourBy="SampleGroup", horizontal=TRUE, 
                              title="") {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
-    if (!colourBy %in% colnames(pData(MSnSetObj))) {
-        stop("colourBy must a column names in the pData of the MSnSetObj")
-    }
     if (is.null(sampleColours)) {
         sampleColours <- assignColours(MSnSetObj, colourBy = colourBy)
     }
-    
+    checkArg_hierarchicalPlot(MSnSetObj, sampleColours, colourBy, horizontal,
+                              title)
 
     dendro.dat <- t(log2xplus1(exprs(MSnSetObj))) %>%
         dist(method = "euclidean") %>%

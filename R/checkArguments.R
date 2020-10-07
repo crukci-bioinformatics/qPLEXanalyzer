@@ -10,14 +10,38 @@
 # check string is a valid colour ####
 
 is_validColour <- function(colour){
-  tryCatch(is.matrix(col2rgb(colour)),
-           error = function(e) FALSE)
+  tests <- map_lgl(colour, ~tryCatch(is.matrix(col2rgb(.x)),
+                                     error = function(e) FALSE))
+  all(tests)
 }
 on_failure(is_validColour) <- function(call, env) {
   varNam <- deparse(call$colour)
-  colVal <- eval(call$colour, env)
-  str_c(varNam, ": ", colVal, " is not a valid colour.")
+  colour <- eval(call$colour, env)
+  tests <- map_lgl(colour, ~tryCatch(is.matrix(col2rgb(.x)),
+                                     error = function(e) FALSE))
+  str_c(
+    str_c(varNam, ": ", colour[!tests], " is not a valid colour."),
+    collapse="\n       ")
 }
+
+# check sample colours for plotting ####
+is_validSampleColours <- function(sampleColours, colourBy, MSnSetObj){
+  assert_that(is_validColour(sampleColours))
+  colnm <- names(sampleColours)
+  colbynm <- pData(MSnSetObj)[[colourBy]] %>% unique()
+  assert_that(!is.null(colnm), 
+              msg = str_c("sampleColours should be a named vector, where the ",
+                          "names are values in the ", colourBy, " column of ",
+                          "the MSnSet object"))
+  assert_that(length(colbynm)==length(colnm),
+              msg = str_c("sampleColours should provide a colour for each ",
+                          "value in the ", colourBy, " column of the MSnSet ",
+                          "object"))
+  assert_that(all(colbynm%in%colnm) && all(colnm%in%colbynm),
+              msg = str_c("The names of sampleColours do not match the values ",
+                          "in the ", colourBy, " column of the MSnSet object"))
+}
+
 
 # check metadata ####
 is_validMetadata <- function(metadata){
@@ -312,6 +336,18 @@ checkArg_groupScaling <- function(MSnSetObj, scalingFunction, groupingColumn){
     assert_that(is_MSnSet(MSnSetObj))
     assert_that(is_validScalingFunction(scalingFunction))
     assert_that(is_validMetadataColumn(groupingColumn, MSnSetObj))
+}
+
+checkArg_hierarchicalPlot <- function(MSnSetObj, 
+                                      sampleColours, 
+                                      colourBy, 
+                                      horizontal,
+                                      title){
+  assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
+  assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
+  assert_that(is_validSampleColours(sampleColours, colourBy, MSnSetObj))
+  assert_that(is.flag(horizontal))
+  assert_that(is.string(title))
 }
 
 checkArg_mergePeptides <- function(MSnSetObj, 
