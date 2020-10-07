@@ -10,6 +10,8 @@ corrPlot(
   title = "",
   low_cor_colour = "#FFFFFF",
   high_cor_colour = "#B90505",
+  low_cor_limit = 0,
+  high_cor_limit = 1,
   textsize = 3
 )
 }
@@ -23,6 +25,10 @@ corrPlot(
 \item{low_cor_colour}{colour; colour for lowest correlation in scale}
 
 \item{high_cor_colour}{colour; colour for highest correlation in scale}
+
+\item{low_cor_limit}{numeric; lower limit for correlation in colour scale}
+
+\item{high_cor_limit}{numeric; upper limit for correlation in colour scale}
 
 \item{textsize}{integer: set the size of correlation values text}
 }

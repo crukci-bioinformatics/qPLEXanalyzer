@@ -19,4 +19,8 @@ test_that("corrPlot works", {
     "correlation plot yellow to pink", 
     corrPlot(MSnSet_data, addValues=TRUE, title="Correlation plot", 
              low_cor_colour="yellow", high_cor_colour="pink"))
+  vdiffr::expect_doppelganger(
+    "correlation plot change limit",
+    corrPlot(MSnSet_data, addValues=TRUE, title="Correlation plot",
+             low_cor_limit=0.5, high_cor_limit=1))
 })
