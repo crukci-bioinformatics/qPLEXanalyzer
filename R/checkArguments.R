@@ -7,6 +7,18 @@
 #' @importFrom purrr map_lgl
 #' @importFrom stringr str_c str_detect
 
+# check string is a valid colour ####
+
+is_validColour <- function(colour){
+  tryCatch(is.matrix(col2rgb(colour)),
+           error = function(e) FALSE)
+}
+on_failure(is_validColour) <- function(call, env) {
+  varNam <- deparse(call$colour)
+  colVal <- eval(call$colour, env)
+  str_c(varNam, ": ", colVal, " is not a valid colour.")
+}
+
 # check metadata ####
 is_validMetadata <- function(metadata){
     assert_that(is.data.frame(metadata))
@@ -236,6 +248,22 @@ checkArg_convertToMSnset <- function(ExpObj,
     assert_that(is_validSequencesColumn(Sequences, type))
     assert_that(is.count(Accessions))
     assert_that(is.flag(rmMissing))
+}
+
+checkArg_corrPlot <- function(MSnSetObj,
+                              addValues,
+                              title,
+                              low_cor_colour,
+                              high_cor_colour,
+                              textsize){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is.flag(addValues))
+    assert_that(is.string(title))
+    assert_that(length(low_cor_colour)==1)
+    assert_that(is_validColour(low_cor_colour))
+    assert_that(length(high_cor_colour)==1)
+    assert_that(is_validColour(high_cor_colour))
+    assert_that(is.number(textsize))
 }
 
 checkArg_getContrastResults <- function(diffstats, 

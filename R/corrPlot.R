@@ -1,6 +1,3 @@
-# Correlation plot
-
-
 #' Correlation plot
 #' 
 #' Computes and display correlation plot for samples within MSnSet
@@ -40,12 +37,9 @@
 corrPlot <- function(MSnSetObj, addValues=TRUE, title="", 
                      low_cor_colour="#FFFFFF", high_cor_colour="#B90505",
                      textsize=3) {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("data has to be of class MSnSet..")
-    }
-    if (!is.logical(addValues)) {
-        stop("addValues has to be either TRUE or FALSE..")
-    }
+    checkArg_corrPlot(MSnSetObj, addValues, title, 
+                      low_cor_colour, high_cor_colour,
+                      textsize)
     
     col2Cols <- c(low_cor_colour, high_cor_colour)
     plotDat <- cor(exprs(MSnSetObj)) %>%
