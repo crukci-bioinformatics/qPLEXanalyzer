@@ -96,10 +96,15 @@ on_failure(is_validScalingFunction) <- function(call, env){
 }
 
 # check the provided protein ID is in the MSnSetObj ####
-is_validProteinId <- function(ProteinID, MSnSetObj){
-    assert_that(is.character(ProteinID) | is.null(ProteinID),
-                msg=paste0("ProteinID should be a charater or NULL"))
-    is.null(ProteinID) || ProteinID%in%fData(MSnSetObj)$Accessions
+is_validProteinId <- function(ProteinID, MSnSetObj, allowNull=TRUE){
+    if(allowNull){
+        assert_that(is.character(ProteinID) | is.null(ProteinID),
+                    msg=paste0("ProteinID should be a charater or NULL"))
+        is.null(ProteinID) || ProteinID%in%fData(MSnSetObj)$Accessions
+    }else{
+        assert_that(is.character(ProteinID))
+        ProteinID%in%fData(MSnSetObj)$Accessions
+    }
 }
 on_failure(is_validProteinId) <- function(call, env){
     "The ProteinID provided is not found the MSnset feature data"
@@ -274,6 +279,21 @@ checkArg_corrPlot <- function(MSnSetObj,
     assert_that(high_cor_limit > low_cor_limit, 
                 msg = "high_cor_limit should be greater than low_cor_limit")
     assert_that(is.number(textsize))
+}
+
+checkArg_coveragePlot <- function(MSnSetObj,
+                                  ProteinID,
+                                  ProteinName,
+                                  fastaFile,
+                                  myCol){
+  assert_that(is_MSnSet(MSnSetObj))
+  assert_that("Sequences" %in% colnames(fData(MSnSetObj)),
+              msg= 'MSnSetObj feature data must include a "Sequences" column')
+  assert_that(is_validProteinId(ProteinID, MSnSetObj, allowNull=FALSE))
+  assert_that(is.string(ProteinName))
+  assert_that(is.readable(fastaFile))    
+  assert_that(length(myCol)==1)
+  assert_that(is_validColour(myCol))
 }
 
 checkArg_getContrastResults <- function(diffstats, 

@@ -7,7 +7,9 @@ MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,
                                indExpData = c(7:16),
                                Sequences = 2,
                                Accessions = 6)
-mySequenceFile <- system.file('extdata', "P03372.fasta", package="qPLEXanalyzer")
+mySequenceFile <- system.file('extdata', 
+                              "P03372.fasta", 
+                              package="qPLEXanalyzer")
 
 plt <- coveragePlot(MSnSet_data, 
                     ProteinID="P03372", 

@@ -14,7 +14,7 @@
 #' @param ProteinID character: Uniprot ID of the protein
 #' @param ProteinName character: name of the protein
 #' @param fastaFile character: fasta file of protein sequence
-#' @param myCol character: colour for plotting
+#' @param myCol colour: colour for plotting
 #' @return An object created by \code{ggplot}
 #' @examples
 #' 
@@ -45,25 +45,9 @@
 #' @export coveragePlot
 coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile, 
                          myCol="brown") {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
-    if (!is(ProteinID, "character")) {
-        stop("ProteinID has to be of class character..")
-    }
-    if (!is(ProteinName, "character")) {
-        stop("ProteinName has to be of class character..")
-    }
-    if (!is(fastaFile, "character")) {
-        stop("fastaFile has to be of class character..")
-    }
-    if (!is(myCol, "character")) {
-        stop("myCol has to be of class character..")
-    }
-    if (!"Sequences" %in% colnames(fData(MSnSetObj))) {
-        stop('MSnSetObj feature data must include a "Sequences" column')
-    }
-    
+    checkArg_coveragePlot(MSnSetObj, ProteinID, ProteinName, fastaFile, 
+                             myCol)
+
     ## read protein sequence from fastafile
     Protein_seq <- readAAStringSet(fastaFile)
     
