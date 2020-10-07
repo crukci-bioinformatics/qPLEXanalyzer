@@ -43,6 +43,7 @@
 regressIntensity <- function(MSnSetObj, ProteinId, controlInd=NULL, plot=TRUE) {
     checkArg_regressIntensity(MSnSetObj, controlInd, ProteinId)
     
+    if (!is.null(controlInd)) { MSnSetObj <- MSnSetObj[, -controlInd] }
     ind <- which(fData(MSnSetObj)$Accessions == ProteinId)
     prot <- exprs(MSnSetObj)[ind, ]
     dep <- exprs(MSnSetObj)
