@@ -58,7 +58,9 @@ corrPlot <- function(MSnSetObj, addValues=TRUE, title="",
     ggplot(plotDat, aes(x = X, y = Y, fill = Cor)) +
         geom_tile(col = "grey") +
         geom_text(aes(label = CorTxt), size=textsize) +
-        scale_fill_gradientn(colors = col2Cols, breaks = seq(0, 1, 0.2)) +
+        scale_fill_gradientn(colors = col2Cols, 
+                             breaks = seq(0, 1, 0.2),
+                             limits = c(0, 1)) +
         labs(x = NULL, y = NULL, title = title) +
         guides(fill = guide_colorbar(barheight = 10)) +
         theme(
