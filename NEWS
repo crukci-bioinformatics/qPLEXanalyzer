@@ -1,6 +1,7 @@
 VERSION 1.7.3
 ------------------------
 o Fix limits of scale in corrPlot to c(0, 1)
+o Fix bug in regress intensities where control columns were not being removed
 
 VERSION 1.7.1
 ------------------------
