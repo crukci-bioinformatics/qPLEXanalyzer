@@ -228,11 +228,12 @@ is_validContrast <- function(contrast, diffstats){
 }
 on_failure(is_validContrast) <- function(call, env){
     contr <- eval(call$contrast, env)
-    contr_available <- eval(diffstats$fittedContrasts$coefficients, env) %>%
+    diffstats <- eval(call$diffstats, env)
+    contr_avail <- diffstats$fittedContrasts$coefficients %>%
       colnames() %>%
       str_c(collapse="\n       ")
     str_c("'", contr, "' is not a valid contrast. Available contrasts:\n",
-          "        ", contr_available)
+          "        ", contr_avail)
 }
 
 # check the control group #####
@@ -441,6 +442,38 @@ checkArg_normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId){
     assert_that(is_MSnSet(MSnSetObj))
     assert_that(is_validScalingFunction(scalingFunction))
     assert_that(is_validProteinId(ProteinId, MSnSetObj))
+}
+
+checkArg_pcaPlot <- function(MSnSetObj,
+                             omitIgG,
+                             sampleColours,
+                             transFunc,
+                             transform,
+                             colourBy,
+                             title,
+                             labelColumn,
+                             labelsize,
+                             pointsize,
+                             x.nudge,
+                             x.PC){
+  assert_that(is_MSnSet(MSnSetObj))
+  assert_that(is.flag(omitIgG))
+  assert_that(is_validSampleColours(sampleColours, colourBy, MSnSetObj))
+  assert_that(is.function(transFunc))
+  assert_that(length(transFunc(10))==1 & is.numeric(transFunc(10)),
+              msg = str_c("transFunc: the specified function should tranform ",
+                          " a numeric value into another single numeric value,",
+                          "e.g. log2 or sqrt"))
+  assert_that(is.flag(transform))
+  assert_that(is.string(colourBy))
+  assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
+  assert_that(is.string(title))
+  assert_that(is.string(labelColumn))
+  assert_that(is_validMetadataColumn(labelColumn, MSnSetObj))
+  assert_that(is.number(labelsize))
+  assert_that(is.number(pointsize))
+  assert_that(is.number(x.nudge))
+  assert_that(is.count(x.PC))
 }
 
 checkArg_regressIntensity <- function(MSnSetObj, controlInd, ProteinId){

@@ -61,15 +61,12 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL,
                     transFunc=log2xplus1, transform=TRUE, 
                     colourBy="SampleGroup", title="", labelColumn="BioRep",
                     labelsize=4, pointsize=4, x.nudge=4, x.PC=1) {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("data has to be of class MSnSet..")
-    }
-    if (!colourBy %in% colnames(pData(MSnSetObj))) {
-        stop("colourBy must a column names in the pData of the MSnSetObj")
-    }
     if (is.null(sampleColours)) {
         sampleColours <- assignColours(MSnSetObj, colourBy = colourBy)
     }
+    checkArg_pcaPlot(MSnSetObj, omitIgG, sampleColours, transFunc, transform, 
+                     colourBy, title, labelColumn, labelsize, pointsize, 
+                     x.nudge, x.PC)
     
     ## Remove IgG samples is requested
     if (omitIgG) {
