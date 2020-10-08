@@ -53,16 +53,13 @@
 intensityPlot <- function(MSnSetObj, sampleColours=NULL, title="", 
                           colourBy="SampleGroup", transform=TRUE, 
                           xlab="log2(intensity)", trFunc=log2xplus1) {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
-    if (!transform) {
-        trFunc <- c
-    }
+    if (!transform) { trFunc <- c }
     if (is.null(sampleColours)) {
         sampleColours <- assignColours(MSnSetObj, colourBy = colourBy)
     }
-    
+    checkArg_intensityPlot(MSnSetObj, sampleColours, title, colourBy,
+                           transform, xlab, trFunc)
+
     colourBy <- sym(colourBy)
 
     plotDat <- exprs(MSnSetObj) %>%
