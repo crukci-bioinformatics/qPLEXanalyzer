@@ -69,15 +69,8 @@ testSignficant <- function(dat, cutoffs) {
 maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
                       selectedGenes=NULL, fdrCutOff=0.05,
                       lfcCutOff=1, controlLfcCutOff=1, plotType="MA") {
-    
-    if (!plotType %in% c("MA", "Volcano")) {
-        stop("plotType should be 'MA' or 'Volcano'..")
-    }
-    
-    if (!all(selectedGenes%in%fData(diffstats$MSnSetObj)$Accessions)) {
-        stop("Some of the genes provided in 'selectedGenes' were not found in ",
-             "the data table")
-    }
+    checkArg_maVolPlot(diffstats, contrast, title, controlGroup, selectedGenes,
+                       fdrCutOff, lfcCutOff, controlLfcCutOff, plotType)
     
     # get contrast results
     results <- suppressMessages(

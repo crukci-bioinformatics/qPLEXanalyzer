@@ -227,7 +227,12 @@ is_validContrast <- function(contrast, diffstats){
     contrast%in%contrasts_available
 }
 on_failure(is_validContrast) <- function(call, env){
-    str_c("'", call$contrast, "' is not a valid contrast")
+    contr <- eval(call$contrast, env)
+    contr_available <- eval(diffstats$fittedContrasts$coefficients, env) %>%
+      colnames() %>%
+      str_c(collapse="\n       ")
+    str_c("'", contr, "' is not a valid contrast. Available contrasts:\n",
+          "        ", contr_available)
 }
 
 # check the control group #####
@@ -239,7 +244,9 @@ is_validControlGroup <- function(controlGroup, diffstats){
         controlGroup%in%colnames(diffstats$fittedLM$coefficients)
 }
 on_failure(is_validControlGroup) <- function(call, env){
-    str_c(call$controlGroup, 
+  argNam <- call$controlGroup
+  ctrlGrp <- eval(argNam, env)
+    str_c(argNam, ": '", ctrlGrp, "'",
            " is not found in the diffstats object. It should be one ", 
            "of the SampleGroups in the original MSnSet object.")
 }
@@ -252,7 +259,12 @@ checkArg_assignColours <- function(MSnSetObj, colourBy){
   assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
 }
 
-checkArg_computeDiffStats <- function(MSnSetObj, batchEffect, transform, contrasts, trend, robust){
+checkArg_computeDiffStats <- function(MSnSetObj, 
+                                      batchEffect, 
+                                      transform, 
+                                      contrasts, 
+                                      trend, 
+                                      robust){
     assert_that(is_MSnSet(MSnSetObj))
     assert_that(is_validBatchEffect(batchEffect, MSnSetObj))
     assert_that(is.flag(transform))
@@ -382,6 +394,33 @@ checkArg_intensityPlot <- function(MSnSetObj,
                 msg = str_c("trFunc: the specified function should tranform a ",
                             "numeric value into another single numeric value,",
                             "e.g. log2 or sqrt"))
+}
+
+checkArg_maVolPlot <- function(diffstats,
+                               contrast,
+                               title,
+                               controlGroup,
+                               selectedGenes,
+                               fdrCutOff,
+                               lfcCutOff,
+                               controlLfcCutOff,
+                               plotType){
+  assert_that(is_validDiffstats(diffstats))
+  assert_that(is_validContrast(contrast, diffstats))
+  assert_that(is.string(title))
+  assert_that(is_validControlGroup(controlGroup, diffstats))
+  assert_that(is.character(selectedGenes) | is.null(selectedGenes),
+              msg = str_c("'selectedGenes' should be character vector of ",
+                          "Accessions or NULL"))
+  assert_that(all(selectedGenes%in%fData(diffstats$MSnSetObj)$Accessions),
+              msg = str_c("Some of the genes provided in 'selectedGenes' were ",
+                          "not found in the data table"))
+  assert_that(is.number(fdrCutOff))
+  assert_that(is.number(lfcCutOff))
+  assert_that(is.number(controlLfcCutOff))
+  assert_that(is.string(plotType))
+  assert_that(plotType %in% c("MA", "Volcano"),
+              msg = "plotType should be 'MA' or 'Volcano'")
 }
 
 checkArg_mergePeptides <- function(MSnSetObj, 
