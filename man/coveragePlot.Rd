@@ -15,7 +15,7 @@ coveragePlot(MSnSetObj, ProteinID, ProteinName, fastaFile, myCol = "brown")
 
 \item{fastaFile}{character: fasta file of protein sequence}
 
-\item{myCol}{character: colour for plotting}
+\item{myCol}{colour: colour for plotting}
 }
 \value{
 An object created by \code{ggplot}
