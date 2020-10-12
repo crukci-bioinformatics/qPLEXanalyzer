@@ -52,12 +52,9 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
                                  combinedIntensities=NULL, 
                                  selectedSequence=NULL,
                                  selectedModifications=NULL) {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
-    if (!is.null(combinedIntensities) && !is(combinedIntensities, "MSnSet")) {
-        stop("combinedIntensities has to either NULL or object of class MSnSet")
-    }
+    checkArg_peptideIntensityPlot(MSnSetObj, ProteinID, ProteinName, 
+                                  combinedIntensities, selectedSequence,
+                                  selectedModifications)
     
     ## get peptide intensities for plotting
     featureDat <- fData(MSnSetObj) %>% rownames_to_column("PeptideID")

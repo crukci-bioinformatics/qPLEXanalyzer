@@ -123,7 +123,7 @@ on_failure(is_validScalingFunction) <- function(call, env){
 is_validProteinId <- function(ProteinID, MSnSetObj, allowNull=TRUE){
     if(allowNull){
         assert_that(is.character(ProteinID) | is.null(ProteinID),
-                    msg=paste0("ProteinID should be a charater or NULL"))
+                    msg=paste0("ProteinID should be a character or NULL"))
         is.null(ProteinID) || ProteinID%in%fData(MSnSetObj)$Accessions
     }else{
         assert_that(is.character(ProteinID))
@@ -180,6 +180,36 @@ is_validfDataColumn <- function(cols, MSnSetObj){
     assert_that(is_validColName(cols, tab), msg = errMsg3) 
     }
   TRUE
+}
+
+# check selected peptide sequences are in the fData for the specified protein ##
+are_validSequences <- function(Sequence, MSnSetObj, ProteinID){
+  assert_that(is.character(Sequence) | is.null(Sequence),
+                msg="selectedSequence should be either a character or NULL")
+  subMSnSet <- MSnSetObj[fData(MSnSetObj)$Accessions==ProteinID,]
+  is.null(Sequence) || Sequence%in%fData(subMSnSet)$Sequences
+}
+on_failure(are_validSequences) <- function(call, env){
+  varNam <- deparse(call$Sequence)
+  protAcc <- eval(call$ProteinID, env)
+  str_c(varNam, 
+        ": The sequence(s) provided can not be found in the feature data for ",
+        protAcc)
+}
+
+# check a selected modification is in the fData for the specified protein ######
+are_validModifications <- function(Modifications, MSnSetObj, ProteinID){
+  assert_that(is.character(Modifications) | is.null(Modifications),
+              msg="selectedModifications should be either a character or NULL")
+  subMSnSet <- MSnSetObj[fData(MSnSetObj)$Accessions==ProteinID,]
+  is.null(Modifications) || all(Modifications%in%fData(subMSnSet)$Modifications)
+}
+on_failure(are_validModifications) <- function(call, env){
+  varNam <- deparse(call$Modification)
+  protAcc <- eval(call$ProteinID, env)
+  str_c(varNam, 
+        ": the modification(s) provided can not be found in the feature data ",
+        "for ", protAcc)
 }
 
 # check the control column index ####
@@ -474,6 +504,27 @@ checkArg_pcaPlot <- function(MSnSetObj,
   assert_that(is.number(pointsize))
   assert_that(is.number(x.nudge))
   assert_that(is.count(x.PC))
+}
+
+checkArg_peptideIntensityPlot <- function(MSnSetObj, 
+                                          ProteinID, 
+                                          ProteinName,
+                                          combinedIntensities, 
+                                          selectedSequence,
+                                          selectedModifications){
+  assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
+  assert_that(is.string(ProteinID))
+  assert_that(is_validProteinId(ProteinID, MSnSetObj, allowNull = FALSE))
+  assert_that(is.null(combinedIntensities) || 
+                (is_MSnSet(combinedIntensities) && 
+                   is_ProteinSet(combinedIntensities)),
+              msg = str_c("combinedIntensities should be either NULL or an ",
+                          "object of class MSnSet containing summarized ",
+                          "protein data"))
+  assert_that(are_validSequences(selectedSequence, MSnSetObj, ProteinID))
+  assert_that(are_validModifications(selectedModifications, 
+                                     MSnSetObj, 
+                                     ProteinID))
 }
 
 checkArg_regressIntensity <- function(MSnSetObj, controlInd, ProteinId){
