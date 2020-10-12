@@ -35,10 +35,6 @@ test_that("argument checks - omitIgG", {
   expect_error(pcaPlot(MSnSetObj = rawMSnSet, omitIgG = 1),
                regexp = "omitIgG is not a flag")
 })
-test_that("argument checks - omitIgG", {
-  expect_error(pcaPlot(MSnSetObj = rawMSnSet, omitIgG = 1),
-               regexp = "omitIgG is not a flag")
-})
 test_that("argument checks - sampleColours", {
   myCols <- assignColours(rawMSnSet)
   myCols[2] <- "blueq"
