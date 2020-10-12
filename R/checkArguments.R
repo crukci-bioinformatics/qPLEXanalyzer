@@ -534,6 +534,19 @@ checkArg_regressIntensity <- function(MSnSetObj, controlInd, ProteinId){
     assert_that(is_validProteinId(ProteinId, MSnSetObj))
 }
 
+checkArg_rliPlot <- function(MSnSetObj,
+                             title,
+                             sampleColours,
+                             colourBy,
+                             omitIgG){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is.string(title))
+    assert_that(is_validSampleColours(sampleColours, colourBy, MSnSetObj))
+    assert_that(is.string(colourBy))
+    assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
+    assert_that(is.flag(omitIgG))
+}
+
 checkArg_rowScaling <- function(MSnSetObj, scalingFunction){
     assert_that(is_MSnSet(MSnSetObj))
     assert_that(is_validScalingFunction(scalingFunction))

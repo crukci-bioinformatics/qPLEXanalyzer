@@ -54,16 +54,11 @@
 #' @export rliPlot
 rliPlot <- function(MSnSetObj, title="", sampleColours=NULL, 
                     colourBy="SampleGroup", omitIgG=TRUE) {
-    if (!is(MSnSetObj, "MSnSet")) {
-        stop("MSnSetObj has to be of class MSnSet..")
-    }
-    if (!colourBy %in% colnames(pData(MSnSetObj))) {
-        stop("colourBy must a column names in the pData of the MSnSetObj")
-    }
     if (is.null(sampleColours)) {
         sampleColours <- assignColours(MSnSetObj, colourBy = colourBy)
     }
-    
+    checkArg_rliPlot(MSnSetObj, title, sampleColours, colourBy, omitIgG)
+
     # Remove IgG samples is requested
     if (omitIgG) {
         MSnSetObj <- MSnSetObj[, toupper(MSnSetObj$SampleGroup) != "IGG"]

@@ -26,3 +26,42 @@ test_that("RLI plot works", {
   vdiffr::expect_doppelganger("RLI plot custom colours", plt3)
 })
 
+# test the check arg functions
+test_that("argument checks - MSnset", {
+    expect_error(rliPlot(MSnSetObj = 1),
+                 regexp = "MSnSetObj has to be of class MSnSet")
+})
+test_that("argument checks - title", {
+    expect_error(rliPlot(MSnSetObj = rawMSnSet, title = 1),
+                 regexp = "title is not a string")
+})
+test_that("argument checks - sampleColours", {
+    myCols <- assignColours(rawMSnSet)
+    myCols[2] <- "blueq"
+    expect_error(rliPlot(MSnSetObj = rawMSnSet,
+                         sampleColours = myCols),
+                 regexp = "sampleColours: blueq is not a valid colour")
+    myCols <- c("red", "blue", "green", "pink")
+    expect_error(rliPlot(MSnSetObj = rawMSnSet,
+                         sampleColours = myCols),
+                 regexp = "sampleColours should be a named vector")
+    myCols <- assignColours(rawMSnSet)[-1]
+    expect_error(rliPlot(MSnSetObj = rawMSnSet,
+                         sampleColours = myCols),
+                 regexp = "sampleColours should provide a colour for each")
+    myCols <- assignColours(rawMSnSet)
+    names(myCols)[1] <- "wibble"
+    expect_error(rliPlot(MSnSetObj = rawMSnSet,
+                         sampleColours = myCols),
+                 regexp = "The names of sampleColours do not match the values")
+})
+test_that("argument checks - colourby", {
+    expect_error(rliPlot(MSnSetObj = rawMSnSet, colourBy = 1),
+                 regexp = "colourBy is not a string")
+    expect_error(rliPlot(MSnSetObj = rawMSnSet, colourBy = "wibble"),
+                 regexp = "column wibble not found in the MSnset metadata")
+})
+test_that("argument checks - omitIgG", {
+    expect_error(rliPlot(MSnSetObj = rawMSnSet, omitIgG = 1),
+                 regexp = "omitIgG is not a flag")
+})
