@@ -1,3 +1,22 @@
+# Argument check function
+checkArg_convertToMSnset <- function(ExpObj, 
+                                     metadata, 
+                                     indExpData, 
+                                     Sequences, 
+                                     Accessions, 
+                                     type, 
+                                     rmMissing){
+    assert_that(is.data.frame(ExpObj))
+    assert_that(is_validMetadata(metadata))
+    assert_that(is.numeric(indExpData), noNA(indExpData))
+    assert_that(is_validSampleData(ExpObj, metadata, indExpData))
+    assert_that(type%in%c("peptide", "protein"), 
+                msg="type must be either 'peptide' or 'protein'")
+    assert_that(is_validSequencesColumn(Sequences, type))
+    assert_that(is.count(Accessions))
+    assert_that(is.flag(rmMissing))
+}
+
 #' Converts proteomics TMT intensity data to MSnSet
 #' 
 #' Converts processed TMT peptide intensities to MSnSet

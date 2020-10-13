@@ -1,3 +1,10 @@
+# Argument check function
+checkArg_normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is_validScalingFunction(scalingFunction))
+    assert_that(is_validProteinId(ProteinId, MSnSetObj))
+}
+
 #' Normalization by scaling
 #' 
 #' Performs scaling normalization on the peptide/protein intensities (median or

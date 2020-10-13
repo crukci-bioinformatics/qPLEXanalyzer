@@ -1,5 +1,18 @@
-# Protein coverage plot
-
+# Argument check function
+checkArg_coveragePlot <- function(MSnSetObj,
+                                  ProteinID,
+                                  ProteinName,
+                                  fastaFile,
+                                  myCol){
+    assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
+    assert_that("Sequences" %in% colnames(fData(MSnSetObj)),
+                msg= 'MSnSetObj feature data must include a "Sequences" column')
+    assert_that(is_validProteinId(ProteinID, MSnSetObj, allowNull=FALSE))
+    assert_that(is.string(ProteinName))
+    assert_that(is.readable(fastaFile))    
+    assert_that(length(myCol)==1)
+    assert_that(is_validColour(myCol))
+}
 
 #' Plot peptide sequence coverage
 #' 

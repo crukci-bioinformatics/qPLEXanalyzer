@@ -1,3 +1,17 @@
+# Argument check function
+checkArg_rliPlot <- function(MSnSetObj,
+                             title,
+                             sampleColours,
+                             colourBy,
+                             omitIgG){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is.string(title))
+    assert_that(is_validSampleColours(sampleColours, colourBy, MSnSetObj))
+    assert_that(is.string(colourBy))
+    assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
+    assert_that(is.flag(omitIgG))
+}
+
 #' Relative log intensity plot
 #' 
 #' Relative log intensity (RLI) plots of the samples within MSnset

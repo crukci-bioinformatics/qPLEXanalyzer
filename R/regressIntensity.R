@@ -1,3 +1,11 @@
+# Argument check function
+checkArg_regressIntensity <- function(MSnSetObj, controlInd, ProteinId){
+    assert_that(is_MSnSet(MSnSetObj), is_ProteinSet(MSnSetObj))
+    assert_that(is_validControlColumn(controlInd, MSnSetObj))
+    assert_that(is.string(ProteinId))
+    assert_that(is_validProteinId(ProteinId, MSnSetObj))
+}
+
 #' Regression based analysis
 #' 
 #' Performs linear regression on protein intensities based on selected protein

@@ -1,3 +1,11 @@
+# Argument check function
+checkArg_groupScaling <- function(MSnSetObj, scalingFunction, groupingColumn){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is_validScalingFunction(scalingFunction))
+    assert_that(is.string(groupingColumn))
+    assert_that(is_validMetadataColumn(groupingColumn, MSnSetObj))
+}
+
 #' Normalization by scaling within group
 #' 
 #' Performs scaling normalization on the intensities within group (median or

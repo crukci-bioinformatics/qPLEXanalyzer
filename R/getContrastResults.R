@@ -1,3 +1,16 @@
+# Argument check function
+checkArg_getContrastResults <- function(diffstats, 
+                                        contrast, 
+                                        controlGroup, 
+                                        transform, 
+                                        writeFile){
+    assert_that(is_validDiffstats(diffstats))
+    assert_that(is_validContrast(contrast, diffstats))
+    assert_that(is_validControlGroup(controlGroup, diffstats))
+    assert_that(is.flag(transform))
+    assert_that(is.flag(writeFile))
+}
+
 #' Get differential statistics results
 #' 
 #' Get differential statistics results for given contrasts.

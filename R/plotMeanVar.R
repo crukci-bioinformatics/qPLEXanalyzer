@@ -1,3 +1,4 @@
+# Argument check function
 #' Mean variance plot
 #' 
 #' Computes and plots variance v mean intensity for peptides in MSnset

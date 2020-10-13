@@ -1,12 +1,22 @@
-# Fits a linear model to the intensity data using limma.
-# The PhenoData table must contain SampleName and SampleGroup columns.
-# The intensities table must contain a column for each sample in PhenoData
+# Argument check function
+checkArg_computeDiffStats <- function(MSnSetObj, 
+                                      batchEffect, 
+                                      transform, 
+                                      contrasts, 
+                                      trend, 
+                                      robust){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is_validBatchEffect(batchEffect, MSnSetObj))
+    assert_that(is.flag(transform))
+    assert_that(is.character(contrasts))
+    assert_that(is.flag(trend))
+    assert_that(is.flag(robust))
+}
+
 # Log2 with addition of 1e-10 count to deal with zeros
 log2xplus1 <- function(x) {
     log2(x + 1e-10)
 }
-
-
 
 #' Compute differential statistics
 #' 
