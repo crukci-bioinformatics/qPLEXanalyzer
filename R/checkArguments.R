@@ -234,7 +234,7 @@ on_failure(is_validContrast) <- function(call, env){
       colnames() %>%
       str_c(collapse="\n       ")
     str_c("'", contr, "' is not a valid contrast. Available contrasts:\n",
-          "        ", contr_avail)
+          "       ", contr_avail)
 }
 
 # check the control group
