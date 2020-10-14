@@ -7,6 +7,7 @@ checkArg_convertToMSnset <- function(ExpObj,
                                      type, 
                                      rmMissing){
     assert_that(is.data.frame(ExpObj))
+    assert_that(is.data.frame(metadata))
     assert_that(is_validMetadata(metadata))
     assert_that(is.numeric(indExpData), noNA(indExpData))
     assert_that(is_validSampleData(ExpObj, metadata, indExpData))

@@ -9,12 +9,21 @@
 
 ## Checks on raw data ##########################################################
 
+# check metadata
+is_validMetadata <- function(metadata){
+    columns <- c("SampleName","SampleGroup","BioRep","TechRep")
+    all(columns%in%colnames(metadata))
+}
+on_failure(is_validMetadata) <- function(call, env) {
+    "Metadata must have columns SampleName, SampleGroup, BioRep, and TechRep"
+}
+
 # check the sample intensity data ####
 is_validSampleData <- function(ExpObj, metadata, indExpData){
     sampleData <- ExpObj[, indExpData]
-    assert_that(all(colnames(sampleData)%in%metadata$SampleName)&
+    assert_that(all(colnames(sampleData)%in%metadata$SampleName) &
                     all(metadata$SampleName%in%colnames(sampleData)),
-                msg=paste0("The sample names in the ExpObj columns indicated",
+                msg = str_c("The sample names in the ExpObj columns indicated",
                            " by indExp do not match the sample names in the ",
                            "metadata table"))
     all(map_lgl(sampleData, is.numeric))
@@ -26,15 +35,13 @@ on_failure(is_validSampleData) <- function(call, env) {
 # check the peptide sequences column ####
 is_validSequencesColumn <- function(Sequences, type){
     if(type=="peptide"){
-        assert_that(is.count(Sequences), 
-                    msg=paste0("Sequences should be count (a single positive ", 
-                               "integer) when type is peptide"))
+        assert_that(is.count(Sequences),
+                    msg = str_c("Sequences should be count (a single positive ",
+                                "integer) when type is peptide"))
     }else{
-        is.null(Sequences)
+        assert_that(is.null(Sequences),
+                    msg = "Sequences should to be NULL when type is protein")
     }
-}
-on_failure(is_validSequencesColumn) <- function(call, env){
-    "Sequences should to be NULL when type is protein"
 }
 
 # check the annotation table
@@ -64,16 +71,6 @@ is_PeptideSet <- function(MSnSetObj){
 }
 on_failure(is_PeptideSet) <- function(call, env){
     "This MSnSet is not a peptide data set"
-}
-
-# check metadata
-is_validMetadata <- function(metadata){
-    assert_that(is.data.frame(metadata))
-    columns <- c("SampleName","SampleGroup","BioRep","TechRep")
-    all(columns%in%colnames(metadata))
-}
-on_failure(is_validMetadata) <- function(call, env) {
-    "Metadata must have columns SampleName, SampleGroup, BioRep, and TechRep"
 }
 
 # check the provided protein ID is in the MSnSetObj
