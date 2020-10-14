@@ -80,7 +80,7 @@ is_validProteinId <- function(ProteinID, MSnSetObj, allowNull=TRUE){
                     msg=paste0("ProteinID should be a character or NULL"))
         is.null(ProteinID) || ProteinID%in%fData(MSnSetObj)$Accessions
     }else{
-        assert_that(is.character(ProteinID))
+        assert_that(is.string(ProteinID))
         ProteinID%in%fData(MSnSetObj)$Accessions
     }
 }
