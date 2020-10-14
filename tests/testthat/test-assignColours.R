@@ -24,8 +24,8 @@ test_that("assign colours works", {
 test_that("argument checks - MSnset", {
   expect_error(assignColours(MSnSetObj = 1), 
                regexp = "MSnSetObj has to be of class MSnSet")
-  expect_error(assignColours(MSnSetObj = rawMSnSet, colourBy=1), 
-               regexp = "colourBy is not a string")
+})
+test_that("argument checks - colourBy", {
   expect_error(assignColours(MSnSetObj = rawMSnSet, colourBy="Wibble"), 
                regexp = "column Wibble not found in the MSnset metadata")
 })
