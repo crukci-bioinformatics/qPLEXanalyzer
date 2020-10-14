@@ -1,5 +1,4 @@
 # Argument check function
-# Argument check function
 checkArg_assignColours <- function(MSnSetObj, colourBy){
     assert_that(is_MSnSet(MSnSetObj))
     assert_that(is.string(colourBy))
