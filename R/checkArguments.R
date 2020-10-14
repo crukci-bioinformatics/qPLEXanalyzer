@@ -101,18 +101,17 @@ on_failure(is_validMetadataColumn) <- function(call, env){
     str_c(varNam, ": column ", colNam, " not found in the MSnset metadata")
 }
 
-
-# check the column indices are valid ####
+# check the column indices are valid
 is_validColNumber <- function(cols, tab){
     max(cols) <= ncol(tab)
 }
 
-# check the column names are valid ####
+# check the column names are valid
 is_validColName <- function(cols, tab){
     all(cols%in%colnames(tab))
 }
 
-# check if the columns are in the fData ####
+# check if the columns are in the fData
 is_validfDataColumn <- function(cols, MSnSetObj){
     tab <- fData(MSnSetObj)
     errMsg1 <- str_c("keepCols should be NULL, a character vector of column ",
@@ -131,7 +130,7 @@ is_validfDataColumn <- function(cols, MSnSetObj){
     TRUE
 }
 
-# check selected peptide sequences are in the fData for the specified protein ##
+# check selected peptide sequences are in the fData for the specified protein
 are_validSequences <- function(Sequence, MSnSetObj, ProteinID){
     assert_that(is.character(Sequence) | is.null(Sequence),
                 msg="selectedSequence should be either a character or NULL")
@@ -146,7 +145,7 @@ on_failure(are_validSequences) <- function(call, env){
           protAcc)
 }
 
-# check a selected modification is in the fData for the specified protein ######
+# check a selected modification is in the fData for the specified protein
 are_validModifications <- function(Modifications, MSnSetObj, ProteinID){
     assert_that(is.character(Modifications) | is.null(Modifications),
                 msg="selectedModifications should be either a character or NULL")
@@ -161,7 +160,7 @@ on_failure(are_validModifications) <- function(call, env){
           "for ", protAcc)
 }
 
-# check the control column index ####
+# check the control column index
 is_validControlColumn <- function(controlInd, MSnSetObj){
     assert_that(is.numeric(controlInd)|is.null(controlInd),
                 msg = "controlInd has to be either numeric or NULL")
@@ -171,7 +170,7 @@ on_failure(is_validControlColumn) <- function(call, env){
     "controlInd includes indexes for columns not present in the MSnSet"
 }
 
-# check the MSnSet is a protein level data set ####
+# check the MSnSet is a protein level data set
 is_ProteinSet <- function(MSnSetObj){
     !str_detect(rownames(MSnSetObj)[1], "peptide")
 }
@@ -179,7 +178,7 @@ on_failure(is_ProteinSet) <- function(call, env){
     "This MSnSet is not a summarized protein data set"
 }
 
-# check the batch effect column ####
+# check the batch effect column
 is_validBatchEffect <- function(batchEffect, MSnSetObj){
     assert_that(is.character(batchEffect) | is.null(batchEffect),
                 msg = "batchEffect has to be either character or NULL")
