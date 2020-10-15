@@ -26,7 +26,7 @@ checkArg_mergePeptides <- function(MSnSetObj,
 #' @param annotation data.frame; a data.frame of protein annotation of four
 #' columns: "Accessions", "Gene", "Description" and "GeneSymbol"
 #' @param keepCols a vector of additional columns from fData(MSnSetObj) to
-#' keep.  either be a numeric vector of column numbers of a character vector of
+#' keep.  either be a numeric vector of column indices or a character vector of
 #' column names
 #' @return An object of class \code{MSnSet} (see \code{\link{MSnSet-class}}) 
 #' @examples
