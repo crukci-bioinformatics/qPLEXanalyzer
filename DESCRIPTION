@@ -1,7 +1,7 @@
 Package: qPLEXanalyzer
 Type: Package
 Title: Tools for qPLEX-RIME data analysis
-Version: 1.8.0
+Version: 1.9.0
 Date: 2020-10-12
 Authors@R: c(person("Matthew","Eldridge", role = "aut"),
              person("Kamal", "Kishore", role = "aut", 
