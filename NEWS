@@ -1,3 +1,8 @@
+VERSION 1.9.1
+------------------------
+o Fix bug in getContrastRestults where file was written to `.txt`, file name 
+  should now be correctly formed from the contrast name
+
 VERSION 1.7.3
 ------------------------
 o Fix limits of scale in corrPlot to c(0, 1)
