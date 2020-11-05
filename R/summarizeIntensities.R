@@ -1,3 +1,12 @@
+# Argument check function
+checkArg_summarizeIntensities <- function(MSnSetObj, 
+                                          summarizationFunction, 
+                                          annotation){
+    assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
+    assert_that(is_validSummarizationFunction(summarizationFunction))
+    assert_that(is_validAnnotationData(annotation))
+}
+
 ##### Summarization function ##########
 
 # Functions for summarizing intensity data

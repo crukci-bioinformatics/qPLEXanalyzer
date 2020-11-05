@@ -1,3 +1,17 @@
+# Argument check function
+checkArg_hierarchicalPlot <- function(MSnSetObj, 
+                                      sampleColours, 
+                                      colourBy, 
+                                      horizontal,
+                                      title){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is.string(colourBy))
+    assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
+    assert_that(is_validSampleColours(sampleColours, colourBy, MSnSetObj))
+    assert_that(is.flag(horizontal))
+    assert_that(is.string(title))
+}
+
 #' Hierarchical clustering plot
 #' 
 #' Computes and displays hierarchical clustering plot for samples in MSnSet

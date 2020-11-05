@@ -1,3 +1,32 @@
+# Argument check function
+checkArg_maVolPlot <- function(diffstats,
+                               contrast,
+                               title,
+                               controlGroup,
+                               selectedGenes,
+                               fdrCutOff,
+                               lfcCutOff,
+                               controlLfcCutOff,
+                               plotType){
+    assert_that(is_validDiffstats(diffstats))
+    assert_that(is_validContrast(contrast, diffstats))
+    assert_that(is.string(title))
+    assert_that(is_validControlGroup(controlGroup, diffstats))
+    assert_that(is.character(selectedGenes) | is.null(selectedGenes),
+                msg = str_c("'selectedGenes' should be character vector of ",
+                            "Accessions or NULL"))
+    assert_that(all(selectedGenes%in%fData(diffstats$MSnSetObj)$Accessions),
+                msg = str_c("Some of the genes provided in 'selectedGenes' were ",
+                            "not found in the data table"))
+    assert_that(is.number(fdrCutOff))
+    assert_that(is.number(lfcCutOff))
+    assert_that(is.number(controlLfcCutOff))
+    assert_that(is.string(plotType))
+    assert_that(plotType %in% c("MA", "Volcano"),
+                msg = "plotType should be 'MA' or 'Volcano'")
+}
+
+# significance test function
 testSignficant <- function(dat, cutoffs) {
     isSig <- dat$adj.P.Val <= cutoffs$FDR &
         !is.na(dat$adj.P.Val) &

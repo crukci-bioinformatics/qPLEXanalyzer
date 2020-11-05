@@ -1,10 +1,30 @@
-# Peptide intensity plot
-## intensities is a data frame containing peptide intensities with columns for
-## each sample summarizedIntensities is a data frame containing summarized
-## protein-level intensities protein is the protein for which intensities will
-## be plotted samples is a list of samples to use in the plot
-
-
+# Argument check function
+checkArg_peptideIntensityPlot <- function(MSnSetObj,
+                                          ProteinID,
+                                          ProteinName,
+                                          combinedIntensities,
+                                          selectedSequence,
+                                          selectedModifications) {
+    assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
+    assert_that(is.string(ProteinID))
+    assert_that(is_validProteinId(ProteinID, MSnSetObj, allowNull = FALSE))
+    assert_that(
+        is.null(combinedIntensities) ||
+            (
+                is_MSnSet(combinedIntensities) &&
+                    is_ProteinSet(combinedIntensities)
+            ),
+        msg = str_c(
+            "combinedIntensities should be either NULL or an ",
+            "object of class MSnSet containing summarized ",
+            "protein data"
+        )
+    )
+    assert_that(are_validSequences(selectedSequence, MSnSetObj, ProteinID))
+    assert_that(are_validModifications(selectedModifications,
+                                       MSnSetObj,
+                                       ProteinID))
+}
 
 #' Plot peptide intensities
 #' 

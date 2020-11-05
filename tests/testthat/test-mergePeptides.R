@@ -11,30 +11,21 @@ rawMSnSet <- convertToMSnset(exp3Int,
                              Accessions = 6)
 
 MSnSet_phos <- readRDS("convertToMSnset_phospho_msnset.rds")
-protMSnSet <- mergePeptides(rawMSnSet, 
-                            summarizationFunction = sum, 
+protMSnSet <- mergePeptides(rawMSnSet,
+                            summarizationFunction = sum,
                             annotation = human_anno)
 
-phosProtMSnSet <- mergePeptides(MSnSet_phos, 
-                                summarizationFunction = sum, 
-                                annotation = human_anno, 
+phosProtMSnSet <- mergePeptides(MSnSet_phos,
+                                summarizationFunction = sum,
+                                annotation = human_anno,
                                 keepCols = 7:8)
 
 # test using column names instead of numbers
-phosProtMSnSetColname <- mergePeptides(MSnSet_phos, 
-                                summarizationFunction = sum, 
-                                annotation = human_anno, 
-                                keepCols = c("Positions in Master Proteins", 
+phosProtMSnSetColname <- mergePeptides(MSnSet_phos,
+                                summarizationFunction = sum,
+                                annotation = human_anno,
+                                keepCols = c("Positions in Master Proteins",
                                              "Modifications in Master Proteins"))
-
-# # The MSnSet object contains the MSnbase version in the `processingData` slot
-# # This will cause the test to fail if the MSnbase version used in the build
-# # changes
-# test_that("Merge peptides works", {
-#   expect_equal_to_reference(protMSnSet, file="mergePeptides_msnset.rds")  
-#   expect_equal_to_reference(phosProtMSnSet, file="mergePeptides_phos_msnset.rds")
-#   expect_equal_to_reference(phosProtMSnSetColname, file="mergePeptides_phos_msnset.rds")
-# })
 
 # The function creates an entirely new MSnSet obj, we should compare the samples
 # features data, and merged intensities of each object
@@ -53,14 +44,77 @@ phosProtColTestList <- list(Samples = pData(phosProtMSnSetColname),
                          Features = fData(phosProtMSnSetColname),
                          MergedIntensitied = exprs(phosProtMSnSetColname))
 
+# test the function
+
 test_that("Merge peptides works", {
-    expect_equal_to_reference(protTestList, 
-                              file="mergePeptides.rds")  
-    expect_equal_to_reference(phosProtTestList, 
+    expect_equal_to_reference(protTestList,
+                              file="mergePeptides.rds") 
+    expect_equal_to_reference(phosProtTestList,
                               file="mergePeptides_phos.rds")
-    expect_equal_to_reference(phosProtColTestList, 
+    expect_equal_to_reference(phosProtColTestList,
                               file="mergePeptides_phos.rds")
 })
 
+# test the argument checks
 
+test_that("argument checks - MSnset", {
+    expect_error(mergePeptides(MSnSetObj = 1,
+                               summarizationFunction = sum,
+                               annotation = human_anno),
+                 regexp = "MSnSetObj has to be of class MSnSet")
+    protMSnSet <- summarizeIntensities(rawMSnSet, sum, human_anno)
+    expect_error(mergePeptides(MSnSetObj = protMSnSet,
+                               summarizationFunction = sum,
+                               annotation = human_anno),
+                 regexp = "This MSnSet is not a peptide data set")
+})
+test_that("argument checks - summarizationFunction", {
+    expect_error(mergePeptides(MSnSetObj = rawMSnSet,
+                               summarizationFunction = 1,
+                               annotation = human_anno),
+                 regexp = "summarizationFunction is not a function")
+    errMsg <- str_c("summarizationFunction should be a summary function, ",
+                    "e.g. mean or sum'")
+    expect_error(mergePeptides(MSnSetObj = rawMSnSet,
+                               summarizationFunction = sqrt,
+                               annotation = human_anno),
+                 regexp = errMsg)
+})
+test_that("argument checks - annotation", {
+    expect_error(mergePeptides(MSnSetObj = rawMSnSet,
+                               summarizationFunction = sum,
+                               annotation = 1),
+                 regexp = "annotation is not a data frame")
+    testAnnot <- rename(human_anno, Wibble = Accessions)
+    errMsg <- str_c("annotation must have the columns Accessions, Gene, ",
+                    "Description and GeneSymbol")
+    expect_error(mergePeptides(MSnSetObj = rawMSnSet,
+                               summarizationFunction = sum,
+                               annotation = testAnnot),
+                 regexp = errMsg)
+})
+test_that("argument checks - keepCols", {
+    errMsg <- str_c("keepCols should be NULL, a character vector of column ",
+                    "names or a numeric vector of column indices.")
+    expect_error(mergePeptides(MSnSetObj = MSnSet_phos,
+                               summarizationFunction = sum,
+                               annotation = human_anno,
+                               keepCols = NA),
+                 regexp = errMsg)
+    errMsg <- str_c("One or more of keepCols exceeds the number of columns ",
+                    "in fData\\(MSnSetObj\\).")
+    expect_error(mergePeptides(MSnSetObj = MSnSet_phos,
+                               summarizationFunction = sum,
+                               annotation = human_anno,
+                               keepCols = c(1,2,7,12)),
+                 regexp = errMsg)
+    errMsg <- "One or more of keepCols is not found in fData\\(MSnSetObj\\)."
+    expect_error(mergePeptides(MSnSetObj = MSnSet_phos,
+                               summarizationFunction = sum,
+                               annotation = human_anno,
+                               keepCols = c("Positions in Master Proteins",
+                                            "Modifications in Master Proteins",
+                                            "Wibble")),
+                 regexp = errMsg)
+})
 

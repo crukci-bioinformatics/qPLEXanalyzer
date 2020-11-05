@@ -1,3 +1,15 @@
+# Argument check function
+checkArg_intensityBoxplot <- function(MSnSetObj, 
+                                      title, 
+                                      sampleColours,
+                                      colourBy){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is.string(colourBy))
+    assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
+    assert_that(is_validSampleColours(sampleColours, colourBy, MSnSetObj))
+    assert_that(is.string(title))
+}
+
 #' Intensity Distribution boxplot
 #' 
 #' Intensity distribution boxplot of all the samples

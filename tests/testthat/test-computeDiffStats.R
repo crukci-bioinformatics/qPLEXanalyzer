@@ -15,6 +15,8 @@ contrasts <- c(tam.24h_vs_vehicle = "tam.24h - vehicle",
                tam.6h_vs_vehicle = "tam.6h - vehicle")
 diffstats <- computeDiffStats(MSnSetObj=MSnset_Pnorm, contrasts=contrasts)
 
+# test the function
+
 # # The MSnSet object contains the MSnbase version in the `processingData` slot
 # # This will cause the test to fail if the MSnbase version used in the build
 # # changes
@@ -35,4 +37,22 @@ testObj <- list(fittedLM = diffstats$fittedLM,
 
 test_that("Compute Diff Stats works", {
   expect_equal_to_reference(testObj, file="computeDiffStats.rds")
+})
+
+# test the argument checks
+
+test_that("argument checks - MSnset", {
+    expect_error(computeDiffStats(MSnSetObj = 1, contrasts=contrasts),
+                 regexp = "MSnSetObj has to be of class MSnSet")
+})
+test_that("argument checks - batchEffect", {
+    expect_error(computeDiffStats(MSnSetObj = MSnset_Pnorm,
+                                  batchEffect = 1,
+                                  contrasts=contrasts),
+                 regexp = "batchEffect has to be either character or NULL")
+    errMsg <- "batchEffect includes columns not found the MSnset metadata"
+    expect_error(computeDiffStats(MSnSetObj = MSnset_Pnorm,
+                                  batchEffect = "Wibble",
+                                  contrasts=contrasts),
+                 regexp = errMsg)
 })

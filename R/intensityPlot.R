@@ -1,3 +1,25 @@
+# Argument check function
+checkArg_intensityPlot <- function(MSnSetObj,
+                                   sampleColours,
+                                   title,
+                                   colourBy,
+                                   transform,
+                                   xlab,
+                                   trFunc){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is_validSampleColours(sampleColours, colourBy, MSnSetObj))
+    assert_that(is.string(title))
+    assert_that(is.string(colourBy))
+    assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
+    assert_that(is.flag(transform))
+    assert_that(is.string(xlab))
+    assert_that(is.function(trFunc))
+    assert_that(length(trFunc(10))==1 & is.numeric(trFunc(10)),
+                msg = str_c("trFunc: the specified function should tranform a ",
+                            "numeric value into another single numeric value,",
+                            "e.g. log2 or sqrt"))
+}
+
 # Intensity distribution plot
 ## intensities is a data frame containing columns for each sample
 ## sampleColours is a named vector that maps samples to colours

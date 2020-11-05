@@ -1,3 +1,10 @@
+# Argument check function
+checkArg_assignColours <- function(MSnSetObj, colourBy){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is.string(colourBy))
+    assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
+}
+
 #' Assigns colours to samples in groups
 #' 
 #' Assigns colours to samples in groups for plotting

@@ -1,3 +1,14 @@
+# Argument check function
+checkArg_mergePeptides <- function(MSnSetObj, 
+                                   summarizationFunction, 
+                                   annotation, 
+                                   keepCols){
+  assert_that(is_MSnSet(MSnSetObj), is_PeptideSet(MSnSetObj))
+  assert_that(is_validSummarizationFunction(summarizationFunction))
+  assert_that(is_validAnnotationData(annotation))
+  assert_that(is_validfDataColumn(keepCols, MSnSetObj))
+}
+
 #' Merge identical peptides intensities
 #' 
 #' Merge identical peptides to single peptide intensity. This function is
@@ -15,7 +26,7 @@
 #' @param annotation data.frame; a data.frame of protein annotation of four
 #' columns: "Accessions", "Gene", "Description" and "GeneSymbol"
 #' @param keepCols a vector of additional columns from fData(MSnSetObj) to
-#' keep.  either be a numeric vector of column numbers of a character vector of
+#' keep.  either be a numeric vector of column indices or a character vector of
 #' column names
 #' @return An object of class \code{MSnSet} (see \code{\link{MSnSet-class}}) 
 #' @examples

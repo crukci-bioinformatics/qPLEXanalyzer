@@ -1,3 +1,8 @@
+# Argument check function
+checkArg_normalizeQuantiles <- function(MSnSetObj){
+    assert_that(is_MSnSet(MSnSetObj))
+}
+
 #' Quantile normalization
 #' 
 #' Performs quantile normalization on the intensities within columns

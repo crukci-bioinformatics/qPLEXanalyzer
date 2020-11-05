@@ -1,3 +1,9 @@
+# Argument check function
+checkArg_rowScaling <- function(MSnSetObj, scalingFunction){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is_validScalingFunction(scalingFunction))
+}
+
 #' Normalization by scaling peptide/protein intensity across all samples
 #' 
 #' Divide each peptide/protein by the row mean/median and transform to log2

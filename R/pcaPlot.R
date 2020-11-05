@@ -1,3 +1,36 @@
+# Argument check function
+checkArg_pcaPlot <- function(MSnSetObj,
+                             omitIgG,
+                             sampleColours,
+                             transFunc,
+                             transform,
+                             colourBy,
+                             title,
+                             labelColumn,
+                             labelsize,
+                             pointsize,
+                             x.nudge,
+                             x.PC){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is.flag(omitIgG))
+    assert_that(is_validSampleColours(sampleColours, colourBy, MSnSetObj))
+    assert_that(is.function(transFunc))
+    assert_that(length(transFunc(10))==1 & is.numeric(transFunc(10)),
+                msg = str_c("transFunc: the specified function should tranform ",
+                            " a numeric value into another single numeric value,",
+                            "e.g. log2 or sqrt"))
+    assert_that(is.flag(transform))
+    assert_that(is.string(colourBy))
+    assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
+    assert_that(is.string(title))
+    assert_that(is.string(labelColumn))
+    assert_that(is_validMetadataColumn(labelColumn, MSnSetObj))
+    assert_that(is.number(labelsize))
+    assert_that(is.number(pointsize))
+    assert_that(is.number(x.nudge))
+    assert_that(is.count(x.PC))
+}
+
 #' PCA plot
 #'
 #' PCA plots of the samples within MSnset

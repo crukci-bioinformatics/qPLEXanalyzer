@@ -1,3 +1,30 @@
+# Argument check function
+checkArg_corrPlot <- function(MSnSetObj,
+                              addValues,
+                              title,
+                              low_cor_colour,
+                              high_cor_colour,
+                              low_cor_limit, 
+                              high_cor_limit,
+                              textsize){
+    assert_that(is_MSnSet(MSnSetObj))
+    assert_that(is.flag(addValues))
+    assert_that(is.string(title))
+    assert_that(length(low_cor_colour)==1)
+    assert_that(is_validColour(low_cor_colour))
+    assert_that(length(high_cor_colour)==1)
+    assert_that(is_validColour(high_cor_colour))
+    assert_that(is.number(low_cor_limit))
+    assert_that(low_cor_limit >= 0)
+    assert_that(low_cor_limit <= 1)
+    assert_that(is.number(high_cor_limit))
+    assert_that(high_cor_limit >= 0)
+    assert_that(high_cor_limit <= 1)
+    assert_that(high_cor_limit > low_cor_limit, 
+                msg = "high_cor_limit should be greater than low_cor_limit")
+    assert_that(is.number(textsize))
+}
+
 #' Correlation plot
 #' 
 #' Computes and display correlation plot for samples within MSnSet
