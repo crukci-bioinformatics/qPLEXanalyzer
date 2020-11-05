@@ -93,8 +93,12 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL,
                     replacement = "Unique_peptides") %>%
         rename(AvgIntensity=AveExpr, log2FC=logFC)
     
-    if (writeFile == TRUE) {
-        write_tsv(results, str_c(names(contrast), ".txt"))
+
+    if (writeFile) {
+        outFile <- contrast %>% 
+            str_replace(pattern = " - ", replacement = "_vs_") %>% 
+            str_c(".txt")
+        write_tsv(results, outFile)
     }
     return(results)
 }
