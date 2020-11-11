@@ -1,3 +1,7 @@
+VERSION 1.8.1
+------------------------
+o Fix bug where getContrastResults was not writing the results file
+
 VERSION 1.7.3
 ------------------------
 o Fix limits of scale in corrPlot to c(0, 1)
