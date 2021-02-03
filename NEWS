@@ -1,5 +1,10 @@
 VERSION 1.9.1
 ------------------------
+o Bug Fix: Update getContrastResults test reference
+o Fix bug in is_validScalingFunction - switch from `are_equal` to `identical`
+
+VERSION 1.9.1
+------------------------
 o Fix bug in getContrastRestults where file was written to `.txt`, file name 
   should now be correctly formed from the contrast name
 
