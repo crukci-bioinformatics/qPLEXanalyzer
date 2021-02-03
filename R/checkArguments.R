@@ -190,9 +190,9 @@ on_failure(is_validBatchEffect) <- function(call, env){
 # Check scaling function is appropriate
 is_validScalingFunction <- function(scalingFunction){
     assert_that(is.function(scalingFunction))
-    are_equal(scalingFunction, BiocGenerics::mean) |
-        are_equal(scalingFunction, mean) | 
-        are_equal(scalingFunction, median)
+    identical(scalingFunction, mean) |
+        identical(scalingFunction, BiocGenerics::mean) |
+        identical(scalingFunction, median)
 }
 on_failure(is_validScalingFunction) <- function(call, env){
     "scalingFunction should be mean or median'"
