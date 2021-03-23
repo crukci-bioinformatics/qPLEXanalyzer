@@ -198,6 +198,17 @@ on_failure(is_validScalingFunction) <- function(call, env){
     "scalingFunction should be mean or median'"
 }
 
+## Checks for IRS function ##########################################
+
+# check the IRSname exists in Samplegroup ####
+is_validIRSname <- function(IRSname, MSnSetObj){
+  assert_that(is.string(IRSname))
+  IRSname%in%pData(MSnSetObj)$SampleGroup
+}
+on_failure(is_validIRSname) <- function(call, env){
+  "The IRSname provided is not found the MSnset Samplegroup"
+}
+
 ## Checks for summarisation functions ##########################################
 
 # check the summarisation function is appropriate
