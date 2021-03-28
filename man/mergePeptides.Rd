@@ -16,7 +16,7 @@ peptides. sum, mean or median}
 columns: "Accessions", "Gene", "Description" and "GeneSymbol"}
 
 \item{keepCols}{a vector of additional columns from fData(MSnSetObj) to
-keep.  either be a numeric vector of column numbers of a character vector of
+keep.  either be a numeric vector of column indices or a character vector of
 column names}
 }
 \value{
