@@ -2,7 +2,8 @@
 checkArg_IRSnorm <- function(MSnSetObj, IRSname, groupingColumn){
   assert_that(is_MSnSet(MSnSetObj))
   assert_that(is_validIRSname(IRSname,MSnSetObj))
-  assert_that(is_validGroupingColumn(groupingColumn, MSnSetObj))
+  assert_that(is.string(groupingColumn))
+  assert_that(is_validMetadataColumn(groupingColumn, MSnSetObj))
 }
 
 #' Batch Correction by Internal Reference Scale
