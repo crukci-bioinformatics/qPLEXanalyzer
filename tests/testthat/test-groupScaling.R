@@ -1,4 +1,4 @@
-context("Group Scaling normalizaion")
+context("Group Scaling normalization")
 library(qPLEXanalyzer)
 
 data(exp2_Xlink)
