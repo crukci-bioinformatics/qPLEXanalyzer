@@ -57,7 +57,9 @@ checkArg_IRSnorm <- function(MSnSetObj, IRSname, groupingColumn){
 #' fData(MSnset_comb) <- fData(MSnset_comb)[,c(2,3,6)]
 #' colnames(fData(MSnset_comb)) <- c("Sequences","Modifications","Accessions")
 #' MSnset_comb_corr <- IRSnorm(MSnset_comb,IRSname="Ref",groupingColumn="Run")
-
+#' @import MSnbase
+#' @importFrom BiocGenerics lapply
+#' @importFrom Biobase pData exprs exprs<-
 #' @export IRSnorm
 
 
