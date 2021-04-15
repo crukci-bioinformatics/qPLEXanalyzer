@@ -57,6 +57,17 @@ test_that("Internal reference scaling works - pData", {
                               file="IRSnorm_pdata.rds")
 })
 
+# Check that it works if the batch column is a character vector
+# We only need to check the exprs slot
+
+MSnset_comb$Run <- str_c("Plex", MSnset_comb$Run)
+MSnset_comb_corr <- IRSnorm(MSnset_comb, IRSname="Ref", groupingColumn="Run")
+
+test_that("Internal reference scaling works - exprs", {
+    expect_equal_to_reference(exprs(MSnset_comb_corr), 
+                              file="IRSnorm_exprs.rds")
+})
+
 # Test the argument checks
 
 test_that("argument checks - MSnset", {
