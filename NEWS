@@ -1,4 +1,10 @@
-VERSION 1.9.1
+VERSION 1.9.3
+------------------------
+o New Feature: Added the function IRSnorm, which performs normalisation of
+intensities across multiple TMT runs using a common reference sample (Internal
+Reference Scale).
+
+VERSION 1.9.2
 ------------------------
 o Bug Fix: Update getContrastResults test reference
 o Fix bug in is_validScalingFunction - switch from `are_equal` to `identical`
