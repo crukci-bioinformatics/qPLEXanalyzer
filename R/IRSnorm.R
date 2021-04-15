@@ -96,7 +96,7 @@ IRSnorm <- function(MSnSetObj, IRSname="RefPool", groupingColumn="Plex") {
   
   Ref_Set <- MSnSetObj[,pData(MSnSetObj)$SampleGroup==IRSname]
   allgrps <- split(Ref_Set, groupingColumn)
-  grpMean <- BiocGenerics::lapply(allgrps, function(x) {apply(exprs(x), 1, mean)})
+  grpMean <- BiocGenerics::lapply(allgrps, function(x) {rowMeans(exprs(x))})
   irs_data <- matrix(unlist(grpMean), ncol = length(grpMean), byrow = FALSE)
   irs_data_geomean <- apply(irs_data, 1, function(x) {exp(mean(log(x)))})
   irs_factors <- irs_data_geomean/irs_data
