@@ -9,38 +9,60 @@ IRSnorm(MSnSetObj, IRSname = "RefPool", groupingColumn = "Plex")
 \arguments{
 \item{MSnSetObj}{MSnSet; an object of class MSnSet}
 
-\item{IRSname}{character; name of Reference group within SampleGroup column}
+\item{IRSname}{character; name of the Reference group within the SampleGroup
+column}
 
-\item{groupingColumn}{character; the pData(MSnSetObj) column name used to define batches; default="Plex"}
+\item{groupingColumn}{character; the pData(MSnSetObj) column name used to
+define batches; default="Plex"}
 }
 \value{
 An object of class \code{MSnSet} (see \code{\link{MSnSet-class}})
 }
 \description{
-Performs batch correction on multiple runs using Internal Reference Scale
+Performs batch correction on multiple runs using an Internal Reference Scale
+sample.
 }
 \details{
-Internal Reference Scale (IRS) is pooled sample made up of aliquots of protein from all samples. The IRS is then run and measured
-in each TMT experiment. The normalization procedure makes different measurements of the IRS exactly the same and puts all of the 
-reporter ions on the same "intensity scale".  
-The argument 'IRSname' is used to define the name of the Reference group within the SampleGroup column. 
-The argument "groupingColumn" takes one of the column of pData(MSnSetObj) to define separate batches to correct. 
-The default variable name is "Plex".
+The Internal Reference Scale sample (IRS) should ideally be representative of
+the entire proteome detectable across all sample in the experiment, e.g. a
+pooled sample made up of aliquots of protein from all samples. The IRS is
+then run and measured in each TMT experiment. The normalization procedure
+makes measurements of the IRS from different TMT batches exactly the same,
+and puts all of the reporter ions on the same "intensity scale". The argument
+'IRSname' is used to define the name of the Reference group within the
+SampleGroup column. The argument "groupingColumn" takes one of the column of
+pData(MSnSetObj) to define separate batches to correct; the default variable
+name is "Plex".
 }
 \examples{
 
 data(human_anno)
 data(ER_ARID1A_KO_MCF7)
-MSnset_SET1 <- convertToMSnset(ER_ARID1A_KO_MCF7$intensities_Set1,metadata=ER_ARID1A_KO_MCF7$metadata_Set1,
-                indExpData=c(7:15),Sequences=2,Accessions=6)
-MSnset_SET2 <- convertToMSnset(ER_ARID1A_KO_MCF7$intensities_Set2,metadata=ER_ARID1A_KO_MCF7$metadata_Set2,
-               indExpData=c(7:15),Sequences=2,Accessions=6)
-MSnset_SET3 <- convertToMSnset(ER_ARID1A_KO_MCF7$intensities_Set3,metadata=ER_ARID1A_KO_MCF7$metadata_Set3,
-                indExpData=c(7:15),Sequences=2,Accessions=6)
-MSnset_SET4 <- convertToMSnset(ER_ARID1A_KO_MCF7$intensities_Set4,metadata=ER_ARID1A_KO_MCF7$metadata_Set4,
-                indExpData=c(7:14),Sequences=2,Accessions=6)
-MSnset_SET5 <- convertToMSnset(ER_ARID1A_KO_MCF7$intensities_Set5,metadata=ER_ARID1A_KO_MCF7$metadata_Set5,
-                indExpData=c(7:15),Sequences=2,Accessions=6)
+MSnset_SET1 <- convertToMSnset(ER_ARID1A_KO_MCF7$intensities_Set1,
+                               metadata=ER_ARID1A_KO_MCF7$metadata_Set1,
+                               indExpData=c(7:15),S
+                               equences=2,
+                               Accessions=6)
+MSnset_SET2 <- convertToMSnset(ER_ARID1A_KO_MCF7$intensities_Set2,
+                               metadata=ER_ARID1A_KO_MCF7$metadata_Set2,
+                               indExpData=c(7:15),
+                               Sequences=2,
+                               Accessions=6)
+MSnset_SET3 <- convertToMSnset(ER_ARID1A_KO_MCF7$intensities_Set3,
+                               metadata=ER_ARID1A_KO_MCF7$metadata_Set3,
+                               indExpData=c(7:15),
+                               Sequences=2,
+                               Accessions=6)
+MSnset_SET4 <- convertToMSnset(ER_ARID1A_KO_MCF7$intensities_Set4,
+                               metadata=ER_ARID1A_KO_MCF7$metadata_Set4,
+                               indExpData=c(7:14),
+                               Sequences=2,
+                               Accessions=6)
+MSnset_SET5 <- convertToMSnset(ER_ARID1A_KO_MCF7$intensities_Set5,
+                               metadata=ER_ARID1A_KO_MCF7$metadata_Set5,
+                               indExpData=c(7:15),
+                               Sequences=2,
+                               Accessions=6)
 MSnset_SET1_norm <- normalizeScaling(MSnset_SET1, median)
 MSnset_SET2_norm <- normalizeScaling(MSnset_SET2, median)
 MSnset_SET3_norm <- normalizeScaling(MSnset_SET3, median)
@@ -56,11 +78,16 @@ MSnset_SET2_Pnorm <- updateSampleNames(updateFvarLabels(MSnset_SET2_Pnorm))
 MSnset_SET3_Pnorm <- updateSampleNames(updateFvarLabels(MSnset_SET3_Pnorm))
 MSnset_SET4_Pnorm <- updateSampleNames(updateFvarLabels(MSnset_SET4_Pnorm))
 MSnset_SET5_Pnorm <- updateSampleNames(updateFvarLabels(MSnset_SET5_Pnorm))
-MSnset_comb <- MSnbase::combine(MSnset_SET1_Pnorm,MSnset_SET2_Pnorm,MSnset_SET3_Pnorm,MSnset_SET4_Pnorm,MSnset_SET5_Pnorm)
-tokeep <- which(complete.cases(fData(MSnset_comb))==TRUE)
+MSnset_comb <- MSnbase::combine(MSnset_SET1_Pnorm,
+                                MSnset_SET2_Pnorm,
+                                MSnset_SET3_Pnorm,
+                                MSnset_SET4_Pnorm,
+                                MSnset_SET5_Pnorm)
+tokeep <- complete.cases(fData(MSnset_comb)
 MSnset_comb <- MSnset_comb[tokeep,]
 sampleNames(MSnset_comb) <- pData(MSnset_comb)$SampleName
 fData(MSnset_comb) <- fData(MSnset_comb)[,c(2,3,6)]
-colnames(fData(MSnset_comb)) <- c("Sequences","Modifications","Accessions")
-MSnset_comb_corr <- IRSnorm(MSnset_comb,IRSname="Ref",groupingColumn="Run")
+colnames(fData(MSnset_comb)) <- c("Sequences", "Modifications", "Accessions")
+MSnset_comb_corr <- IRSnorm(MSnset_comb, IRSname="Ref", groupingColumn="Run")
+
 }
