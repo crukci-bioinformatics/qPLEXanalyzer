@@ -40,8 +40,8 @@ data(human_anno)
 data(ER_ARID1A_KO_MCF7)
 MSnset_SET1 <- convertToMSnset(ER_ARID1A_KO_MCF7$intensities_Set1,
                                metadata=ER_ARID1A_KO_MCF7$metadata_Set1,
-                               indExpData=c(7:15),S
-                               equences=2,
+                               indExpData=c(7:15),
+                               Sequences=2,
                                Accessions=6)
 MSnset_SET2 <- convertToMSnset(ER_ARID1A_KO_MCF7$intensities_Set2,
                                metadata=ER_ARID1A_KO_MCF7$metadata_Set2,
@@ -83,7 +83,7 @@ MSnset_comb <- MSnbase::combine(MSnset_SET1_Pnorm,
                                 MSnset_SET3_Pnorm,
                                 MSnset_SET4_Pnorm,
                                 MSnset_SET5_Pnorm)
-tokeep <- complete.cases(fData(MSnset_comb)
+tokeep <- complete.cases(fData(MSnset_comb))
 MSnset_comb <- MSnset_comb[tokeep,]
 sampleNames(MSnset_comb) <- pData(MSnset_comb)$SampleName
 fData(MSnset_comb) <- fData(MSnset_comb)[,c(2,3,6)]
