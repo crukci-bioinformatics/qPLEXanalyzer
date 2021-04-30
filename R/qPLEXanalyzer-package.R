@@ -1,6 +1,3 @@
-# Argument check function
-
-
 #' exp2_Xlink dataset
 #' 
 #' An ER qPLEX-RIME experiment was performed to compare two different methods
@@ -19,10 +16,6 @@
 #' quantification.
 #' @keywords data datasets
 NULL
-
-
-
-
 
 #' exp3_OHT_ESR1 dataset
 #' 
@@ -49,14 +42,9 @@ NULL
 #' @keywords data datasets
 NULL
 
-
-
-
-
 #' human_anno dataset
 #' 
 #' Uniprot Human protein annotation table.
-#' 
 #' 
 #' @name human_anno
 #' @docType data
@@ -65,9 +53,16 @@ NULL
 #' @keywords data datasets
 NULL
 
-
-
-
+#' mouse_anno dataset
+#' 
+#' Uniprot Mouse protein annotation table.
+#' 
+#' @name mouse_anno
+#' @docType data
+#' @format An object of class \code{\link{data.frame}} consisting of uniprot
+#' mouse protein annotation.
+#' @keywords data datasets
+NULL
 
 #' Tools for qPLEX-RIME data analysis
 #' 
