@@ -42,6 +42,24 @@ NULL
 #' @keywords data datasets
 NULL
 
+#' ER_ARID1A_KO_MCF7 dataset
+#' 
+#' Five ER qPLEX-RIME (9plex) experiments were performed on two wild type clones,
+#' two ARID1A knockout clones and one parental cell line with Tamoxifen treatment
+#' in MCF7 cell lines.
+#' 
+#' 
+#' @name ER_ARID1A_KO_MCF7
+#' @docType data
+#' @format An object of class \code{\link{list}} related to peptides
+#' quantification. It consists of qPLEX-RIME data from five experimental runs.
+#' Each run contains 9 samples divided into nine conditions (T_14, V_14,
+#' T_11, V_11, ECACC.T, ECACC.V, T_221, V_221 and Ref).
+#' @return An object of class \code{\link{list}} related to peptides
+#' quantification.
+#' @keywords data datasets
+NULL
+
 #' human_anno dataset
 #' 
 #' Uniprot Human protein annotation table.
