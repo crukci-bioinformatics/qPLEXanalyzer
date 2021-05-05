@@ -1,3 +1,7 @@
+VERSION 1.9.4
+------------------------
+o Added documentation for new data set.
+
 VERSION 1.9.3
 ------------------------
 o New Feature: Added the function IRSnorm, which performs normalisation of
