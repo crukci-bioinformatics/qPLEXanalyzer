@@ -1,3 +1,7 @@
+VERSION 1.13.1
+------------------------
+o Fixed bug in computeDiffStats.
+
 VERSION 1.9.4
 ------------------------
 o Added documentation for new data set.
