@@ -93,12 +93,12 @@ computeDiffStats <- function(MSnSetObj, batchEffect = NULL, transform = TRUE,
         dupcor <- duplicateCorrelation(intensities, 
                                        design = design, 
                                        block = pData(MSnSetObj)$TechRep)
-        fit <- lmFit(intensities, 
+        fit <- lmFit(as.matrix(intensities), 
                      design = design, 
                      weights = NULL, 
                      correlation = dupcor$consensus)
     } else {
-        fit <- lmFit(intensities, design = design, weights = NULL)
+        fit <- lmFit(as.matrix(intensities), design = design, weights = NULL)
     }
     
     message("Fitting contrasts\n")
