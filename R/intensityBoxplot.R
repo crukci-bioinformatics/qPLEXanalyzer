@@ -81,6 +81,6 @@ intensityBoxplot <- function(MSnSetObj, title="", sampleColours=NULL,
             axis.text.x = element_text(angle = 90, hjust = 1),
             plot.title = element_text(hjust = 0.5)
         ) +
-        guides(fill = FALSE)
+        guides(fill = "none")
 }
 

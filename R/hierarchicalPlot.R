@@ -87,7 +87,7 @@ hierarchicalPlot <- function(MSnSetObj, sampleColours=NULL,
             aes(x = x, y = y, label = SampleName, colour = !!colourBy),
             hjust = hj, nudge_y = ny, angle = ang
         ) +
-        guides(colour = FALSE) +
+        guides(colour = "none") +
         scale_colour_manual(values = sampleColours) +
         labs(x = NULL, y = "Distance", title = title)
     if (horizontal) {
