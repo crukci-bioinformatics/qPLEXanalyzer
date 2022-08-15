@@ -1,6 +1,6 @@
 ---
 title: "qPLEXanalyzer"
-author: Matthew Eldridge, Kamal Kishore, and Ashley Sawle
+author: Matthew Eldridge, Kamal Kishore and Ashley Sawle
 date: "`r format(Sys.Date(), '%m/%d/%Y')`"
 output: 
   rmarkdown::html_vignette:
@@ -42,6 +42,8 @@ of the quantitative dataset.
 and linear regression based normalization.
 
 - Aggregation of peptide intensities into protein intensities
+
+- Merging of similar peptides/sites into unified intensities
 
 - Differential statistical analysis: _limma_ based analysis to 
 identify differentially abundant proteins.
@@ -91,6 +93,7 @@ MSnset_data <- convertToMSnset(exp2_Xlink$intensities,
                                indExpData = c(7:16), 
                                Sequences = 2, 
                                Accessions = 6)
+exprs(MSnset_data) <- exprs(MSnset_data)+1.1
 MSnset_data
 ```
 
@@ -336,12 +339,15 @@ peptideIntensityPlot(MSnset_data,
                      ProteinName = "ESR1")
 ```
 
-Phosphopeptide data is usually analysed at peptide level instead of protein.
-This is achieved by either performing analysis separately at each peptide or
-merging identical peptides (having phospho modification) belonging to same
-protein into single peptide intensity. The downstream analysis is then carried
-out on these merged peptides. The `mergePeptides` function performs this merging
-of peptides intensities.
+## Merging of similar peptides/sites into unified intensities 
+
+
+Data that contain TMT-labelled peptides with post-translational modifications (Phospho/Acetyl) are mainly analysed at the peptide level instead of the protein level. The analysis can be performed either at the peptide sequence or modified protein site level. However, in these datasets there are peptide sequences or modified protein sites that are identified multiple times. Peptide sequences that are present multiple times may contain additional modifications such as oxidation of M or deamidation of N, Q that are introduced during sample preparation. Additionally, the same acetyl protein site may be present multiple times as peptide sequences may be overlapping due to a missed cleavage. To reduce the redundancy and facilitate the data interpretation, such sequences/sites coming from same protein are merged into a unified peptide/site TMT intensity.
+
+The `mergePeptides` function performs the merging of identical peptides sequences (of enriched modification) belonging to same protein into single peptide intensity.
+
+The `mergeSites` function performs the merging of identical modified sites (of enriched modification) belonging to same protein into single site intensity. It is imperative to pre-process your input quantitative proteomics data such that each row represents intensity of modified site (with protein accession). This function expects `Sites` column in your dataset.
+
 
 ## Regression Analysis
 

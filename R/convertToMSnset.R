@@ -75,8 +75,13 @@ convertToMSnset <- function(ExpObj, metadata, indExpData, Sequences=NULL,
     
     if (rmMissing) {
         ExpObj <- ExpObj %>% 
-            drop_na(indExpData)
+            drop_na(all_of(indExpData))
     }
+    else
+    {
+      tokeep <- apply(ExpObj[,indExpData],1,function(x) !all(is.na(x)))
+      ExpObj <- ExpObj[tokeep,]
+      }
     obj <- readMSnSet2(ExpObj, ecol = indExpData)
 
     pData(obj) <- tibble(SampleName=sampleNames(obj)) %>% 

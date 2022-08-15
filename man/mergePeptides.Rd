@@ -2,7 +2,7 @@
 % Please edit documentation in R/mergePeptides.R
 \name{mergePeptides}
 \alias{mergePeptides}
-\title{Merge identical peptides intensities}
+\title{Merge identical modified peptides intensities}
 \usage{
 mergePeptides(MSnSetObj, summarizationFunction, annotation, keepCols = NULL)
 }
@@ -23,8 +23,8 @@ column names}
 An object of class \code{MSnSet} (see \code{\link{MSnSet-class}})
 }
 \description{
-Merge identical peptides to single peptide intensity. This function is
-especially useful for phosphopeptide analysis.
+Merge modified peptides with identical sequences to single peptide intensity. This function is
+especially useful for modified peptide enrichment based method such as phosphopeptide analysis.
 }
 \details{
 Rows of the intensity matrix with identical peptide sequences are merged by

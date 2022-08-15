@@ -47,7 +47,7 @@ phosProtColTestList <- list(Samples = pData(phosProtMSnSetColname),
 # test the function
 
 test_that("Merge peptides works", {
-    expect_equal_to_reference(protTestList,
+     expect_equal_to_reference(protTestList,
                               file="mergePeptides.rds") 
     expect_equal_to_reference(phosProtTestList,
                               file="mergePeptides_phos.rds")

@@ -54,7 +54,7 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL,
     checkArg_getContrastResults(diffstats, contrast, controlGroup, transform,
                                 writeFile)
     
-    message("Obtaining results for contrast", contrast, "\n")
+    message("Obtaining results for contrast  ", contrast, "\n")
     contrast <- contrast %>%
         str_replace_all(pattern = " ", replacement = "_") %>%
         str_replace(pattern = "_-_", replacement = " - ") %>%

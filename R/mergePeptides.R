@@ -9,10 +9,10 @@ checkArg_mergePeptides <- function(MSnSetObj,
   assert_that(is_validfDataColumn(keepCols, MSnSetObj))
 }
 
-#' Merge identical peptides intensities
+#' Merge identical modified peptides intensities
 #' 
-#' Merge identical peptides to single peptide intensity. This function is
-#' especially useful for phosphopeptide analysis.
+#' Merge modified peptides with identical sequences to single peptide intensity. This function is
+#' especially useful for modified peptide enrichment based method such as phosphopeptide analysis.
 #' 
 #' Rows of the intensity matrix with identical peptide sequences are merged by
 #' summarising the intensities using \code{summarizationFunction}.
@@ -62,9 +62,9 @@ mergePeptides <- function(MSnSetObj,
   summarizedIntensities <- fData(MSnSetObj) %>%
     select(Accessions, Sequences, all_of(keepCols)) %>%
     mutate(across(everything(), as.character)) %>% 
-    mutate(phosseqid = str_c(Sequences, "_", Accessions)) %>%  
+    mutate(Seq_Acc = str_c(Sequences, "_", Accessions)) %>%  
     bind_cols(as.data.frame(exprs(MSnSetObj))) %>% 
-    group_by(phosseqid, Accessions) %>%
+    group_by(Seq_Acc, Accessions) %>%
     select(-Sequences) %>% 
     summarize(across(where(is.character), concatUnique),
               across(where(is.numeric), summarizationFunction), 
@@ -78,7 +78,7 @@ mergePeptides <- function(MSnSetObj,
 
   obj <- readMSnSet2(summarizedIntensities, ecol = sampleNames(MSnSetObj))
   pData(obj) <- pData(MSnSetObj)
-  featureNames(obj) <- fData(obj)$phosseqid
+  featureNames(obj) <- fData(obj)$Seq_Acc
   return(obj)
 }
 

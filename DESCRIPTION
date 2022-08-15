@@ -1,14 +1,14 @@
 Package: qPLEXanalyzer
 Type: Package
-Title: Tools for qPLEX-RIME data analysis
-Version: 1.13.2
-Date: 2022-03-16
+Title: Tools for quantitative proteomics data analysis
+Version: 1.14.1
+Date: 2022-08-02
 Authors@R: c(person("Matthew","Eldridge", role = "aut"),
              person("Kamal", "Kishore", role = "aut", 
                     email = "kamal.fartiyal84@gmail.com"),
              person("Ashley", "Sawle", role=c("aut", "cre"),
                      email="ads2202cu@gmail.com"))
-Description: Tools for quantitative proteomics data analysis generated from qPLEX-RIME method.
+Description: Tools for TMT based quantitative proteomics data analysis.
 License: GPL-2
 Imports: assertthat, 
          BiocGenerics,
@@ -46,4 +46,4 @@ VignetteBuilder: knitr
 biocViews: ImmunoOncology, Proteomics, MassSpectrometry, Normalization, Preprocessing, QualityControl, DataImport
 BugReports: https://github.com/crukci-bioinformatics/qPLEXanalyzer/issues
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
