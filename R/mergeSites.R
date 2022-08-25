@@ -18,7 +18,9 @@ checkArg_mergeSites <- function(MSnSetObj,
 #' 
 #' Rows of the intensity matrix with identical sites on same protein are merged by
 #' summarising the intensities using \code{summarizationFunction}. The merging will only take
-#' place if "Sites" column is present in the fData(MSnSetObj).
+#' place if "Sites" and "Type" column are present in the fData(MSnSetObj). Sites contains the 
+#' information of modified site position within the protein sequence and Type tells us about
+#' whether the modification is single (1xPhospho/Acetyl) or multi (2xPhospho/Acetyl).
 #' 
 #' Columns specified with \code{keepCols} are retained in the final output.
 #' Non-unique entries in different rows are concatenated with ';'.
@@ -63,12 +65,11 @@ mergeSites <- function(MSnSetObj,
   concatUnique <- function(x){ unique(x) %>% str_c(collapse=";") }
   
   summarizedIntensities <- fData(MSnSetObj) %>%
-    select(Accessions, Sites, all_of(keepCols)) %>%
+    select(Accessions, Sites, Type, all_of(keepCols)) %>%
     mutate(across(everything(), as.character)) %>% 
     mutate(Sites_Acc = str_c(Sites, "_", Accessions)) %>%  
     bind_cols(as.data.frame(exprs(MSnSetObj))) %>% 
-    group_by(Sites_Acc, Accessions) %>%
-    select(-Sites) %>% 
+    group_by(Accessions,Sites_Acc,Type) %>%
     summarize(across(where(is.character), concatUnique),
               across(where(is.numeric), summarizationFunction), 
               Count=n())   %>% 
@@ -81,7 +82,7 @@ mergeSites <- function(MSnSetObj,
 
   obj <- readMSnSet2(summarizedIntensities, ecol = sampleNames(MSnSetObj))
   pData(obj) <- pData(MSnSetObj)
-  featureNames(obj) <- fData(obj)$Sites_Acc
+  featureNames(obj) <- paste0(fData(obj)$Sites_Acc,"_",fData(obj)$Type)
   return(obj)
 }
 
