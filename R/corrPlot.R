@@ -73,6 +73,7 @@ corrPlot <- function(MSnSetObj, addValues=TRUE, title="",
                       low_cor_limit, high_cor_limit,
                       textsize)
     
+
     plotDat <- cor(exprs(MSnSetObj)) %>%
         as.data.frame() %>%
         rownames_to_column("X") %>%
