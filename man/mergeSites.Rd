@@ -29,7 +29,9 @@ especially useful for data based on enrichment of specific peptide modification.
 \details{
 Rows of the intensity matrix with identical sites on same protein are merged by
 summarising the intensities using \code{summarizationFunction}. The merging will only take
-place if "Sites" column is present in the fData(MSnSetObj).
+place if "Sites" and "Type" column are present in the fData(MSnSetObj). Sites contains the 
+information of modified site position within the protein sequence and Type tells us about
+whether the modification is single (1xPhospho/Acetyl) or multi (2xPhospho/Acetyl).
 
 Columns specified with \code{keepCols} are retained in the final output.
 Non-unique entries in different rows are concatenated with ';'.
