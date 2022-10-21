@@ -20,6 +20,10 @@ phosProtMSnSet <- mergePeptides(MSnSet_phos,
                                 annotation = human_anno,
                                 keepCols = 7:8)
 
+# R CMD check (and devtools::check()) is using a different locale to 
+# devtools::test(). This leads to the summarised table being sorted differently
+# specifying the locale ensure they are both the same and we don't get errors.
+Sys.setlocale(category = "LC_COLLATE", locale = "C")
 # test using column names instead of numbers
 phosProtMSnSetColname <- mergePeptides(MSnSet_phos,
                                 summarizationFunction = sum,
