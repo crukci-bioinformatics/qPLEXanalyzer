@@ -11,6 +11,11 @@ rawMSnSet <- convertToMSnset(exp3Int,
                              Accessions = 6)
 
 MSnSet_phos <- readRDS("convertToMSnset_phospho_msnset.rds")
+
+# R CMD check (and devtools::check()) is using a different locale to 
+# devtools::test(). This leads to the summarised table being sorted differently
+# specifying the locale ensure they are both the same and we don't get errors.
+Sys.setlocale(category = "LC_COLLATE", locale = "C")
 protMSnSet <- mergePeptides(rawMSnSet,
                             summarizationFunction = sum,
                             annotation = human_anno)
