@@ -1,3 +1,5 @@
+
+
 VERSION 1.13.2
 ------------------------
 o Fixed guide = FALSE to guide = "none".
@@ -25,11 +27,9 @@ VERSION 1.9.1
 ------------------------
 o Fix bug in getContrastRestults where file was written to `.txt`, file name 
   should now be correctly formed from the contrast name
-
-VERSION 1.7.3
+VERSION 1.15.3
 ------------------------
-o Fix limits of scale in corrPlot to c(0, 1)
-o Fix bug in regress intensities where control columns were not being removed
+o Fix for error in devtools::check tests caused by differing locales
 
 VERSION 1.7.1
 ------------------------
