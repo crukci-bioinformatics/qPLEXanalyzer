@@ -1,3 +1,7 @@
+VERSION 1.14.2
+------------------------
+o Fix in tests to deal with different locales in devtools::test and devtools::check
+
 VERSION 1.13.2
 ------------------------
 o Fixed guide = FALSE to guide = "none".
