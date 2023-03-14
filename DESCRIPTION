@@ -1,7 +1,7 @@
 Package: qPLEXanalyzer
 Type: Package
 Title: Tools for quantitative proteomics data analysis
-Version: 1.17.1  
+Version: 1.16.1  
 Date: 2023-03-14
 Authors@R: c(person("Matthew","Eldridge", role = "aut"),
              person("Kamal", "Kishore", role = "aut", 
