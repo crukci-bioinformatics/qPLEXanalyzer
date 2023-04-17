@@ -39,6 +39,7 @@ Suggests:
     knitr,
     qPLEXdata,
     rmarkdown,
+    statmod,
     testthat,
     UniProt.ws,
     vdiffr
