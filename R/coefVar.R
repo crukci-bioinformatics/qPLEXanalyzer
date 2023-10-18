@@ -23,6 +23,7 @@ checkArg_coefVar <- function(MSnSetObj){
 #'                                indExpData=c(7:16), 
 #'                                Sequences=2, 
 #'                                Accessions=6)
+#' exprs(MSnSet_data) <- exprs(MSnSet_data)+1.1                                 
 #' res <- coefVar(MSnSet_data)                             
 #' @import ggplot2
 #' @importFrom Biobase exprs exprs<- pData
@@ -65,7 +66,10 @@ coefVar <- function(MSnSetObj) {
     theme_bw() + 
     labs(title = "Boxplot of Coefficient of Variation",
          x = "Sample Name",
-         y = "Coefficient of Variation (%)")
+         y = "Coefficient of Variation (%)") +
+    theme(plot.title = element_text(hjust = 0.5),
+          axis.text = element_text(size = 10)) 
+    
   
   ### cumulative fraction plot for each samplegroup
   cumulpl <- ggplot(CV_comb,mapping = aes(x=CV,y=fraction,color=SampleName)) +
@@ -73,7 +77,9 @@ coefVar <- function(MSnSetObj) {
     theme_bw() +
     labs(title = "Cumulative Fraction Plot",
          x = "Coefficient of Variation (%)",
-         y = "Cumulative Fraction")
+         y = "Cumulative Fraction") +
+    theme(plot.title = element_text(hjust = 0.5),
+          axis.text = element_text(size = 10))
   
   ## return both plots in the form of list
   return(list(boxpl=boxpl,cumulpl=cumulpl))
