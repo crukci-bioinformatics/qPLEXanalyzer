@@ -1,4 +1,7 @@
-
+VERSION 1.21.1
+------------------------
+o Added function `coefVar.R` to calculate and plot coefficient of variance
+between all samples in a sample group.
 
 VERSION 1.13.2
 ------------------------
