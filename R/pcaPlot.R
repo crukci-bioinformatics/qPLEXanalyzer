@@ -24,7 +24,7 @@ checkArg_pcaPlot <- function(MSnSetObj,
     assert_that(is_validMetadataColumn(colourBy, MSnSetObj))
     assert_that(is.string(title))
     assert_that(is.string(labelColumn))
-    assert_that(is_validMetadataColumn(labelColumn, MSnSetObj))
+    assert_that(is_validMetadataColumn(labelColumn, MSnSetObj) || labelColumn == "none")
     assert_that(is.number(labelsize))
     assert_that(is.number(pointsize))
     assert_that(is.number(x.nudge))
@@ -50,7 +50,7 @@ checkArg_pcaPlot <- function(MSnSetObj,
 #'   \code{pData(MSnSetObj)}
 #' @param title character: title for the plot
 #' @param labelColumn character: column name from \code{pData(MSnSetObj)} to use
-#'   for labelling points on the plot
+#'   for labelling points on the plot or "none" to omit labels
 #' @param labelsize numeric: size of the labels
 #' @param pointsize numeric: size of plotting points
 #' @param x.nudge numeric: distance to move labels along the x-axis away from
@@ -143,7 +143,7 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL,
             aspect.ratio = 1
         )
     
-    if (!is.null(labelColumn)) {
+    if (labelColumn != "none") {
         labelColumn <- sym(labelColumn) 
         pcPlot <- pcPlot +
             geom_text(aes(label = !!labelColumn),
