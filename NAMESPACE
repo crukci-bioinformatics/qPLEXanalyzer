@@ -2,6 +2,7 @@
 
 export(IRSnorm)
 export(assignColours)
+export(coefVar)
 export(computeDiffStats)
 export(convertToMSnset)
 export(corrPlot)

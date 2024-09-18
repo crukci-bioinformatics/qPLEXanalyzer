@@ -36,7 +36,7 @@ pcaPlot(
 \item{title}{character: title for the plot}
 
 \item{labelColumn}{character: column name from \code{pData(MSnSetObj)} to use
-for labelling points on the plot}
+for labelling points on the plot or "none" to omit labels}
 
 \item{labelsize}{numeric: size of the labels}
 
