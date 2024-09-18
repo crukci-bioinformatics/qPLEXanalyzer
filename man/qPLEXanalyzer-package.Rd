@@ -24,6 +24,8 @@ peptides/proteins intensities within group (median or mean)
 across all samples 
 \item \code{regressIntensity}: Performs linear regression on protein 
 intensities based on selected protein 
+\item \code{coefVar}: Calculating the coefficient of variation by utilizing 
+expression data within individual sample groups
 \item \code{computeDiffStats}: Compute differential statistics for the given
 contrasts 
 \item \code{getContrastResults}: Get differential statistics results for 
@@ -48,6 +50,13 @@ MSnSet
 \item \code{rliPlot}: Relative intensity plot of all the samples 
 selected protein in proteomics experiment 
 }
+}
+\seealso{
+Useful links:
+\itemize{
+  \item Report bugs at \url{https://github.com/crukci-bioinformatics/qPLEXanalyzer/issues}
+}
+
 }
 \author{
 Matthew Eldridge, Kamal Kishore, Ashley Sawle (Maintainer)

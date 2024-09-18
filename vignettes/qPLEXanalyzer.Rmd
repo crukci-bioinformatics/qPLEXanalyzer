@@ -82,7 +82,7 @@ replicates of each group.
 
 ```{r libs}
 library(qPLEXanalyzer)
-library(gridExtra)
+library(patchwork)
 data(human_anno)
 data(exp2_Xlink)
 ```
@@ -272,8 +272,7 @@ MSnset_norm_gs <- groupScaling(MSnset_data,
                                groupingColumn = "SampleGroup")
 p4 <- intensityPlot(MSnset_norm_gs, title = "Within Group Scaling")
 
-grid.arrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
-
+(p1 | p2) / (p3 | p4)
 ```
 
 ## Aggregation of peptide intensities into protein intensities
