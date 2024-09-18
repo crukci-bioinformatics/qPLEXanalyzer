@@ -35,7 +35,7 @@ Imports: assertthat,
          utils
 Depends: R (>= 4.0), Biobase, MSnbase
 Suggests: 
-    gridExtra,
+    patchwork,
     knitr,
     qPLEXdata,
     rmarkdown,
