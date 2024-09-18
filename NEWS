@@ -5,7 +5,7 @@ o Modify pcaPlot to allow user to omit the labelling
 o Switch from gridExtra to patchwork in vignette
 VERSION 1.23.0
 ------------------------
-o Version bump for Bioconductor 3.19, no changes to package
+o Version bump for Bioconductor 3.20, no changes to package
 VERSION 1.21.1
 ------------------------
 o Added function `coefVar.R` to calculate and plot coefficient of variance
