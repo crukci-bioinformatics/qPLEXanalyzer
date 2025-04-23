@@ -295,15 +295,14 @@ expects an annotation file in this format.
 library(UniProt.ws)
 library(dplyr)
 proteins <- unique(fData(MSnset_data)$Accessions)[1:10]
-columns <- c("ENTRY-NAME", "PROTEIN-NAMES", "GENES")
+columns <- c("id", 'gene_primary',"gene_names", "protein_name")
 hs <- UniProt.ws::UniProt.ws(taxId = 9606)
-first_ten_anno <- UniProt.ws::select(hs, proteins, columns, "UNIPROTKB") %>%
+first_ten_anno <- UniProt.ws::select(hs, proteins, columns, "UniProtKB") %>%
   as_tibble() %>%
-  mutate(GeneSymbol = gsub(" .*", "", GENES)) %>%
-  select(Accessions = "UNIPROTKB", 
-         Gene = "ENTRY-NAME",
-         Description = "PROTEIN-NAMES", 
-         GeneSymbol) %>% 
+  select(Accessions = "Entry", 
+         Gene = "Entry.Name",
+         Description = "Protein.names", 
+         GeneSymbol= "Gene.Names..primary.") %>% 
   arrange(Accessions)
 head(first_ten_anno)
 ```
