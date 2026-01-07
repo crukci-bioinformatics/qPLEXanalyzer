@@ -427,7 +427,7 @@ statistical significance level.
 contrasts <- c(DSG.FA_vs_FA = "DSG.FA - FA")
 diffstats <- computeDiffStats(MSnset_Pnorm, contrasts = contrasts)
 diffexp <- getContrastResults(diffstats, 
-                              contrast = contrasts,
+                              contrast = "DSG.FA_vs_FA",
                               controlGroup = "IgG")
 ```
 
@@ -435,13 +435,13 @@ diffexp <- getContrastResults(diffstats,
 <a name="Figure11" />
 
 ```{r MAplot, fig.width=6,fig.height=4, fig.cap="Figure 11: MA plot of the quantified proteins"}
-maVolPlot(diffstats, contrast = contrasts, plotType = "MA", title = contrasts)
+maVolPlot(diffstats, contrast = "DSG.FA_vs_FA", plotType = "MA", title = contrasts)
 ```
 
 <a name="Figure12" />
 
 ```{r volcano, fig.width=6, fig.height=4, fig.cap="Figure 12: Volcano plot of the quantified proteins"}
-maVolPlot(diffstats, contrast = contrasts, plotType = "Volcano", title = contrasts)
+maVolPlot(diffstats, contrast = "DSG.FA_vs_FA", plotType = "Volcano", title = contrasts)
 ```
 
 
