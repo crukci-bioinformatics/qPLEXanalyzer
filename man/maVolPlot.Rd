@@ -19,7 +19,7 @@ maVolPlot(
 \arguments{
 \item{diffstats}{list; output of computeDiffStats function}
 
-\item{contrast}{character; contrast of interest to plot differential
+\item{contrast}{character; name of contrast of interest to plot differential
 statistics results}
 
 \item{title}{character: title for the plot}
