@@ -15,7 +15,7 @@ getContrastResults(
 \arguments{
 \item{diffstats}{list; output of computeDiffStats function}
 
-\item{contrast}{character; contrast of interest for which to retrieve
+\item{contrast}{character; name of contrast of interest for which to retrieve
 differential statistics results}
 
 \item{controlGroup}{character; control group such as IgG}
