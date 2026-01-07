@@ -1,3 +1,7 @@
+VERSION 1.29.1
+------------------------
+o Update to getContrasts to account for changes in limma::topTable
+o Update to maVolPlot to account fo changes in limma::topTable
 VERSION 1.23.1
 ------------------------
 o Add coefCV to NAMESPACE
