@@ -15,7 +15,7 @@ getContrastResults(
 \arguments{
 \item{diffstats}{list; output of computeDiffStats function}
 
-\item{contrast}{character; contrast of interest for which to retrieve
+\item{contrast}{character; name of contrast of interest for which to retrieve
 differential statistics results}
 
 \item{controlGroup}{character; control group such as IgG}
@@ -43,7 +43,7 @@ MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,
 MSnset_norm <- groupScaling(MSnSet_data, scalingFunction=median)
 MSnset_Pnorm <- summarizeIntensities(MSnset_norm, sum, human_anno)
 contrasts <- c(tam.24h_vs_vehicle = "tam.24h - vehicle")
-diffstats <- computeDiffStats(MSnset_Pnorm, contrasts=contrasts)
+diffstats <- computeDiffStats(MSnset_Pnorm, contrasts="tam.24h_vs_vehicle") 
 diffexp <- getContrastResults(diffstats=diffstats, contrast=contrasts)
 
 }

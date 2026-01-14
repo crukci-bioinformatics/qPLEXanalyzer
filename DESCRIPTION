@@ -1,8 +1,8 @@
 Package: qPLEXanalyzer
 Type: Package
 Title: Tools for quantitative proteomics data analysis
-Version: 1.23.1
-Date: 2024-09-18
+Version: 1.29.2
+Date: 2026-01-14
 Authors@R: c(person("Matthew","Eldridge", role = "aut"),
              person("Kamal", "Kishore", role = "aut", 
                     email = "kamal.fartiyal84@gmail.com"),
@@ -47,4 +47,4 @@ VignetteBuilder: knitr
 biocViews: ImmunoOncology, Proteomics, MassSpectrometry, Normalization, Preprocessing, QualityControl, DataImport
 BugReports: https://github.com/crukci-bioinformatics/qPLEXanalyzer/issues
 Encoding: UTF-8
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3

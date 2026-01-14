@@ -17,7 +17,7 @@ checkArg_getContrastResults <- function(diffstats,
 #' 
 #' 
 #' @param diffstats list; output of computeDiffStats function
-#' @param contrast character; contrast of interest for which to retrieve
+#' @param contrast character; name of contrast of interest for which to retrieve
 #' differential statistics results
 #' @param controlGroup character; control group such as IgG
 #' @param transform logical; apply log2 transformation to the raw intensities
@@ -55,10 +55,6 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL,
                                 writeFile)
     
     message("Obtaining results for contrast  ", contrast, "\n")
-    contrast <- contrast %>%
-        str_replace_all(pattern = " ", replacement = "_") %>%
-        str_replace(pattern = "_-_", replacement = " - ") %>%
-        str_replace(pattern = "_vs_", replacement = " - ")
     
     MSnSetObj <- diffstats$MSnSetObj
     fittedContrasts <- diffstats$fittedContrasts
@@ -68,11 +64,14 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL,
                         number = Inf, 
                         sort.by = "none",
                         confint=TRUE)
-    contrastGroups <- contrast %>% strsplit(" - ") %>% unlist()
-    fittedIntensities <- as.data.frame(fittedLinearModel$coefficients)
-    contrastIntensities <- select(fittedIntensities, one_of(contrastGroups))
-    
+    # Get the groups involved in the contrast
+    contrastCoeff <- fittedContrasts$contrasts[, contrast]
+    contrastGroups <- names(contrastCoeff)[contrastCoeff != 0]
+
+    # Calculate control log fold change if control group is provided
     if (!is.null(controlGroup)) {
+        fittedIntensities <- as.data.frame(fittedLinearModel$coefficients)
+        contrastIntensities <- select(fittedIntensities, one_of(contrastGroups))
         controlIntensity <- fittedIntensities[, controlGroup]
         results$controlLogFoldChange <- 
             apply(contrastIntensities - controlIntensity, 1, max)

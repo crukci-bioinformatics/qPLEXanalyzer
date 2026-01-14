@@ -60,7 +60,7 @@ testSignficant <- function(dat, cutoffs) {
 #' be apparent.
 #' 
 #' @param diffstats list; output of computeDiffStats function
-#' @param contrast character; contrast of interest to plot differential
+#' @param contrast character; name of contrast of interest to plot differential
 #' statistics results
 #' @param title character: title for the plot
 #' @param controlGroup character; control group such as IgG
@@ -105,8 +105,7 @@ maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
     results <- suppressMessages(
         getContrastResults(diffstats = diffstats,
                            contrast = contrast,
-                           controlGroup = controlGroup
-                           ))
+                           controlGroup = controlGroup))
 
     # prepare plot data
     cutOffs <- list(FDR = fdrCutOff, LFC = lfcCutOff, cLFC = controlLfcCutOff)
