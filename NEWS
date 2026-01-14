@@ -1,3 +1,6 @@
+VERSION 1.29.2
+------------------------
+o Update to getContrasts man page example to account for changes in limma::topTable
 VERSION 1.29.1
 ------------------------
 o Update to getContrasts to account for changes in limma::topTable
