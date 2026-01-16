@@ -43,7 +43,7 @@ MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,
 MSnset_norm <- groupScaling(MSnSet_data, scalingFunction=median)
 MSnset_Pnorm <- summarizeIntensities(MSnset_norm, sum, human_anno)
 contrasts <- c(tam.24h_vs_vehicle = "tam.24h - vehicle")
-diffstats <- computeDiffStats(MSnset_Pnorm, contrasts="tam.24h_vs_vehicle") 
-diffexp <- getContrastResults(diffstats=diffstats, contrast=contrasts)
+diffstats <- computeDiffStats(MSnset_Pnorm, contrasts=contrasts)
+diffexp <- getContrastResults(diffstats=diffstats, contrast="tam.24h_vs_vehicle")
 
 }
