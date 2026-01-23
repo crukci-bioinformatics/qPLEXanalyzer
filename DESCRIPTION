@@ -1,7 +1,7 @@
 Package: qPLEXanalyzer
 Type: Package
 Title: Tools for quantitative proteomics data analysis
-Version: 1.29.3
+Version: 1.29.4
 Date: 2026-01-16
 Authors@R: c(person("Matthew","Eldridge", role = "aut"),
              person("Kamal", "Kishore", role = "aut", 
@@ -21,6 +21,7 @@ Imports: assertthat,
          IRanges, 
          limma, 
          magrittr,
+         MSnbase,
          preprocessCore, 
          purrr, 
          RColorBrewer, 
