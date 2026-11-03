@@ -2,8 +2,12 @@
 #' Mean variance plot
 #' 
 #' Computes and plots variance v mean intensity for peptides in MSnset
-#' 
-#' 
+#'
+#' The intensities are transformed with the natural logarithm after adding
+#' 0.001 (\code{log(x + 0.001)}), and the mean and variance of each feature are
+#' computed across all samples. A smoothing spline fitted to variance against
+#' mean is shown in red. The intensities must not contain missing values.
+#'
 #' @param MSnSetObj MSnSet; an object of class MSnSet
 #' @param title character: title for the plot
 #' @return An object created by \code{ggplot}

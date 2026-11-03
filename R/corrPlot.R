@@ -28,8 +28,12 @@ checkArg_corrPlot <- function(MSnSetObj,
 #' Correlation plot
 #' 
 #' Computes and display correlation plot for samples within MSnSet
-#' 
-#' 
+#'
+#' Pearson correlations between samples are computed on the intensities as
+#' given (no transformation is applied). The intensities must not contain
+#' missing values. Correlations outside \code{low_cor_limit} and
+#' \code{high_cor_limit} are coloured as the nearest limit, with a warning.
+#'
 #' @param MSnSetObj MSnSet; an object of class MSnSet
 #' @param addValues logical: adds correlation values to the plot
 #' @param title character; title of the plot

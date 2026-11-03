@@ -22,13 +22,20 @@ pcaPlot(
 \arguments{
 \item{MSnSetObj}{MSnSet; an object of class MSnSet}
 
-\item{omitIgG}{Logical: whether to remove IgG from the PCA plot}
+\item{omitIgG}{Logical: whether to remove IgG from the PCA plot. Samples
+are removed if their SampleGroup is "IgG" (in any letter case); other names
+for the control group are not recognised.}
 
 \item{sampleColours}{character: A named vector of colours for samples}
 
-\item{transFunc}{func: internal helper function for log transformation}
+\item{transFunc}{function: transformation applied to the intensities when
+\code{transform = TRUE}. The default is \code{log2(x + 1e-10)}, which turns
+zero intensities into about -33.}
 
-\item{transform}{logical: whether to log transform intensities}
+\item{transform}{logical: whether to transform the intensities with
+\code{transFunc}. Features with missing values are removed before the PCA,
+and the PCA is computed with \code{\link[stats]{prcomp}} on the centred,
+unscaled data.}
 
 \item{colourBy}{character: column name to use for colouring samples from
 \code{pData(MSnSetObj)}}
@@ -45,11 +52,12 @@ for labelling points on the plot or "none" to omit labels}
 \item{x.nudge}{numeric: distance to move labels along the x-axis away from
 the plotting points}
 
-\item{x.PC}{numeric: The principle component to plot on the x-axis; the
+\item{x.PC}{numeric: The principal component to plot on the x-axis; the
 following PC will be plotted on the y-axis}
 }
 \value{
-An object created by \code{ggplot}
+An object created by \code{ggplot}, or \code{NULL} if no feature
+without missing values remains.
 }
 \description{
 PCA plots of the samples within MSnset

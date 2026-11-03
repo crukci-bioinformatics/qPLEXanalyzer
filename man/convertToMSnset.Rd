@@ -24,16 +24,21 @@ intensities and peptide annotation}
 intensities in ExpObj}
 
 \item{Sequences}{numeric; a numeric value indicating the index of column
-consisting of peptide sequence in ExpObj}
+consisting of peptide sequence in ExpObj. Required when
+\code{type = "peptide"}; must be NULL when \code{type = "protein"}. The
+column is renamed "Sequences".}
 
 \item{Accessions}{numeric; a numeric value indicating the index of column
-consisting of protein accession in ExpObj}
+consisting of protein accession in ExpObj. The column is renamed
+"Accessions". Neither this column nor the \code{Sequences} column may be one
+of the intensity columns given in \code{indExpData}.}
 
 \item{type}{character; what type of data set to create, either 'peptide' or
 'protein'}
 
-\item{rmMissing}{logical; TRUE or FALSE to indicate whether to remove
-missing data or not}
+\item{rmMissing}{logical; if TRUE, rows with a missing value in any of the
+intensity columns are removed. If FALSE, rows with missing values are kept,
+except rows in which all intensities are missing, which are always removed.}
 }
 \value{
 An object of class \code{MSnSet} (see \code{\link{MSnSet-class}}) 
@@ -51,7 +56,8 @@ intensities and metadata file.  The metadata must contain "SampleName",
 all samples when there are no repeated measurements of the same
 biological unit (e.g. technical replicates, or several experiments on the
 same cell line). Otherwise, all samples from the same unit should share
-one value that is unique across groups (e.g. "CellLine_1", "CellLine_2"), and
+one value, different units must have different values (e.g. "CellLine_1",
+"CellLine_2" rather than a number reused for different cell lines), and
 each sample without repeated measurements should have its own unique
 value; it is used as the blocking variable in
 \code{\link{computeDiffStats}}. The function can be used for

@@ -24,11 +24,18 @@ intensityPlot(
 \item{colourBy}{character: column name from pData(MSnSetObj) to use for
 coloring samples}
 
-\item{transform}{logical: whether to log transform intensities}
+\item{transform}{logical: whether to transform the intensities with
+\code{trFunc}}
 
-\item{xlab}{character: label for x-axis}
+\item{xlab}{character: label for x-axis. The default label
+"log2(intensity)" is not changed automatically when \code{transform = FALSE}
+or a different \code{trFunc} is used, so a suitable label should then be
+supplied.}
 
-\item{trFunc}{func: internal helper function for log transformation}
+\item{trFunc}{function: transformation applied to the intensities when
+\code{transform = TRUE}. The default is \code{log2(x + 1e-10)}, which turns
+zero intensities into about -33. Missing values are removed before
+plotting.}
 }
 \value{
 An object created by \code{ggplot}

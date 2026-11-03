@@ -24,8 +24,14 @@ mean)
 In this normalization method the central tendencies (mean or median) of the
 samples are aligned.  The central tendency for each sample is computed and
 log transformed. A scaling factor is determined by subtracting from each
-central tendency the mean of all the central tendencies.  The raw intensities
-are then divided by the scaling factor to get normalized intensities.
+central tendency the mean of all the central tendencies and back-transforming
+(exponentiating) the difference, i.e. the scaling factor of a sample is its
+central tendency divided by the geometric mean of the central tendencies of
+all samples.  The raw intensities are then divided by the scaling factor to
+get normalized intensities, so that all samples end up with the same central
+tendency. Missing values are ignored when computing the central tendencies.
+The intensities should be raw (not log transformed) and the central tendency
+of every sample must be greater than zero.
 
 The intensities can also be normalized based on the peptide intensities of
 a selected protein. For this the argument "ProteinId" allows you to define

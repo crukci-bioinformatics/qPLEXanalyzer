@@ -17,10 +17,12 @@ checkArg_mergeSites <- function(MSnSetObj,
 #' especially useful for data based on enrichment of specific peptide modification.
 #' 
 #' Rows of the intensity matrix with identical sites on same protein are merged by
-#' summarising the intensities using \code{summarizationFunction}. The merging will only take
-#' place if "Sites" and "Type" column are present in the fData(MSnSetObj). Sites contains the 
+#' summarising the intensities using \code{summarizationFunction}. fData(MSnSetObj) must
+#' contain "Sites" and "Type" columns, otherwise an error is raised. Sites contains the
 #' information of modified site position within the protein sequence and Type tells us about
-#' whether the modification is single (1xPhospho/Acetyl) or multi (2xPhospho/Acetyl).
+#' whether the modification is single (1xPhospho/Acetyl) or multi (2xPhospho/Acetyl). None of
+#' the datasets provided with the package contains these columns, so the example below is not
+#' run.
 #' 
 #' Columns specified with \code{keepCols} are retained in the final output.
 #' Non-unique entries in different rows are concatenated with ';'.

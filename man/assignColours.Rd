@@ -13,7 +13,11 @@ assignColours(MSnSetObj, colourBy = "SampleGroup")
 coloring samples}
 }
 \value{
-A character vector of colors for samples.
+A named character vector with one colour per unique value of the
+\code{colourBy} column (not one per sample). The names are the values of
+the column, sorted alphabetically as character strings. Colours are taken
+from the RColorBrewer "Dark2" palette, interpolated when there are more
+than 8 values.
 }
 \description{
 Assigns colours to samples in groups for plotting

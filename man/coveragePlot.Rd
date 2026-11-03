@@ -28,6 +28,15 @@ In the qPLEX-RIME experiment it is imperative for bait protein to have good
 sequence coverage.  This function plots the protein sequence coverage of the
 bait protein in the qPLEX-RIME experiment. It requires the fasta sequence
 file of bait protein as input to generate the plot.
+
+The peptides are taken from the "Sequences" column of fData(MSnSetObj) for
+the rows whose Accessions match \code{ProteinID}. Flanking residues written
+as a single residue in square brackets (e.g. "[K].PEPTIDE.[R]") are removed
+before the peptides are matched exactly to the protein sequence; peptides
+that are not found in the sequence are ignored without a message. The
+"Number of Unique Peptides" shown in the subtitle is the number of distinct
+matched positions (start and end) in the sequence. The fasta file should
+contain a single protein sequence.
 }
 \examples{
 

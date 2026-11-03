@@ -11,9 +11,10 @@ regressIntensity(MSnSetObj, ProteinId, controlInd = NULL, plot = TRUE)
 
 \item{ProteinId}{character; Uniprot protein ID}
 
-\item{controlInd}{numeric; index of IgG within MSnSet}
+\item{controlInd}{numeric; column indices of the control samples (e.g. IgG)
+to exclude from the regression and from the returned object}
 
-\item{plot}{character; Whether or not to plot the QC histograms}
+\item{plot}{logical; Whether or not to plot the QC histograms}
 }
 \value{
 An object of class \code{MSnSet} (see \code{\link{MSnSet-class}}).
@@ -34,6 +35,12 @@ linear regression. It sets the target protein levels as the independent
 variable (x) and each of the other proteins as the dependent variable (y).
 The resulting residuals of the linear regressions y=ax+b are the protein
 levels corrected for target protein dependency.
+
+The returned intensities are these residuals: they are centred around zero
+for each protein, and the row of the target protein itself becomes zero in
+every sample. The samples given in \code{controlInd} are removed from the
+returned object, and the regression is performed on the intensities as
+given (no transformation is applied).
 }
 \examples{
 

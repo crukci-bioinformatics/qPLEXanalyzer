@@ -80,8 +80,11 @@ checkArg_IRSnorm <- function(MSnSetObj, IRSname, groupingColumn){
 #' tokeep <- complete.cases(fData(MSnset_comb))
 #' MSnset_comb <- MSnset_comb[tokeep,]
 #' sampleNames(MSnset_comb) <- pData(MSnset_comb)$SampleName
-#' fData(MSnset_comb) <- fData(MSnset_comb)[,c(2,3,6)]
-#' colnames(fData(MSnset_comb)) <- c("Sequences", "Modifications", "Accessions")
+#' # combine() keeps one copy of each annotation column per set (suffixed with
+#' # the set name); keep the annotation columns of the first set
+#' fData(MSnset_comb) <- fData(MSnset_comb)[, 1:4]
+#' colnames(fData(MSnset_comb)) <- c("Accessions", "Gene", "Description",
+#'                                   "GeneSymbol")
 #' MSnset_comb_corr <- IRSnorm(MSnset_comb, IRSname="Ref", groupingColumn="Run")
 #'
 #' @import MSnbase

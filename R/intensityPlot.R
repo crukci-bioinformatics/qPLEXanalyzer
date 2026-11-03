@@ -41,9 +41,16 @@ checkArg_intensityPlot <- function(MSnSetObj,
 #' @param title character: title for the plot
 #' @param colourBy character: column name from pData(MSnSetObj) to use for
 #' coloring samples
-#' @param transform logical: whether to log transform intensities
-#' @param xlab character: label for x-axis
-#' @param trFunc func: internal helper function for log transformation
+#' @param transform logical: whether to transform the intensities with
+#' \code{trFunc}
+#' @param xlab character: label for x-axis. The default label
+#' "log2(intensity)" is not changed automatically when \code{transform = FALSE}
+#' or a different \code{trFunc} is used, so a suitable label should then be
+#' supplied.
+#' @param trFunc function: transformation applied to the intensities when
+#' \code{transform = TRUE}. The default is \code{log2(x + 1e-10)}, which turns
+#' zero intensities into about -33. Missing values are removed before
+#' plotting.
 #' @return An object created by \code{ggplot}
 #' @examples
 #' 

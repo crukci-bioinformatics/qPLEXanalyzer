@@ -42,10 +42,17 @@ checkArg_pcaPlot <- function(MSnSetObj,
 #' vector should match the unique values in the "colourBy" column.
 #'
 #' @param MSnSetObj MSnSet; an object of class MSnSet
-#' @param omitIgG Logical: whether to remove IgG from the PCA plot
+#' @param omitIgG Logical: whether to remove IgG from the PCA plot. Samples
+#' are removed if their SampleGroup is "IgG" (in any letter case); other names
+#' for the control group are not recognised.
 #' @param sampleColours character: A named vector of colours for samples
-#' @param transFunc func: internal helper function for log transformation
-#' @param transform logical: whether to log transform intensities
+#' @param transFunc function: transformation applied to the intensities when
+#' \code{transform = TRUE}. The default is \code{log2(x + 1e-10)}, which turns
+#' zero intensities into about -33.
+#' @param transform logical: whether to transform the intensities with
+#' \code{transFunc}. Features with missing values are removed before the PCA,
+#' and the PCA is computed with \code{\link[stats]{prcomp}} on the centred,
+#' unscaled data.
 #' @param colourBy character: column name to use for colouring samples from
 #'   \code{pData(MSnSetObj)}
 #' @param title character: title for the plot
@@ -55,9 +62,10 @@ checkArg_pcaPlot <- function(MSnSetObj,
 #' @param pointsize numeric: size of plotting points
 #' @param x.nudge numeric: distance to move labels along the x-axis away from
 #'   the plotting points
-#' @param x.PC numeric: The principle component to plot on the x-axis; the
+#' @param x.PC numeric: The principal component to plot on the x-axis; the
 #'   following PC will be plotted on the y-axis
-#' @return An object created by \code{ggplot}
+#' @return An object created by \code{ggplot}, or \code{NULL} if no feature
+#' without missing values remains.
 #' @examples
 #'
 #' data(human_anno)

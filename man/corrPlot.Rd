@@ -38,6 +38,12 @@ An object created by \code{ggplot}
 \description{
 Computes and display correlation plot for samples within MSnSet
 }
+\details{
+Pearson correlations between samples are computed on the intensities as
+given (no transformation is applied). The intensities must not contain
+missing values. Correlations outside \code{low_cor_limit} and
+\code{high_cor_limit} are coloured as the nearest limit, with a warning.
+}
 \examples{
 
 data(human_anno)

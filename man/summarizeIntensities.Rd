@@ -21,6 +21,17 @@ An object of class \code{MSnSet} (see \code{\link{MSnSet-class}})
 \description{
 Summarizes multiple peptides intensities measurements to protein level.
 }
+\details{
+The peptide intensities of each protein (grouped by the "Accessions" column
+of fData(MSnSetObj)) are combined in each sample with
+\code{summarizationFunction}. Missing values are passed to this function as
+they are: with \code{sum}, \code{mean} or \code{median} a protein gets a
+missing value in a sample if any of its peptides is missing in that sample.
+The resulting feature data contain the annotation columns and a "Count"
+column giving the number of distinct peptide sequences (values of the
+"Sequences" column) of each protein. Proteins whose Accession is not found
+in the annotation are kept, with missing annotation.
+}
 \examples{
 
 data(human_anno)

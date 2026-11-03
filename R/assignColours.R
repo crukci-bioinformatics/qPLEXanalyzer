@@ -13,7 +13,11 @@ checkArg_assignColours <- function(MSnSetObj, colourBy){
 #' @param MSnSetObj MSnSet; an object of class MSnSet
 #' @param colourBy character: column name from pData(MSnSetObj) to use for
 #' coloring samples
-#' @return A character vector of colors for samples.
+#' @return A named character vector with one colour per unique value of the
+#' \code{colourBy} column (not one per sample). The names are the values of
+#' the column, sorted alphabetically as character strings. Colours are taken
+#' from the RColorBrewer "Dark2" palette, interpolated when there are more
+#' than 8 values.
 #' @examples
 #' 
 #' data(human_anno)

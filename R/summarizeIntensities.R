@@ -14,19 +14,29 @@ checkArg_summarizeIntensities <- function(MSnSetObj,
 # Summarizes multiple peptide measurements for a protein.
 # Assumes that there are columns for each of the samples specified and uses
 # Accessions column for grouping peptide-level measurements.
-# Filters any rows with missing values.
+# Missing values are not filtered: they are passed to the summarization
+# function as they are.
 # Typical summarization functions are sum, mean and median.
-# For successful running of this function the annotation file must have at least
-# two columns: "Accessions" and "GeneSymbol"
+# The annotation must have the columns "Accessions", "Gene", "Description" and
+# "GeneSymbol".
 # The MSnSetObj must have column "Sequences" denoting its a peptide dataset
 
 
 
 #' Summarizes peptides intensities to proteins
-#' 
+#'
 #' Summarizes multiple peptides intensities measurements to protein level.
-#' 
-#' 
+#'
+#' The peptide intensities of each protein (grouped by the "Accessions" column
+#' of fData(MSnSetObj)) are combined in each sample with
+#' \code{summarizationFunction}. Missing values are passed to this function as
+#' they are: with \code{sum}, \code{mean} or \code{median} a protein gets a
+#' missing value in a sample if any of its peptides is missing in that sample.
+#' The resulting feature data contain the annotation columns and a "Count"
+#' column giving the number of distinct peptide sequences (values of the
+#' "Sequences" column) of each protein. Proteins whose Accession is not found
+#' in the annotation are kept, with missing annotation.
+#'
 #' @param MSnSetObj MSnSet; an object of class MSnSet
 #' @param summarizationFunction function; method used to aggregate the peptides
 #' into proteins. Sum, mean or median

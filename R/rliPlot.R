@@ -20,8 +20,11 @@ checkArg_rliPlot <- function(MSnSetObj,
 #' a data set. It is similar to the relative log expression plot developed for
 #' microarray analysis - see Gandolfo and Speed (2018).  Rather than examining
 #' gene expression, the RLI plot uses the MS intensities for each peptide or
-#' the summarised protein intensities.
-#' 
+#' the summarised protein intensities. Intensities are log2 transformed and
+#' values that are not finite (zeros and missing values) are removed; the RLI
+#' of a feature in a sample is its log2 intensity minus the median log2
+#' intensity of that feature across the samples.
+#'
 #' The column provided to the \code{colourBy} argument will be used to colour
 #' the samples. The colours will be determined using the function
 #' \code{\link{assignColours}}, alternatively the user may specify a named
@@ -34,7 +37,10 @@ checkArg_rliPlot <- function(MSnSetObj,
 #' @param sampleColours character: a named vector of colours for samples
 #' @param colourBy character: column name to use for colouring samples from
 #' pData(MSnSetObj)
-#' @param omitIgG logical: whether to remove IgG from the RLI plot
+#' @param omitIgG logical: whether to remove IgG from the RLI plot. Samples are
+#' removed if their SampleGroup is "IgG" (in any letter case); other names for
+#' the control group are not recognised. Note that the default (TRUE) differs
+#' from that of \code{\link{pcaPlot}} (FALSE).
 #' @return An object created by \code{ggplot}
 #' @references Gandolfo LC, Speed TP (2018) RLE plots: Visualizing unwanted
 #' variation in high dimensional data. PLoS ONE 13(2): e0191629.

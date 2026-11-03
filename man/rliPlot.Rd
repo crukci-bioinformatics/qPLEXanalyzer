@@ -22,7 +22,10 @@ rliPlot(
 \item{colourBy}{character: column name to use for colouring samples from
 pData(MSnSetObj)}
 
-\item{omitIgG}{logical: whether to remove IgG from the RLI plot}
+\item{omitIgG}{logical: whether to remove IgG from the RLI plot. Samples are
+removed if their SampleGroup is "IgG" (in any letter case); other names for
+the control group are not recognised. Note that the default (TRUE) differs
+from that of \code{\link{pcaPlot}} (FALSE).}
 }
 \value{
 An object created by \code{ggplot}
@@ -35,7 +38,10 @@ An RLI-plot is a boxplot that can be used to visualise unwanted variation in
 a data set. It is similar to the relative log expression plot developed for
 microarray analysis - see Gandolfo and Speed (2018).  Rather than examining
 gene expression, the RLI plot uses the MS intensities for each peptide or
-the summarised protein intensities.
+the summarised protein intensities. Intensities are log2 transformed and
+values that are not finite (zeros and missing values) are removed; the RLI
+of a feature in a sample is its log2 intensity minus the median log2
+intensity of that feature across the samples.
 
 The column provided to the \code{colourBy} argument will be used to colour
 the samples. The colours will be determined using the function

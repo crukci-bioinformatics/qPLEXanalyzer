@@ -26,14 +26,18 @@ statistics results}
 
 \item{controlGroup}{character; control group such as IgG}
 
-\item{selectedGenes}{character: a vector defining genes to plot}
+\item{selectedGenes}{character: a vector of Accessions to highlight and
+label}
 
-\item{fdrCutOff}{numeric: False Discovery Rate (adj.P.Val) cut off}
+\item{fdrCutOff}{numeric: False Discovery Rate (adj.P.Val) cut off for
+significance}
 
-\item{lfcCutOff}{numeric: Log Fold Change (log2FC) cutoff for}
+\item{lfcCutOff}{numeric: cutoff on the absolute log2 fold change (log2FC)
+for significance}
 
-\item{controlLfcCutOff}{numeric: only plot genes above controlLogFoldChange
-cutoff}
+\item{controlLfcCutOff}{numeric: used only when \code{controlGroup} is
+given; cutoff on the absolute \code{controlLogFoldChange} for significance.
+It does not remove any proteins from the plot.}
 
 \item{plotType}{character: which type of plot to generate: "MA" or "Volcano"}
 }
@@ -44,14 +48,18 @@ An object created by \code{ggplot}
 MA or Volcano plot of differential statistics results
 }
 \details{
-Genes determined as significant according to the Log Fold Change and False
-Discovery Rate cutoffs are highlighted in red.
+All proteins are plotted. Proteins with \code{adj.P.Val <= fdrCutOff} and
+\code{abs(log2FC) >= lfcCutOff} are highlighted as significant in red. If
+\code{controlGroup} is given, a protein must in addition have
+\code{abs(controlLogFoldChange) >= controlLfcCutOff} to be highlighted (see
+\code{\link{getContrastResults}}). The values are taken from the output of
+\code{\link{getContrastResults}}, i.e. after its rounding.
 
 A user specified selection of genes can be highlighted by passing a character
 vector of Accessions to the \code{selectedGenes} argument. The contents of
 this vector will be matched with the Accessions column of the
 \code{diffstats} object to identify rows to highlight. These will be plotted
-in blue and labeled with the contents of the \code{GeneSymbol} column. Note
+in cyan and labeled with the contents of the \code{GeneSymbol} column. Note
 that if the \code{GeneSymbol} for a selected gene is missing, no label will
 be apparent.
 }

@@ -90,16 +90,22 @@ NULL
 #' Data processing, normalization & analysis: 
 #' \itemize{ 
 #' \item \code{convertToMSnset}: Converts quantitative data to a MSnSet 
-#' \item \code{summarizeIntensities}: Summarizes multiple peptide measurements 
-#' for a protein 
+#' \item \code{summarizeIntensities}: Summarizes multiple peptide measurements
+#' for a protein
+#' \item \code{mergePeptides}: Merges identical peptide sequences of the same
+#' protein into a single peptide intensity
+#' \item \code{mergeSites}: Merges identical modification sites of the same
+#' protein into a single site intensity
 #' \item \code{normalizeQuantiles}: Performs quantile normalization on the
-#' peptides/proteins intensities 
+#' peptides/proteins intensities
 #' \item \code{normalizeScaling}: Performs scaling normalization on the
-#' peptides/proteins intensities (mean, median or sum) 
+#' peptides/proteins intensities (mean or median)
 #' \item \code{groupScaling}: Performs scaling normalization on the 
 #' peptides/proteins intensities within group (median or mean) 
 #' \item \code{rowScaling}: Normalization by scaling peptide/protein intensity
-#' across all samples 
+#' across all samples
+#' \item \code{IRSnorm}: Batch correction of multiple TMT runs using an
+#' Internal Reference Scale sample measured in each run
 #' \item \code{regressIntensity}: Performs linear regression on protein 
 #' intensities based on selected protein 
 #' \item \code{coefVar}: Calculating the coefficient of variation by utilizing 
@@ -114,6 +120,7 @@ NULL
 #' \item \code{assignColours}: Assigns colours to samples in groups 
 #' \item \code{corrPlot}: Correlation plot of all the samples 
 #' \item \code{coveragePlot}: Computes and display protein sequence coverage of
+#' selected protein in proteomics experiment
 #' \item \code{hierarchicalPlot}: Hierarchical clustering plot of all the 
 #' samples 
 #' \item \code{intensityBoxplot}: Intensity distribution boxplot of all the 
@@ -125,8 +132,7 @@ NULL
 #' specific protein 
 #' \item \code{plotMeanVar}: Computes and plots mean-variance for samples in 
 #' MSnSet 
-#' \item \code{rliPlot}: Relative intensity plot of all the samples 
-#' selected protein in proteomics experiment 
+#' \item \code{rliPlot}: Relative log intensity plot of all the samples
 #' }
 #' 
 #' @name qPLEXanalyzer-package
