@@ -1,3 +1,8 @@
+VERSION 1.31.1
+------------------------
+o Fix computeDiffStats: pass the TechRep block to lmFit so the duplicateCorrelation
+  consensus correlation is used (previously it was silently ignored)
+o Document TechRep usage in computeDiffStats and convertToMSnset
 VERSION 1.29.3
 ------------------------
 o Update maVolPlot man page

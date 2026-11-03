@@ -47,7 +47,14 @@ This function builds an object of class MSnSet from a dataframe consisting
 of quantitative proteomics intensities data and a meta-data describing the
 samples information. This function creates an MSnSet object from the
 intensities and metadata file.  The metadata must contain "SampleName",
-"SampleGroup", "BioRep" and "TechRep" columns. The function can be used for
+"SampleGroup", "BioRep" and "TechRep" columns. "TechRep" should be NA for
+all samples when there are no repeated measurements of the same
+biological unit (e.g. technical replicates, or several experiments on the
+same cell line). Otherwise, all samples from the same unit should share
+one value that is unique across groups (e.g. "CellLine_1", "CellLine_2"), and
+each sample without repeated measurements should have its own unique
+value; it is used as the blocking variable in
+\code{\link{computeDiffStats}}. The function can be used for
 either peptide intensities or data that has already been summarized to
 protein level. The type argument should be set to 'protein' for the latter.
 }

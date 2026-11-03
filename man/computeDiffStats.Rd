@@ -54,6 +54,27 @@ In order to correct for batch effect, variable(s) can be defined. It should
 corresponds to a column name in pData(MSnSetObj). The default variable is
 "SampleGroup" that distinguish between two groups.  If more variables are
 defined they are added to default.
+
+Repeated measurements of the same biological unit, such as technical
+replicates of a sample or several experiments performed on the same cell
+line, are accounted for through the "TechRep" column of pData(MSnSetObj).
+If this column contains any non-NA values, the correlation between
+measurements of the same unit is estimated with
+\code{\link[limma]{duplicateCorrelation}} using "TechRep" as the blocking
+variable, and the linear model is then fitted with
+\code{\link[limma]{lmFit}} using the same block and the consensus
+correlation. Samples sharing a "TechRep" value are treated as correlated
+measurements of one biological unit, so all such samples must have the
+same value, and values must be unique across groups. For example, with two
+cell lines per group and four experiments per cell line, label the samples
+by cell line (e.g. "Control_1", "Control_2", "POLG_1", "POLG_2") rather
+than by a replicate or cell line number that repeats across groups
+(e.g. 1, 2). In this case every sample must have a value: a sample without
+repeated measurements should be given its own unique value. If all
+"TechRep" values are NA, the linear model is fitted without blocking.
+A variable nested within "SampleGroup", such as cell line in the example
+above, should not be given in \code{batchEffect}, because its effects
+cannot be estimated separately from the groups.
 }
 \examples{
 
