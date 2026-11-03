@@ -18,6 +18,31 @@ log2xplus1 <- function(x) {
     log2(x + 1e-10)
 }
 
+# Rewrite user contrasts so that they refer to the design matrix column names.
+# `levelNames` are the design column names before spaces are replaced by "_".
+# - Group names containing spaces are replaced by their "_" version (longest
+#   names first, so a name contained in a longer one is not split).
+# - A contrast that is exactly "<level>_vs_<level>" is read as
+#   "<level> - <level>", unless the whole string is itself a level name.
+# Everything else in the contrast is left untouched, so contrasts with
+# brackets, several terms or group names containing "_vs_" are kept as given.
+formatContrasts <- function(contrasts, levelNames) {
+    levelsFixed <- gsub(" ", "_", levelNames)
+    spaced <- levelNames[grepl(" ", levelNames)]
+    spaced <- spaced[order(nchar(spaced), decreasing = TRUE)]
+    for (lev in spaced) {
+        contrasts <- gsub(lev, gsub(" ", "_", lev), contrasts, fixed = TRUE)
+    }
+    for (i in seq_along(contrasts)) {
+        parts <- trimws(strsplit(contrasts[i], "_vs_", fixed = TRUE)[[1]])
+        if (!contrasts[i] %in% levelsFixed &&
+            length(parts) == 2 && all(parts %in% levelsFixed)) {
+            contrasts[i] <- paste(parts, collapse = " - ")
+        }
+    }
+    contrasts
+}
+
 #' Compute differential statistics
 #' 
 #' Compute differential statistics on the given contrasts, based on
@@ -27,15 +52,16 @@ log2xplus1 <- function(x) {
 #' bound proteins is carried out using limma based analysis. It uses linear
 #' models to assess differential expression in the context of multifactor
 #' designed experiments.  Firstly, a linear model is fitted for each protein
-#' where the model includes variables for each group and MS run. Then, log2
-#' fold changes between comparisions are estimated. Multiple testing correction
-#' of p-values are applied using the Benjamini-Hochberg method to control the
+#' where the model includes a variable for each sample group ("SampleGroup")
+#' plus any additional variables given in \code{batchEffect}. Then, log2 fold
+#' changes between comparisons are estimated. Multiple testing correction of
+#' p-values are applied using the Benjamini-Hochberg method to control the
 #' false discovery rate (FDR).
-#' 
-#' In order to correct for batch effect, variable(s) can be defined. It should
-#' corresponds to a column name in pData(MSnSetObj). The default variable is
-#' "SampleGroup" that distinguish between two groups.  If more variables are
-#' defined they are added to default.
+#'
+#' In order to correct for batch effects (e.g. MS run), additional variable(s)
+#' can be given in \code{batchEffect}. Each must correspond to a column name in
+#' pData(MSnSetObj). "SampleGroup" is always included in the model; the
+#' variables in \code{batchEffect} are added to it.
 #'
 #' Repeated measurements of the same biological unit, such as technical
 #' replicates of a sample or several experiments performed on the same cell
@@ -46,26 +72,45 @@ log2xplus1 <- function(x) {
 #' variable, and the linear model is then fitted with
 #' \code{\link[limma]{lmFit}} using the same block and the consensus
 #' correlation. Samples sharing a "TechRep" value are treated as correlated
-#' measurements of one biological unit, so all such samples must have the
-#' same value, and values must be unique across groups. For example, with two
-#' cell lines per group and four experiments per cell line, label the samples
-#' by cell line (e.g. "Control_1", "Control_2", "POLG_1", "POLG_2") rather
-#' than by a replicate or cell line number that repeats across groups
-#' (e.g. 1, 2). In this case every sample must have a value: a sample without
-#' repeated measurements should be given its own unique value. If all
-#' "TechRep" values are NA, the linear model is fitted without blocking.
+#' measurements of one biological unit, so all measurements of the same unit
+#' must have the same value, and different units must have different values.
+#' A unit may be measured in more than one group (for example the same subject
+#' measured under two conditions, as in the "Multi-level experiments" section
+#' of the limma User's Guide); what must be avoided is reusing a replicate or
+#' cell line number for different units. For example, with two cell lines per
+#' group, four experiments per cell line and each cell line belonging to one
+#' group only, label the samples by cell line (e.g. "Control_1", "Control_2",
+#' "POLG_1", "POLG_2") rather than by a cell line number that repeats across
+#' groups (e.g. 1, 2). If "TechRep" is used, every sample must have a value: a
+#' sample without repeated measurements should be given its own unique value.
+#' If all "TechRep" values are NA, the linear model is fitted without blocking.
 #' A variable nested within "SampleGroup", such as cell line in the example
 #' above, should not be given in \code{batchEffect}, because its effects
 #' cannot be estimated separately from the groups.
 #'
 #' @param MSnSetObj MSnSet; An object of class MSnSet
 #' @param batchEffect character; vector of variable(s) to correct for batch
-#' effect, Default : "SampleGroup"
-#' @param transform logical; apply log2 transformation to the raw intensitites
+#' effect, Default : "SampleGroup". All variables in the model, including
+#' "SampleGroup", are treated as categorical: numeric or logical columns
+#' (e.g. a run number stored as an integer) are converted to factors.
+#' @param transform logical; apply log2 transformation to the raw intensities
+#' before fitting. The transformation is \code{log2(x + 1e-10)}, so zero
+#' intensities become about -33; set to FALSE if the intensities are already
+#' on a log scale.
 #' @param contrasts character; named character vector of contrasts for
-#' differential statistics
-#' @param trend logical; TRUE or FALSE
-#' @param robust logical; TRUE or FALSE
+#' differential statistics, written in terms of the SampleGroup names
+#' (e.g. "tam.24h - vehicle"). Group names containing spaces can be written
+#' as they are or with the spaces replaced by "_". A contrast written as
+#' "groupA_vs_groupB", where both are existing group names, is read as
+#' "groupA - groupB". Any other expression accepted by
+#' \code{\link[limma]{makeContrasts}} can be used, e.g.
+#' "(A - B) - (C - D)".
+#' @param trend logical; passed to \code{\link[limma]{eBayes}}: should an
+#' intensity-dependent trend be allowed for the prior variance? If FALSE the
+#' prior variance is constant.
+#' @param robust logical; passed to \code{\link[limma]{eBayes}}: should the
+#' estimation of the prior degrees of freedom and prior variance be
+#' robustified against outlier sample variances?
 #' @return A list object containing three components: MSnSetObj of class
 #' \code{MSnSet} (see \code{\link{MSnSet-class}}) object), fittedLM (fitted
 #' linear model) and fittedContrasts. This object should be input into
@@ -90,7 +135,6 @@ log2xplus1 <- function(x) {
 #'
 #' @import limma
 #' @importFrom Biobase exprs pData
-#' @importFrom magrittr %>%
 #' @importFrom stats as.formula model.matrix
 #' 
 #' @export computeDiffStats
@@ -106,10 +150,21 @@ computeDiffStats <- function(MSnSetObj, batchEffect = NULL, transform = TRUE,
     }
     batchEffect <- unique(c("SampleGroup", batchEffect))
     model <- as.formula(paste(c("~0", batchEffect), collapse = " + "))
-    design <- model.matrix(model, data = pData(MSnSetObj))
-    colnames(design) <- colnames(design) %>%
-        sub(pattern = "^SampleGroup", replacement = "") %>%
-        gsub(pattern = " ", replacement = "_")
+    # model variables are categorical: numeric or logical columns (e.g. BioRep
+    # or Run stored as integers) would otherwise be fitted as a single slope
+    modelData <- pData(MSnSetObj)
+    numericVars <- batchEffect[vapply(modelData[batchEffect], function(x) {
+        is.numeric(x) || is.logical(x)
+    }, logical(1))]
+    if (length(numericVars) > 0) {
+        message("Treating numeric column(s) ",
+                paste(numericVars, collapse = ", "),
+                " as categorical (factor) in the linear model")
+        modelData[numericVars] <- lapply(modelData[numericVars], factor)
+    }
+    design <- model.matrix(model, data = modelData)
+    levelNames <- sub("^SampleGroup", "", colnames(design))
+    colnames(design) <- gsub(" ", "_", levelNames)
     if (length(which(is.na(pData(MSnSetObj)$TechRep) == FALSE)) > 0) {
         techRepBlock <- pData(MSnSetObj)$TechRep
         dupcor <- duplicateCorrelation(intensities,
@@ -126,11 +181,8 @@ computeDiffStats <- function(MSnSetObj, batchEffect = NULL, transform = TRUE,
     
     message("Fitting contrasts\n")
     
-    contrasts <- contrasts %>%
-        gsub(pattern = " ", replacement = "_") %>%
-        sub(pattern = "_-_", replacement = " - ") %>%
-        sub(pattern = "_vs_", replacement = " - ")
-    
+    contrasts <- formatContrasts(contrasts, levelNames)
+
     contrasts <- makeContrasts(contrasts = contrasts, levels = fit$design)
     contrastsfit <- contrasts.fit(fit, contrasts)
     

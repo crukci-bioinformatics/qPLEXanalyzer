@@ -17,16 +17,31 @@ computeDiffStats(
 \item{MSnSetObj}{MSnSet; An object of class MSnSet}
 
 \item{batchEffect}{character; vector of variable(s) to correct for batch
-effect, Default : "SampleGroup"}
+effect, Default : "SampleGroup". All variables in the model, including
+"SampleGroup", are treated as categorical: numeric or logical columns
+(e.g. a run number stored as an integer) are converted to factors.}
 
-\item{transform}{logical; apply log2 transformation to the raw intensitites}
+\item{transform}{logical; apply log2 transformation to the raw intensities
+before fitting. The transformation is \code{log2(x + 1e-10)}, so zero
+intensities become about -33; set to FALSE if the intensities are already
+on a log scale.}
 
 \item{contrasts}{character; named character vector of contrasts for
-differential statistics}
+differential statistics, written in terms of the SampleGroup names
+(e.g. "tam.24h - vehicle"). Group names containing spaces can be written
+as they are or with the spaces replaced by "_". A contrast written as
+"groupA_vs_groupB", where both are existing group names, is read as
+"groupA - groupB". Any other expression accepted by
+\code{\link[limma]{makeContrasts}} can be used, e.g.
+"(A - B) - (C - D)".}
 
-\item{trend}{logical; TRUE or FALSE}
+\item{trend}{logical; passed to \code{\link[limma]{eBayes}}: should an
+intensity-dependent trend be allowed for the prior variance? If FALSE the
+prior variance is constant.}
 
-\item{robust}{logical; TRUE or FALSE}
+\item{robust}{logical; passed to \code{\link[limma]{eBayes}}: should the
+estimation of the prior degrees of freedom and prior variance be
+robustified against outlier sample variances?}
 }
 \value{
 A list object containing three components: MSnSetObj of class
@@ -45,15 +60,16 @@ A statistical analysis for the identification of differentially regulated or
 bound proteins is carried out using limma based analysis. It uses linear
 models to assess differential expression in the context of multifactor
 designed experiments.  Firstly, a linear model is fitted for each protein
-where the model includes variables for each group and MS run. Then, log2
-fold changes between comparisions are estimated. Multiple testing correction
-of p-values are applied using the Benjamini-Hochberg method to control the
+where the model includes a variable for each sample group ("SampleGroup")
+plus any additional variables given in \code{batchEffect}. Then, log2 fold
+changes between comparisons are estimated. Multiple testing correction of
+p-values are applied using the Benjamini-Hochberg method to control the
 false discovery rate (FDR).
 
-In order to correct for batch effect, variable(s) can be defined. It should
-corresponds to a column name in pData(MSnSetObj). The default variable is
-"SampleGroup" that distinguish between two groups.  If more variables are
-defined they are added to default.
+In order to correct for batch effects (e.g. MS run), additional variable(s)
+can be given in \code{batchEffect}. Each must correspond to a column name in
+pData(MSnSetObj). "SampleGroup" is always included in the model; the
+variables in \code{batchEffect} are added to it.
 
 Repeated measurements of the same biological unit, such as technical
 replicates of a sample or several experiments performed on the same cell
@@ -64,14 +80,18 @@ measurements of the same unit is estimated with
 variable, and the linear model is then fitted with
 \code{\link[limma]{lmFit}} using the same block and the consensus
 correlation. Samples sharing a "TechRep" value are treated as correlated
-measurements of one biological unit, so all such samples must have the
-same value, and values must be unique across groups. For example, with two
-cell lines per group and four experiments per cell line, label the samples
-by cell line (e.g. "Control_1", "Control_2", "POLG_1", "POLG_2") rather
-than by a replicate or cell line number that repeats across groups
-(e.g. 1, 2). In this case every sample must have a value: a sample without
-repeated measurements should be given its own unique value. If all
-"TechRep" values are NA, the linear model is fitted without blocking.
+measurements of one biological unit, so all measurements of the same unit
+must have the same value, and different units must have different values.
+A unit may be measured in more than one group (for example the same subject
+measured under two conditions, as in the "Multi-level experiments" section
+of the limma User's Guide); what must be avoided is reusing a replicate or
+cell line number for different units. For example, with two cell lines per
+group, four experiments per cell line and each cell line belonging to one
+group only, label the samples by cell line (e.g. "Control_1", "Control_2",
+"POLG_1", "POLG_2") rather than by a cell line number that repeats across
+groups (e.g. 1, 2). If "TechRep" is used, every sample must have a value: a
+sample without repeated measurements should be given its own unique value.
+If all "TechRep" values are NA, the linear model is fitted without blocking.
 A variable nested within "SampleGroup", such as cell line in the example
 above, should not be given in \code{batchEffect}, because its effects
 cannot be estimated separately from the groups.
