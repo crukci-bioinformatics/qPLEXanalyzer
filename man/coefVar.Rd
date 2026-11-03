@@ -2,7 +2,7 @@
 % Please edit documentation in R/coefVar.R
 \name{coefVar}
 \alias{coefVar}
-\title{Calculating the coefficient of variation by utilizing expression data within individual sample groups.}
+\title{Calculating the coefficient of variation by utilizing expression data within individual sample groups}
 \usage{
 coefVar(MSnSetObj)
 }
@@ -10,16 +10,27 @@ coefVar(MSnSetObj)
 \item{MSnSetObj}{MSnSet; an object of class MSnSet}
 }
 \value{
-An object of class \code{list} consisting of object of class \code{ggplot})
+A \code{list} of two objects of class \code{ggplot}: \code{boxpl},
+boxplots of the CVs of each sample group, and \code{cumulpl}, the cumulative
+fraction plot.
 }
 \description{
 Calculating the coefficient of variation by utilizing peptide/protein expression data within individual sample groups.
 }
 \details{
-In this approach, we calculate distributions of the coefficient of variation (CV) 
-for the dataset. The CVs are determined based on peptides or proteins intensities 
-within each sample group, and the results are visualized through boxplots and 
+In this approach, we calculate distributions of the coefficient of variation (CV)
+for the dataset. The CVs are determined based on peptides or proteins intensities
+within each sample group, and the results are visualized through boxplots and
 cumulative fraction plots for each sample group.
+
+The samples are grouped by the "SampleGroup" column of pData(MSnSetObj). For
+each feature and group the CV is computed as 100 * standard deviation / mean
+of the intensities as given (no transformation is applied, so raw intensities
+should be used). The cumulative fraction plot shows, for each group, the
+proportion of features with a CV less than or equal to the value on the
+x-axis. CVs that cannot be computed (e.g. features with missing values, or
+with a mean of zero) are excluded from the cumulative fraction plot, with a
+message giving their number.
 }
 \examples{
 
@@ -30,6 +41,8 @@ MSnSet_data <- convertToMSnset(exp3_OHT_ESR1$intensities_qPLEX1,
                                indExpData=c(7:16), 
                                Sequences=2, 
                                Accessions=6)
-exprs(MSnSet_data) <- exprs(MSnSet_data)+1.1                                 
-res <- coefVar(MSnSet_data)                             
+# the IgG samples contain zero intensities, which give a mean of zero (and an
+# undefined CV) for some peptides; a constant is added to avoid this
+exprs(MSnSet_data) <- exprs(MSnSet_data)+1.1
+res <- coefVar(MSnSet_data)
 }
