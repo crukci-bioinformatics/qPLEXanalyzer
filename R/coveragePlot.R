@@ -51,7 +51,6 @@ checkArg_coveragePlot <- function(MSnSetObj,
 #' @importFrom Biostrings readAAStringSet vmatchPattern
 #' @importFrom dplyr distinct filter select pull
 #' @importFrom IRanges IRanges reduce start end width 
-#' @importFrom magrittr %>%
 #' @importFrom purrr list_rbind map
 #' @importFrom stringr str_c str_replace_all
 #'
@@ -67,25 +66,24 @@ coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile,
     ## extract peptide sequence from MsnSet object and match peptide sequence 
     ## with protein sequence and store co-ordinates
     getPosition <- function(peptideSeq, ProteinSeq=Protein_seq) {
-        vmatchPattern(peptideSeq, ProteinSeq) %>%
-            as.data.frame() %>%
-            select(start, end) %>%
-            return()
+        vmatchPattern(peptideSeq, ProteinSeq) |>
+            as.data.frame() |>
+            select(start, end)
     }
     
-    features <- fData(MSnSetObj) %>%
-        filter(Accessions == ProteinID) %>%
-        pull(Sequences) %>%
-        str_replace_all("^\\[.\\]\\.([A-Z]+)\\.\\[.\\]$", "\\1") %>%
-        map(getPosition) %>%
-        list_rbind() %>%
+    features <- fData(MSnSetObj) |>
+        filter(Accessions == ProteinID) |>
+        pull(Sequences) |>
+        str_replace_all("^\\[.\\]\\.([A-Z]+)\\.\\[.\\]$", "\\1") |>
+        map(getPosition) |>
+        list_rbind() |>
         distinct()
     
     # get percent coverage
     protWidth <- IRanges::width(Protein_seq)
-    coverage <- IRanges(features$start, features$end) %>%
-        IRanges::reduce() %>%
-        IRanges::width() %>%
+    coverage <- IRanges(features$start, features$end) |>
+        IRanges::reduce() |>
+        IRanges::width() |>
         sum()
     Perct <- round(coverage / protWidth * 100, 2)
     SubTitle <- str_c("Number of Unique Peptides: ", 
@@ -97,8 +95,8 @@ coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile,
     nTicks <- min(c(7, ceiling(protWidth / 50) + 1))
     brkTicks <- round(seq(0, protWidth, length.out = nTicks), 0)
     
-    features %>%
-        distinct() %>%
+    features |>
+        distinct() |>
         ggplot() +
         geom_rect(aes(xmin = start - 1, xmax = end, ymin = 0, ymax = 10), 
                   fill = myCol) +

@@ -39,7 +39,6 @@ checkArg_hierarchicalPlot <- function(MSnSetObj,
 #' @importFrom Biobase exprs pData
 #' @importFrom dplyr across left_join mutate
 #' @importFrom ggdendro dendro_data label
-#' @importFrom magrittr %>%
 #' @importFrom rlang sym
 #' @importFrom stats as.dendrogram dist hclust
 #' @importFrom utils head
@@ -54,20 +53,20 @@ hierarchicalPlot <- function(MSnSetObj, sampleColours=NULL,
     checkArg_hierarchicalPlot(MSnSetObj, sampleColours, colourBy, horizontal,
                               title)
 
-    dendro.dat <- t(log2xplus1(exprs(MSnSetObj))) %>%
-        dist(method = "euclidean") %>%
-        hclust() %>%
-        as.dendrogram() %>%
+    dendro.dat <- t(log2xplus1(exprs(MSnSetObj))) |>
+        dist(method = "euclidean") |>
+        hclust() |>
+        as.dendrogram() |>
         dendro_data()
 
     colourBy <- sym(colourBy)
 
-    labelDat <- dendro.dat$labels %>%
-        mutate(SampleName = as.character(label)) %>%
-        left_join(pData(MSnSetObj), "SampleName") %>%
+    labelDat <- dendro.dat$labels |>
+        mutate(SampleName = as.character(label)) |>
+        left_join(pData(MSnSetObj), "SampleName") |>
         mutate(across(!!colourBy, as.factor))
 
-    axisBreaks <- pretty(dendro.dat$segments$yend)[-1] %>% head(-1)
+    axisBreaks <- pretty(dendro.dat$segments$yend)[-1] |> head(-1)
     
     if (horizontal) {
         hj <- 0

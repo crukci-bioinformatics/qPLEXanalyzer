@@ -20,7 +20,6 @@ Imports: assertthat,
          grDevices, 
          IRanges, 
          limma, 
-         magrittr,
          MSnbase,
          preprocessCore, 
          purrr (>= 1.0.0), 
@@ -34,7 +33,7 @@ Imports: assertthat,
          tidyr, 
          tidyselect,
          utils
-Depends: R (>= 4.0), Biobase, MSnbase
+Depends: R (>= 4.1.0), Biobase, MSnbase
 Suggests: 
     patchwork,
     knitr,

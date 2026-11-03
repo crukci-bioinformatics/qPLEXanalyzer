@@ -46,7 +46,6 @@ checkArg_mergePeptides <- function(MSnSetObj,
 #' @importFrom Biobase sampleNames
 #' @importFrom dplyr across bind_cols everything group_by left_join mutate n 
 #' @importFrom dplyr select summarize ungroup
-#' @importFrom magrittr %>%
 #' @importFrom stringr str_c
 #' @importFrom tidyselect all_of where
 #'
@@ -57,20 +56,20 @@ mergePeptides <- function(MSnSetObj,
                           keepCols=NULL) {
   checkArg_mergePeptides(MSnSetObj, summarizationFunction, annotation, keepCols)
   
-  concatUnique <- function(x){ unique(x) %>% str_c(collapse=";") }
+  concatUnique <- function(x){ unique(x) |> str_c(collapse=";") }
   
-  summarizedIntensities <- fData(MSnSetObj) %>%
-    select(Accessions, Sequences, all_of(keepCols)) %>%
-    mutate(across(everything(), as.character)) %>% 
-    mutate(Seq_Acc = str_c(Sequences, "_", Accessions)) %>%  
-    bind_cols(as.data.frame(exprs(MSnSetObj))) %>% 
-    group_by(Seq_Acc, Accessions) %>%
-    select(-Sequences) %>% 
+  summarizedIntensities <- fData(MSnSetObj) |>
+    select(Accessions, Sequences, all_of(keepCols)) |>
+    mutate(across(everything(), as.character)) |> 
+    mutate(Seq_Acc = str_c(Sequences, "_", Accessions)) |>  
+    bind_cols(as.data.frame(exprs(MSnSetObj))) |> 
+    group_by(Seq_Acc, Accessions) |>
+    select(-Sequences) |> 
     summarize(across(where(is.character), concatUnique),
               across(where(is.numeric), summarizationFunction), 
-              Count=n())   %>% 
-    ungroup() %>% 
-    left_join(annotation, by = "Accessions") %>%
+              Count=n())   |> 
+    ungroup() |> 
+    left_join(annotation, by = "Accessions") |>
     select(Accessions, 
            colnames(annotation), 
            Count, 

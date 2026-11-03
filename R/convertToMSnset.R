@@ -66,7 +66,6 @@ checkArg_convertToMSnset <- function(ExpObj,
 #' @importFrom Biobase fData featureNames featureNames<- pData pData<- 
 #' sampleNames
 #' @importFrom dplyr left_join mutate
-#' @importFrom magrittr %>%
 #' @importFrom stringr str_c
 #' @importFrom tibble column_to_rownames tibble
 #' @importFrom tidyr drop_na
@@ -81,7 +80,7 @@ convertToMSnset <- function(ExpObj, metadata, indExpData, Sequences=NULL,
     colnames(ExpObj)[Sequences] <- "Sequences"
     
     if (rmMissing) {
-        ExpObj <- ExpObj %>% 
+        ExpObj <- ExpObj |> 
             drop_na(all_of(indExpData))
     }
     else
@@ -91,9 +90,9 @@ convertToMSnset <- function(ExpObj, metadata, indExpData, Sequences=NULL,
       }
     obj <- readMSnSet2(ExpObj, ecol = indExpData)
 
-    pData(obj) <- tibble(SampleName=sampleNames(obj)) %>% 
-        left_join(metadata, by="SampleName") %>% 
-        mutate(rowname = SampleName) %>% 
+    pData(obj) <- tibble(SampleName=sampleNames(obj)) |> 
+        left_join(metadata, by="SampleName") |> 
+        mutate(rowname = SampleName) |> 
         column_to_rownames()
             
     if (type == "protein") {

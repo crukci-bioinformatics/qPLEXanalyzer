@@ -3,7 +3,6 @@
 
 #' @import assertthat
 #' @importFrom Biobase fData pData
-#' @importFrom magrittr %>%
 #' @importFrom purrr map_lgl
 #' @importFrom stringr str_c str_detect
 
@@ -224,8 +223,8 @@ on_failure(is_validSummarizationFunction) <- function(call, env){
 
 # check list is a computeDiffStats output
 is_validDiffstats <- function(diffstats){
-    c("MSnSetObj", "fittedLM", "fittedContrasts") %>% 
-        map_lgl(has_name, x=diffstats) %>% 
+    c("MSnSetObj", "fittedLM", "fittedContrasts") |> 
+        map_lgl(has_name, x=diffstats) |> 
         all()
 }
 on_failure(is_validDiffstats) <- function(call, env){
@@ -241,8 +240,8 @@ is_validContrast <- function(contrast, diffstats){
 on_failure(is_validContrast) <- function(call, env){
     contr <- eval(call$contrast, env)
     diffstats <- eval(call$diffstats, env)
-    contr_avail <- diffstats$fittedContrasts$coefficients %>%
-      colnames() %>%
+    contr_avail <- diffstats$fittedContrasts$coefficients |>
+      colnames() |>
       str_c(collapse="\n       ")
     str_c("'", contr, "' is not a valid contrast. Available contrasts:\n",
           "       ", contr_avail)
@@ -287,7 +286,7 @@ on_failure(is_validColour) <- function(call, env) {
 is_validSampleColours <- function(sampleColours, colourBy, MSnSetObj){
     assert_that(is_validColour(sampleColours))
     colnm <- names(sampleColours)
-    colbynm <- pData(MSnSetObj)[[colourBy]] %>% unique()
+    colbynm <- pData(MSnSetObj)[[colourBy]] |> unique()
     assert_that(!is.null(colnm), 
                 msg = str_c("sampleColours should be a named vector, where the ",
                             "names are values in the ", colourBy, " column of ",

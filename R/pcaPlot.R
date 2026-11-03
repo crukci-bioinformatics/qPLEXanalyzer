@@ -82,7 +82,6 @@ checkArg_pcaPlot <- function(MSnSetObj,
 #' @import ggplot2
 #' @importFrom Biobase exprs pData
 #' @importFrom dplyr across left_join mutate
-#' @importFrom magrittr %>%
 #' @importFrom rlang sym
 #' @importFrom stats na.omit prcomp
 #' @importFrom stringr str_c
@@ -105,28 +104,28 @@ pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL,
         MSnSetObj <- MSnSetObj[, toupper(MSnSetObj$SampleGroup) != "IGG"]
     }
     
-    intensities <- exprs(MSnSetObj) %>%
-        as.data.frame() %>%
+    intensities <- exprs(MSnSetObj) |>
+        as.data.frame() |>
         na.omit()
     
     if (!nrow(intensities)) { return(NULL) }
     
     if(transform) {  intensities <- transFunc(intensities) }
     
-    pca <- intensities %>% t() %>% prcomp()
+    pca <- intensities |> t() |> prcomp()
     pcaVariance <- round((pca$sdev^2 / sum(pca$sdev^2)) * 100)
     
     colourBy <- sym(colourBy)
-    plotDat <- as.data.frame(pca$x) %>%
-        rownames_to_column("SampleName") %>%
-        left_join(pData(MSnSetObj), "SampleName") %>%
+    plotDat <- as.data.frame(pca$x) |>
+        rownames_to_column("SampleName") |>
+        left_join(pData(MSnSetObj), "SampleName") |>
         mutate(across(!!colourBy, as.factor))
     
     xLab <- str_c("PC", x.PC, ", ", pcaVariance[x.PC], "% variance")
     yLab <- str_c("PC", x.PC + 1, ", ", pcaVariance[x.PC + 1], "% variance")
     
-    xPC <- str_c("PC", x.PC) %>% sym()
-    yPC <- str_c("PC", x.PC + 1) %>% sym()
+    xPC <- str_c("PC", x.PC) |> sym()
+    yPC <- str_c("PC", x.PC + 1) |> sym()
     
     pcPlot <- ggplot(plotDat, aes(x = !!xPC, y = !!yPC)) +
         geom_point(aes(fill = !!colourBy),

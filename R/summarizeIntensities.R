@@ -49,21 +49,20 @@ checkArg_summarizeIntensities <- function(MSnSetObj,
 #' sampleNames
 #' @importFrom dplyr across bind_cols everything group_by left_join mutate
 #' @importFrom dplyr n_distinct select summarize
-#' @importFrom magrittr %>%
 #' @importFrom tidyselect where
 #'
 #' @export summarizeIntensities
 summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation) {
     checkArg_summarizeIntensities(MSnSetObj, summarizationFunction, annotation)
     
-   summarizedIntensities <- fData(MSnSetObj) %>%
-       select(Accessions, Sequences) %>%
-       mutate(across(c(Accessions, Sequences), as.character)) %>% 
-       bind_cols(as.data.frame(exprs(MSnSetObj))) %>% 
-       group_by(Accessions) %>%
+   summarizedIntensities <- fData(MSnSetObj) |>
+       select(Accessions, Sequences) |>
+       mutate(across(c(Accessions, Sequences), as.character)) |> 
+       bind_cols(as.data.frame(exprs(MSnSetObj))) |> 
+       group_by(Accessions) |>
        summarize(across(where(is.numeric), summarizationFunction), 
-                 Count=n_distinct(Sequences)) %>% 
-       left_join(annotation, by = "Accessions") %>%
+                 Count=n_distinct(Sequences)) |> 
+       left_join(annotation, by = "Accessions") |>
        select(Accessions, colnames(annotation), Count, everything())
     
     obj <- readMSnSet2(summarizedIntensities, ecol = sampleNames(MSnSetObj))

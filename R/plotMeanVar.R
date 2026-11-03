@@ -20,7 +20,6 @@
 #' 
 #' @import ggplot2
 #' @importFrom Biobase exprs
-#' @importFrom magrittr %$%
 #' @importFrom stats smooth.spline var
 #'
 #' @export plotMeanVar
@@ -35,8 +34,8 @@ plotMeanVar <- function(MSnSetObj, title="") {
         Variance = apply(intensities, 1, var)
     )
     
-    ssDat <- smooth.spline(x = mvDat$Mean, y = mvDat$Variance, spar = 1) %$%
-        data.frame(x = x, y = y)
+    ss <- smooth.spline(x = mvDat$Mean, y = mvDat$Variance, spar = 1)
+    ssDat <- data.frame(x = ss$x, y = ss$y)
     
     ggplot(mvDat, aes(x = Mean, y = Variance)) +
         geom_point(size = 0.5, alpha = 0.6, colour = "darkblue") +

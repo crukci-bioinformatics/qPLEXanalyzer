@@ -40,7 +40,6 @@ checkArg_groupScaling <- function(MSnSetObj, scalingFunction, groupingColumn){
 #' @importFrom Biobase exprs exprs<- pData
 #' @importFrom dplyr across arrange group_by left_join mutate select ungroup
 #' pull
-#' @importFrom magrittr %>%
 #' @importFrom tibble column_to_rownames rownames_to_column
 #' @importFrom tidyr pivot_longer pivot_wider
 #' @importFrom tidyselect all_of
@@ -53,10 +52,9 @@ groupScaling <- function(MSnSetObj, scalingFunction=median,
     intensities <- as.data.frame(exprs(MSnSetObj))
     
     # check none of the samples is entirely missing in intensities
-    checNA <- intensities %>%  
-        summarize(across(everything(), ~sum(!is.na(.x)))) %>% 
-        min() %>% 
-        `==`(0)
+    nonMissing <- intensities |>
+        summarize(across(everything(), ~sum(!is.na(.x))))
+    checNA <- min(nonMissing) == 0
     if(checNA){
         stop("One or more of the samples is entirely missing in the intensity ",
              "matrix.")
@@ -69,17 +67,17 @@ groupScaling <- function(MSnSetObj, scalingFunction=median,
     }
     
     # get median/mean for each sample
-    scaledIntensities <- intensities %>%
+    scaledIntensities <- intensities |>
         summarize(across(everything(),
-                         function(x) scalingFunction(x, na.rm = TRUE))) %>%
-        mutate(across(everything(), log)) %>% 
+                         function(x) scalingFunction(x, na.rm = TRUE))) |>
+        mutate(across(everything(), log)) |> 
         pivot_longer(names_to = "SampleName", values_to="sInt", everything())
     
     # get group mean for each sample
-    meanScaledIntensities <- scaledIntensities %>% 
-        left_join(pData(MSnSetObj), by="SampleName") %>% 
-        group_by(across(all_of(groupingColumn))) %>% 
-        mutate(meanscaledIntensity = mean(sInt)) %>% 
+    meanScaledIntensities <- scaledIntensities |> 
+        left_join(pData(MSnSetObj), by="SampleName") |> 
+        group_by(across(all_of(groupingColumn))) |> 
+        mutate(meanscaledIntensity = mean(sInt)) |> 
         pull(meanscaledIntensity)
     
     scaledIntensities <- pull(scaledIntensities, sInt)

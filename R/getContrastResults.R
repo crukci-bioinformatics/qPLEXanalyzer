@@ -43,7 +43,6 @@ checkArg_getContrastResults <- function(diffstats,
 #' @importFrom Biobase exprs fData
 #' @importFrom dplyr across arrange bind_cols desc mutate rename rename_with
 #' select
-#' @importFrom magrittr %>%
 #' @importFrom readr write_tsv
 #' @importFrom stringr str_replace str_replace_all
 #' @importFrom tidyselect all_of
@@ -82,22 +81,22 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL,
         intensities <- log2xplus1(intensities)
     }
     SamplesCol <- as.character(MSnSetObj$SampleName)
-    results <- bind_cols(fData(MSnSetObj), intensities, results) %>%
-        arrange(desc(B)) %>%
+    results <- bind_cols(fData(MSnSetObj), intensities, results) |>
+        arrange(desc(B)) |>
         mutate(across(c("logFC", "t", "B", all_of(SamplesCol)),
-                      function(x) round(x, digits = 2))) %>%
+                      function(x) round(x, digits = 2))) |>
         mutate(across(c("P.Value", "adj.P.Val"),
-                      function(x) signif(x, digits = 2))) %>%
+                      function(x) signif(x, digits = 2))) |>
         # Count column may not be present
         rename_with(str_replace, 
                     pattern = "^Count$", 
-                    replacement = "Unique_peptides") %>%
+                    replacement = "Unique_peptides") |>
         rename(AvgIntensity=AveExpr, log2FC=logFC)
     
 
     if (writeFile) {
-        outFile <- contrast %>% 
-            str_replace(pattern = " - ", replacement = "_vs_") %>% 
+        outFile <- contrast |> 
+            str_replace(pattern = " - ", replacement = "_vs_") |> 
             str_c(".txt")
         write_tsv(results, outFile)
     }

@@ -58,7 +58,6 @@ checkArg_rliPlot <- function(MSnSetObj,
 #' @import ggplot2
 #' @importFrom Biobase exprs pData
 #' @importFrom dplyr across filter group_by left_join mutate ungroup
-#' @importFrom magrittr %>%
 #' @importFrom rlang sym
 #' @importFrom stats median
 #' @importFrom tibble rownames_to_column
@@ -78,22 +77,22 @@ rliPlot <- function(MSnSetObj, title="", sampleColours=NULL,
     }
     
     colourBy <- sym(colourBy)
-    plotDat <- exprs(MSnSetObj) %>%
-        as.data.frame() %>%
-        rownames_to_column("RowID") %>%
+    plotDat <- exprs(MSnSetObj) |>
+        as.data.frame() |>
+        rownames_to_column("RowID") |>
         pivot_longer(names_to = "SampleName", 
                      values_to = "Intensity", 
-                     -RowID) %>%
-        mutate(logInt = log2(Intensity)) %>%
-        filter(is.finite(logInt)) %>%
-        group_by(RowID) %>%
-        mutate(medianLogInt = median(logInt)) %>%
-        ungroup() %>%
-        mutate(RLI = logInt - medianLogInt) %>%
-        left_join(pData(MSnSetObj), "SampleName") %>%
+                     -RowID) |>
+        mutate(logInt = log2(Intensity)) |>
+        filter(is.finite(logInt)) |>
+        group_by(RowID) |>
+        mutate(medianLogInt = median(logInt)) |>
+        ungroup() |>
+        mutate(RLI = logInt - medianLogInt) |>
+        left_join(pData(MSnSetObj), "SampleName") |>
         mutate(across(!!colourBy, as.factor))
     
-    plotDat %>%
+    plotDat |>
         ggplot(aes(x = SampleName, y = RLI, fill = !!colourBy)) +
         geom_boxplot(alpha = 0.6) +
         scale_fill_manual(values = sampleColours) +

@@ -37,7 +37,6 @@ checkArg_normalizeScaling <- function(MSnSetObj, scalingFunction, ProteinId){
 #' 
 #' @importFrom Biobase exprs exprs<- fData
 #' @importFrom dplyr across everything mutate summarize
-#' @importFrom magrittr %>%
 #'
 #' @export normalizeScaling
 normalizeScaling <- function(MSnSetObj, 
@@ -61,10 +60,9 @@ normalizeScaling <- function(MSnSetObj,
     }
     
     # check none of the samples is entirely missing in intensitiesForScaling
-    checNA <- intensitiesForScaling %>%  
-        summarize(across(everything(), ~sum(!is.na(.x)))) %>% 
-        min() %>% 
-        `==`(0)
+    nonMissing <- intensitiesForScaling |>
+        summarize(across(everything(), ~sum(!is.na(.x))))
+    checNA <- min(nonMissing) == 0
     if(checNA & !protNorm){
         stop("One or more of the samples is entirely missing in the intensity ",
              "matrix.")
@@ -80,10 +78,10 @@ normalizeScaling <- function(MSnSetObj,
                 "These will be omitted in the calculation of scaling factors.")
     }
     
-    scaledIntensities <- intensitiesForScaling %>%
+    scaledIntensities <- intensitiesForScaling |>
         summarize(across(everything(),
-                         function(x) scalingFunction(x, na.rm = TRUE))) %>%
-        mutate(across(everything(), log)) %>%
+                         function(x) scalingFunction(x, na.rm = TRUE))) |>
+        mutate(across(everything(), log)) |>
         as.numeric()
     
     scalingFactors <- exp(scaledIntensities - mean(scaledIntensities))

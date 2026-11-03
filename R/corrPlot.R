@@ -57,7 +57,6 @@ checkArg_corrPlot <- function(MSnSetObj,
 #' @import ggplot2
 #' @importFrom Biobase exprs
 #' @importFrom dplyr mutate
-#' @importFrom magrittr %>%
 #' @importFrom stats cor
 #' @importFrom scales squish
 #' @importFrom tibble rownames_to_column
@@ -74,11 +73,11 @@ corrPlot <- function(MSnSetObj, addValues=TRUE, title="",
                       textsize)
     
 
-    plotDat <- cor(exprs(MSnSetObj)) %>%
-        as.data.frame() %>%
-        rownames_to_column("X") %>%
-        pivot_longer(names_to = "Y", values_to = "Cor", -X) %>%
-        mutate(AddValues = addValues) %>%
+    plotDat <- cor(exprs(MSnSetObj)) |>
+        as.data.frame() |>
+        rownames_to_column("X") |>
+        pivot_longer(names_to = "Y", values_to = "Cor", -X) |>
+        mutate(AddValues = addValues) |>
         mutate(CorTxt = ifelse(AddValues, round(Cor, 3), ""))
     
     col2Cols <- c(low_cor_colour, high_cor_colour)

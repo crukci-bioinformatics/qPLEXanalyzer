@@ -90,7 +90,6 @@ testSignficant <- function(dat, cutoffs) {
 #' @import ggplot2
 #' @importFrom Biobase fData
 #' @importFrom dplyr arrange bind_rows case_when desc mutate pull
-#' @importFrom magrittr %>%
 #' @importFrom rlang sym
 #' @importFrom tidyr replace_na
 #'
@@ -110,14 +109,14 @@ maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
     # prepare plot data
     cutOffs <- list(FDR = fdrCutOff, LFC = lfcCutOff, cLFC = controlLfcCutOff)
     grpLevels <- c("Selected", "Significant", "Non-significant")
-    daResTab <- results  %>%
+    daResTab <- results  |>
         mutate(group = case_when(
             Accessions %in% selectedGenes ~ "Selected",
-            testSignficant(., cutOffs) ~ "Significant",
-            TRUE ~ "Non-significant")) %>%
-        mutate(group = factor(group, levels = grpLevels)) %>%
-        arrange(desc(group)) %>%
-        mutate(phredPval = -log10(adj.P.Val)) %>%
+            testSignficant(results, cutOffs) ~ "Significant",
+            TRUE ~ "Non-significant")) |>
+        mutate(group = factor(group, levels = grpLevels)) |>
+        arrange(desc(group)) |>
+        mutate(phredPval = -log10(adj.P.Val)) |>
         mutate(SymbolLab = ifelse(group == "Selected", GeneSymbol, ""))
     
     # set axes for plot type

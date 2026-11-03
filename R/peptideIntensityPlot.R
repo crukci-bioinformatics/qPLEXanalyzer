@@ -63,7 +63,6 @@ checkArg_peptideIntensityPlot <- function(MSnSetObj,
 #' @import ggplot2
 #' @importFrom Biobase exprs fData
 #' @importFrom dplyr filter left_join mutate
-#' @importFrom magrittr %<>% %>%
 #' @importFrom tibble rownames_to_column
 #' @importFrom tidyr pivot_longer
 #'
@@ -77,15 +76,15 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
                                   selectedModifications)
     
     ## get peptide intensities for plotting
-    featureDat <- fData(MSnSetObj) %>% rownames_to_column("PeptideID")
-    intensities <- exprs(MSnSetObj) %>%
-        as.data.frame() %>%
-        rownames_to_column("PeptideID") %>%
+    featureDat <- fData(MSnSetObj) |> rownames_to_column("PeptideID")
+    intensities <- exprs(MSnSetObj) |>
+        as.data.frame() |>
+        rownames_to_column("PeptideID") |>
         pivot_longer(names_to = "SampleName", 
                      values_to = "Intensity", 
-                     -PeptideID) %>%
-        left_join(featureDat, by = "PeptideID") %>%
-        mutate(logIntensity = log2xplus1(Intensity)) %>%
+                     -PeptideID) |>
+        left_join(featureDat, by = "PeptideID") |>
+        mutate(logIntensity = log2xplus1(Intensity)) |>
         filter(Accessions == ProteinID)
 
     if (!nrow(intensities)) {
@@ -114,7 +113,8 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
     if(!is.null(selectedSequence)){    
         seqIntensities <- filter(intensities, Sequences %in% selectedSequence)
         if (!is.null(selectedModifications)) {
-            seqIntensities %<>% filter(Modifications %in% selectedModifications)
+            seqIntensities <- seqIntensities |>
+                filter(Modifications %in% selectedModifications)
         }
         
         intPlot <- intPlot +
@@ -129,14 +129,14 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
     }
     
     if (!is.null(combinedIntensities)) {
-        summIntensities <- exprs(combinedIntensities) %>%
-            as.data.frame() %>%
-            rownames_to_column("Accessions") %>%
+        summIntensities <- exprs(combinedIntensities) |>
+            as.data.frame() |>
+            rownames_to_column("Accessions") |>
             pivot_longer(names_to = "SampleName", 
                          values_to = "Intensity", 
-                         -Accessions) %>%
-            left_join(fData(combinedIntensities), "Accessions") %>%
-            mutate(logIntensity = log2xplus1(Intensity)) %>%
+                         -Accessions) |>
+            left_join(fData(combinedIntensities), "Accessions") |>
+            mutate(logIntensity = log2xplus1(Intensity)) |>
             filter(Accessions == ProteinID)
         
         intPlot <- intPlot +

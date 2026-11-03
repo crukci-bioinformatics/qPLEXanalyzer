@@ -49,7 +49,6 @@ checkArg_intensityBoxplot <- function(MSnSetObj,
 #' @import ggplot2
 #' @importFrom Biobase exprs pData
 #' @importFrom dplyr across everything filter left_join mutate
-#' @importFrom magrittr %>%
 #' @importFrom rlang sym
 #' @importFrom tidyr pivot_longer
 #'
@@ -62,14 +61,14 @@ intensityBoxplot <- function(MSnSetObj, title="", sampleColours=NULL,
     checkArg_intensityBoxplot(MSnSetObj, title, sampleColours, colourBy)
 
     colourBy <- sym(colourBy)
-    plotDat <- exprs(MSnSetObj) %>%
-        as.data.frame() %>%
+    plotDat <- exprs(MSnSetObj) |>
+        as.data.frame() |>
         pivot_longer(names_to = "SampleName", 
                      values_to = "Intensity", 
-                     everything()) %>%
-        mutate(logInt = log2(Intensity)) %>%
-        filter(is.finite(logInt)) %>%
-        left_join(pData(MSnSetObj), "SampleName") %>%
+                     everything()) |>
+        mutate(logInt = log2(Intensity)) |>
+        filter(is.finite(logInt)) |>
+        left_join(pData(MSnSetObj), "SampleName") |>
         mutate(across(!!colourBy, as.factor))
     
     ggplot(plotDat, aes(x = SampleName, y = logInt, fill = !!colourBy)) +

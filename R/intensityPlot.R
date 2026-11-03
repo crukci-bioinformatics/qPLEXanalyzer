@@ -66,7 +66,6 @@ checkArg_intensityPlot <- function(MSnSetObj,
 #' @import ggplot2
 #' @importFrom Biobase exprs pData
 #' @importFrom dplyr across everything filter left_join mutate
-#' @importFrom magrittr %>%
 #' @importFrom rlang sym
 #' @importFrom tidyr pivot_longer
 #'
@@ -83,14 +82,14 @@ intensityPlot <- function(MSnSetObj, sampleColours=NULL, title="",
 
     colourBy <- sym(colourBy)
 
-    plotDat <- exprs(MSnSetObj) %>%
-        as.data.frame() %>%
+    plotDat <- exprs(MSnSetObj) |>
+        as.data.frame() |>
         pivot_longer(names_to = "SampleName", 
                      values_to = "Intensity", 
-                     everything()) %>%
-        left_join(pData(MSnSetObj), "SampleName") %>%
-        mutate(across(!!colourBy, as.factor)) %>%
-        mutate(Intensity = trFunc(Intensity)) %>%
+                     everything()) |>
+        left_join(pData(MSnSetObj), "SampleName") |>
+        mutate(across(!!colourBy, as.factor)) |>
+        mutate(Intensity = trFunc(Intensity)) |>
         filter(!is.na(Intensity))
     
     

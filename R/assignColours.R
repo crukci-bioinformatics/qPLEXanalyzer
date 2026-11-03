@@ -26,18 +26,17 @@ checkArg_assignColours <- function(MSnSetObj, colourBy){
 #' @import RColorBrewer
 #' @importFrom Biobase pData
 #' @importFrom grDevices colorRampPalette
-#' @importFrom magrittr %>%
 #' @importFrom stats setNames
 #' @export assignColours
 assignColours <- function(MSnSetObj, colourBy="SampleGroup") {
     checkArg_assignColours(MSnSetObj, colourBy)
     
-    colourGroups <- as.character(pData(MSnSetObj)[, colourBy]) %>%
-        sort() %>% 
+    colourGroups <- as.character(pData(MSnSetObj)[, colourBy]) |>
+        sort() |> 
         unique()
     len <- length(colourGroups)
-    clen <- c(len, 3) %>% max() %>% c(8) %>% min()
-    coloursF <- brewer.pal(clen, "Dark2") %>% colorRampPalette()
+    clen <- c(len, 3) |> max() |> c(8) |> min()
+    coloursF <- brewer.pal(clen, "Dark2") |> colorRampPalette()
     sampleColours <- setNames(coloursF(len), colourGroups)
     return(sampleColours)
 }
