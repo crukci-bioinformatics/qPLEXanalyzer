@@ -144,5 +144,13 @@ NULL
 #' @keywords package
 NULL
 
-
-
+# Column names used with non-standard evaluation in dplyr, tidyr and ggplot2
+# code; declared here so R CMD check does not report them as undefined.
+utils::globalVariables(c(
+    "Accessions", "AddValues", "AveExpr", "B", "CV", "Cor", "CorTxt",
+    "Count", "GeneSymbol", "Intensity", "Mean", "Modifications", "PeptideID",
+    "RLI", "RowID", "SampleName", "Seq_Acc", "Sequences", "Sites",
+    "Sites_Acc", "SymbolLab", "Type", "Variance", "X", "Y", "adj.P.Val",
+    "cum_sum", "fraction", "group", "logFC", "logInt", "logIntensity",
+    "meanscaledIntensity", "medianLogInt", "sInt", "x", "xend", "y", "yend"
+))

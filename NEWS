@@ -1,17 +1,22 @@
 VERSION 1.31.2
 ------------------------
-o Replace deprecated dplyr/tidyselect usage: across() with extra arguments,
-  external vectors in selections, one_of()
-o Replace deprecated ggplot2 usage: size for lines (now linewidth), numeric
-  legend.position, guide_colorbar(barheight)
-o Replace superseded purrr::map_dfr() with map() + list_rbind()
-o Fix partial name matching of dendrogram segments in hierarchicalPlot
-o Import tidyselect::where; require ggplot2 >= 3.5.0 and purrr >= 1.0.0
+o Fix computeDiffStats contrasts: group names containing "_vs_" are no longer
+  rewritten, and contrasts such as "(A - B) - (C - D)" now work
+o computeDiffStats: numeric batchEffect columns are now treated as factors
+o Fix coefVar cumulative fraction plot to show the proportion of features
+  with a CV less than or equal to x
+o Replace deprecated tidyverse and ggplot2 code; now requires R >= 4.1.0,
+  ggplot2 >= 3.5.0 and purrr >= 1.0.0
+o Use the native R pipe (|>) instead of the magrittr pipe (%>%); magrittr is
+  no longer imported
+o Correct and extend the vignette and help pages
+
 VERSION 1.31.1
 ------------------------
 o Fix computeDiffStats: pass the TechRep block to lmFit so the duplicateCorrelation
   consensus correlation is used (previously it was silently ignored)
 o Document TechRep usage in computeDiffStats and convertToMSnset
+
 VERSION 1.29.3
 ------------------------
 o Update maVolPlot man page

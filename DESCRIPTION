@@ -20,7 +20,6 @@ Imports: assertthat,
          grDevices, 
          IRanges, 
          limma, 
-         MSnbase,
          preprocessCore, 
          purrr (>= 1.0.0), 
          RColorBrewer, 
@@ -37,13 +36,9 @@ Depends: R (>= 4.1.0), Biobase, MSnbase
 Suggests: 
     patchwork,
     knitr,
-    MSnbase,
     qPLEXdata,
     rmarkdown,
-    statmod,
-    testthat,
-    UniProt.ws,
-    vdiffr
+    UniProt.ws
 VignetteBuilder: knitr
 biocViews: ImmunoOncology, Proteomics, MassSpectrometry, Normalization, Preprocessing, QualityControl, DataImport
 BugReports: https://github.com/crukci-bioinformatics/qPLEXanalyzer/issues
