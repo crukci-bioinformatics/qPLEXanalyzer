@@ -67,12 +67,13 @@ MaxQuant, Proteome Discoverer or any other proteomic software (see
 matching to a protein should be used as an input. Alternatively, the protein
 level quantification by the aggregation of the peptide TMT intensities can also
 be used as input. Peptides/Protein intensities with missing values in one or
-more samples can either be excluded or included in the _MSnSet_ object. If the
-missing values are kept in the _MSnSet_ object, these must be imputed either by
-user defined methods or by those provided in
-[MSnbase](http://bioconductor.org/packages/MSnbase) package. The downstream
-functions of _qPLEXanalyzer_ expect a matrix with no missing values in the
-_MSnSet_ object.
+more samples can either be excluded (the default, `rmMissing = TRUE`) or
+included in the _MSnSet_ object. Missing values can be kept as they are, or
+imputed either by user defined methods or by those provided in the
+[MSnbase](http://bioconductor.org/packages/MSnbase) package. The _limma_ based
+functions (`computeDiffStats`, `getContrastResults`) accept missing values and
+`pcaPlot` excludes features with missing values, but `corrPlot`, `plotMeanVar`
+and `regressIntensity` currently require a matrix with no missing values.
 
 The example dataset shown below is from an ER qPLEX-RIME experiment in MCF7 
 cells that was performed to compare two different ways of cell crosslinking: 
@@ -86,6 +87,12 @@ library(patchwork)
 data(human_anno)
 data(exp2_Xlink)
 ```
+
+The peptide intensities in this dataset contain zeros (579 values). Several
+_qPLEXanalyzer_ functions log2 transform intensities after adding only a very
+small value (1e-10), so a zero would become about -33 on the log2 scale and
+distort the plots and statistics that follow. In this example a constant of
+1.1 is therefore added to all intensities after import.
 
 ```{r Import}
 MSnset_data <- convertToMSnset(exp2_Xlink$intensities,
@@ -118,8 +125,8 @@ should not be considered as outliers.
 intensityPlot(MSnset_data, title = "Peptide intensity distribution")
 ```
 
-The intensities can also be viewed in the form of boxplots by 
-`intensityPlot`. [Figure 2](#Figure2) shows the distribution of peptides 
+The intensities can also be viewed in the form of boxplots by
+`intensityBoxplot`. [Figure 2](#Figure2) shows the distribution of peptides 
 intensities for each sample. 
 
 <a name="Figure2" />
@@ -155,35 +162,37 @@ however an outlier sample is also identified in one of the groups (DSG.FA).
 corrPlot(MSnset_data)
 ```
 
-### Hierachical clustering dendrogram
+### Hierarchical clustering dendrogram
 
 Hierarchical clustering can be performed by `hierarchicalPlot` to produce a
-dendrogram displaying the hierarchical relationship among samples 
+dendrogram displaying the hierarchical relationship among samples
 ([Figure 5](#Figure5)). The horizontal axis shows the dissimilarity (measured by
-means of the Euclidean distance) between samples: similar samples appear on the
-same branches. Colors correspond to groups. If the data set contains zeros, it
-will be necessary to add a small value (e.g. 0.01) to the intentsities in order
-to avoid errors while generating dendrogram.
+means of the Euclidean distance between the log2 intensities) between samples:
+similar samples appear on the same branches. Colors correspond to groups. Zero
+intensities are not removed before clustering; as described above, they would
+become about -33 on the log2 scale and dominate the distances, so they should be
+dealt with first (in this example by the constant added after import).
 
 <a name="Figure5" />
 
-```{r hierarchicalplot, fig.width=6, fig.height=5, fig.cap="Figure 5: Clustering plot of peptide intensitites"}
-exprs(MSnset_data) <- exprs(MSnset_data) + 0.01
+```{r hierarchicalplot, fig.width=6, fig.height=5, fig.cap="Figure 5: Clustering plot of peptide intensities"}
 hierarchicalPlot(MSnset_data)
 ```
 
-### Principle component analysis scatterplot
+### Principal component analysis scatterplot
 
-A visual representation of the scaled loading of the first two dimensions of a 
-PCA analysis can be obtained by `pcaPlot` ([Figure 6](#Figure6)). Co-variances 
-between samples are approximated by the inner product between samples. Highly 
-correlated samples will appear close to each other. The samples could be 
-labeled by name, replicate, group or experiment run allowing for identification 
-of potential batch effects.
+`pcaPlot` performs a principal component analysis of the log2 intensities
+(features with missing values are excluded; the data are centred but not
+scaled) and plots the scores of the samples on the first two principal
+components ([Figure 6](#Figure6)). The axis labels give the percentage of the
+total variance explained by each component. Samples with similar intensity
+profiles appear close to each other. The samples could be labeled by name,
+replicate, group or experiment run allowing for identification of potential
+batch effects.
 
 <a name="Figure6" />
 
-```{r pcaplot, fig.width=6, fig.height=5, fig.cap="Figure 6: PCA plot of peptide intensitites"}
+```{r pcaplot, fig.width=6, fig.height=5, fig.cap="Figure 6: PCA plot of peptide intensities"}
 pcaPlot(MSnset_data, labelColumn = "BioRep", pointsize = 3)
 ```
 
@@ -191,8 +200,10 @@ pcaPlot(MSnset_data, labelColumn = "BioRep", pointsize = 3)
 
 A plot showing regions of the bait protein covered by captured peptides can be
 produced using `coveragePlot` ([Figure 7](#Figure7)). The plot shows the
-location of peptides that have been identified with high confidence across the
-protein sequence and the corresponding percentage of coverage. This provides a
+location across the protein sequence of the bait peptides present in the
+_MSnSet_ object (no further filtering is applied, so the input should contain
+only confidently identified peptides) and the corresponding percentage of
+coverage. This provides a
 means of assessing the efficiency of the immunoprecipitation approach in the
 qPLEX-RIME method. For a better evaluation of the pull down assay we could
 compare the observed bait protein coverage with the theoretical coverage from
@@ -284,9 +295,10 @@ intensities for further analysis.
 An annotation file consisting of proteins with unique ID must be provided. An
 example file can be found with the package corresponding to uniprot annotation
 of human proteins. It consists of four columns: 'Accessions', 'Gene',
-'Description' and 'GeneSymbol'. The columns 'Accessions'and 'GeneSymbol' are
-mandatory for successful downstream analysis while the other two columns are
-optional. The [UniProt.ws](http://bioconductor.org/packages/niProt.ws) package
+'Description' and 'GeneSymbol'. All four columns are required by
+`summarizeIntensities`, `mergePeptides` and `mergeSites`; 'Accessions' is used
+to match the annotation to the data and 'GeneSymbol' is used to label proteins
+in the plots. The [UniProt.ws](http://bioconductor.org/packages/UniProt.ws) package
 provides a convenient means of obtaining these annotations using Uniprot protein
 accessions, as shown in the section below. The `summarizeIntensities` function
 expects an annotation file in this format.
@@ -331,7 +343,7 @@ MSnset_Pnorm <- summarizeIntensities(MSnset_norm_gs,
 ```
 
 ```{r pepIntensity, fig.width=6, fig.height=5, fig.cap="Figure 9: Summarized protein intensity"}
-peptideIntensityPlot(MSnset_data,
+peptideIntensityPlot(MSnset_norm_gs,
                      combinedIntensities = MSnset_Pnorm,
                      ProteinID = "P03372", 
                      ProteinName = "ESR1")
@@ -344,7 +356,7 @@ Data that contain TMT-labelled peptides with post-translational modifications (P
 
 The `mergePeptides` function performs the merging of identical peptides sequences (of enriched modification) belonging to same protein into single peptide intensity.
 
-The `mergeSites` function performs the merging of identical modified sites (of enriched modification) belonging to same protein into single site intensity. It is imperative to pre-process your input quantitative proteomics data such that each row represents intensity of modified site (with protein accession). This function expects `Sites` column in your dataset.
+The `mergeSites` function performs the merging of identical modified sites (of enriched modification) belonging to same protein into single site intensity. It is imperative to pre-process your input quantitative proteomics data such that each row represents intensity of modified site (with protein accession). This function expects `Sites` and `Type` columns in the feature data of your dataset: `Sites` gives the position of the modified site within the protein sequence and `Type` whether the modification is single (e.g. 1xPhospho) or multiple (e.g. 2xPhospho).
 
 
 ## Regression Analysis
@@ -399,7 +411,8 @@ bound proteins is carried out using
 [limma](http://bioconductor.org/packages/limma) [@Ritchie2015]. It uses linear 
 models to assess differential expression in the context of multifactor designed
 experiments. Firstly, a linear model is fitted for each protein where the model
-includes variables for each group and MS run. Then, log2 fold changes between
+includes a variable for each sample group, plus any additional variables (such
+as MS run) given in the _batchEffect_ argument. Then, log2 fold changes between
 comparisons are estimated using `computeDiffStats`. Multiple testing correction
 of p-values are applied using the Benjamini-Hochberg method to control the false
 discovery rate (FDR). Finally, `getContrastResults` is used to get contrast
@@ -412,7 +425,9 @@ intensities from the fitted linear model to compute log2 fold change between IgG
 and each of the groups. The maximum log2 fold change over IgG control from the
 two groups being compared is reported in the _controlLogFoldChange_ column. This
 information can be used to filter non-specific binding. A _controlLogFoldChange_
-more than 1 can be used as a filter to discover specific interactors.
+more than 1 can be used as a filter to discover specific interactors. Note that
+the _controlLfcCutOff_ argument of `maVolPlot` is applied to the absolute value
+of _controlLogFoldChange_.
 
 The results of the differential protein analysis can be visualized using
 `maVolPlot` function. It plots average log2 protein intensity to log2 fold
