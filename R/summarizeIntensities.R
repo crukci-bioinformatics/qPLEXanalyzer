@@ -50,6 +50,7 @@ checkArg_summarizeIntensities <- function(MSnSetObj,
 #' @importFrom dplyr across bind_cols everything group_by left_join mutate
 #' @importFrom dplyr n_distinct select summarize
 #' @importFrom magrittr %>%
+#' @importFrom tidyselect where
 #'
 #' @export summarizeIntensities
 summarizeIntensities <- function(MSnSetObj, summarizationFunction, annotation) {

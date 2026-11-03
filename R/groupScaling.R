@@ -43,6 +43,7 @@ checkArg_groupScaling <- function(MSnSetObj, scalingFunction, groupingColumn){
 #' @importFrom magrittr %>%
 #' @importFrom tibble column_to_rownames rownames_to_column
 #' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom tidyselect all_of
 #'
 #' @export groupScaling
 groupScaling <- function(MSnSetObj, scalingFunction=median, 
@@ -69,14 +70,15 @@ groupScaling <- function(MSnSetObj, scalingFunction=median,
     
     # get median/mean for each sample
     scaledIntensities <- intensities %>%
-        summarize(across(everything(), scalingFunction, na.rm=TRUE)) %>%
+        summarize(across(everything(),
+                         function(x) scalingFunction(x, na.rm = TRUE))) %>%
         mutate(across(everything(), log)) %>% 
         pivot_longer(names_to = "SampleName", values_to="sInt", everything())
     
     # get group mean for each sample
     meanScaledIntensities <- scaledIntensities %>% 
         left_join(pData(MSnSetObj), by="SampleName") %>% 
-        group_by(across(groupingColumn)) %>% 
+        group_by(across(all_of(groupingColumn))) %>% 
         mutate(meanscaledIntensity = mean(sInt)) %>% 
         pull(meanscaledIntensity)
     

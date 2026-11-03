@@ -149,7 +149,7 @@ maVolPlot <- function(diffstats, contrast, title="", controlGroup = NULL,
     
     # plot
     ggplot(daResTab, aes(x = !!xFactor, y = !!yFactor)) +
-        geom_hline(yintercept = 0, color = "gray50", size = 0.5) +
+        geom_hline(yintercept = 0, color = "gray50", linewidth = 0.5) +
         geom_point(aes(colour = group,
                        size = group,
                        alpha = group,

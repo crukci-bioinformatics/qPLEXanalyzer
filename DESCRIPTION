@@ -1,7 +1,7 @@
 Package: qPLEXanalyzer
 Type: Package
 Title: Tools for quantitative proteomics data analysis
-Version: 1.31.1
+Version: 1.31.2
 Date: 2026-01-28
 Authors@R: c(person("Matthew","Eldridge", role = "aut"),
              person("Kamal", "Kishore", role = "aut", 
@@ -15,7 +15,7 @@ Imports: assertthat,
          Biostrings, 
          dplyr (>= 1.0.0),
          ggdendro, 
-         ggplot2, 
+         ggplot2 (>= 3.5.0), 
          graphics, 
          grDevices, 
          IRanges, 
@@ -23,7 +23,7 @@ Imports: assertthat,
          magrittr,
          MSnbase,
          preprocessCore, 
-         purrr, 
+         purrr (>= 1.0.0), 
          RColorBrewer, 
          readr,
          rlang,

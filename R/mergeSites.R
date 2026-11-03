@@ -53,7 +53,7 @@ checkArg_mergeSites <- function(MSnSetObj,
 #' @importFrom dplyr select summarize ungroup
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_c
-#' @importFrom tidyselect all_of
+#' @importFrom tidyselect all_of where
 #'
 #' @export mergeSites
 mergeSites <- function(MSnSetObj, 

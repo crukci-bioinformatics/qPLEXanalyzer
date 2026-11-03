@@ -87,7 +87,6 @@ checkArg_pcaPlot <- function(MSnSetObj,
 #' @importFrom stats na.omit prcomp
 #' @importFrom stringr str_c
 #' @importFrom tibble rownames_to_column
-#' @importFrom tidyselect one_of
 #'
 #' @export pcaPlot
 pcaPlot <- function(MSnSetObj, omitIgG=FALSE, sampleColours=NULL,

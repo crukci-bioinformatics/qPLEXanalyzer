@@ -63,7 +63,6 @@ checkArg_rliPlot <- function(MSnSetObj,
 #' @importFrom stats median
 #' @importFrom tibble rownames_to_column
 #' @importFrom tidyr pivot_longer
-#' @importFrom tidyselect one_of
 #'
 #' @export rliPlot
 rliPlot <- function(MSnSetObj, title="", sampleColours=NULL, 

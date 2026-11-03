@@ -81,7 +81,8 @@ normalizeScaling <- function(MSnSetObj,
     }
     
     scaledIntensities <- intensitiesForScaling %>%
-        summarize(across(everything(), scalingFunction, na.rm = TRUE)) %>%
+        summarize(across(everything(),
+                         function(x) scalingFunction(x, na.rm = TRUE))) %>%
         mutate(across(everything(), log)) %>%
         as.numeric()
     

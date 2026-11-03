@@ -52,7 +52,7 @@ checkArg_coveragePlot <- function(MSnSetObj,
 #' @importFrom dplyr distinct filter select pull
 #' @importFrom IRanges IRanges reduce start end width 
 #' @importFrom magrittr %>%
-#' @importFrom purrr map_dfr
+#' @importFrom purrr list_rbind map
 #' @importFrom stringr str_c str_replace_all
 #'
 #' @export coveragePlot
@@ -77,7 +77,8 @@ coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile,
         filter(Accessions == ProteinID) %>%
         pull(Sequences) %>%
         str_replace_all("^\\[.\\]\\.([A-Z]+)\\.\\[.\\]$", "\\1") %>%
-        map_dfr(getPosition) %>% 
+        map(getPosition) %>%
+        list_rbind() %>%
         distinct()
     
     # get percent coverage
@@ -107,7 +108,7 @@ coveragePlot <- function(MSnSetObj, ProteinID, ProteinName, fastaFile,
                   ymax = 10,
                   colour = "black",
                   fill = NA, 
-                  size = 0.15) +
+                  linewidth = 0.15) +
         labs(title = ProteinName, subtitle = SubTitle) +
         theme(
             axis.title.y = element_blank(),

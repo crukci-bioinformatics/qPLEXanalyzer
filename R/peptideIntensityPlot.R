@@ -95,7 +95,7 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
     
     intPlot <- ggplot(intensities, aes(x = SampleName, y = logIntensity)) +
         geom_line(aes(group = PeptideID, colour = Sequences), 
-                  size = 0.6, 
+                  linewidth = 0.6, 
                   alpha = 0.5,
                   linetype = 2) +
         geom_point(aes(fill = Sequences), shape = 21, size = 2) +
@@ -120,7 +120,7 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
         intPlot <- intPlot +
             geom_line(data = seqIntensities, aes(group = PeptideID), 
                       colour = "#6666FF", 
-                      size = 1.2,
+                      linewidth = 1.2,
                       linetype = 6) +
             geom_point(data = seqIntensities,
                        fill = "#0000FF",
@@ -143,7 +143,7 @@ peptideIntensityPlot <- function(MSnSetObj, ProteinID, ProteinName,
             geom_line(data = summIntensities, 
                       aes(group = Accessions),
                       colour = "#AAAAAA",
-                      size = 1.2,
+                      linewidth = 1.2,
                       linetype = 6) +
             geom_point(data = summIntensities,
                        fill = "#888888",

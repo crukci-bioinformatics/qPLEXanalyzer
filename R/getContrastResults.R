@@ -46,7 +46,7 @@ checkArg_getContrastResults <- function(diffstats,
 #' @importFrom magrittr %>%
 #' @importFrom readr write_tsv
 #' @importFrom stringr str_replace str_replace_all
-#' @importFrom tidyselect one_of
+#' @importFrom tidyselect all_of
 #'
 #' @export getContrastResults
 getContrastResults <- function(diffstats, contrast, controlGroup = NULL, 
@@ -71,7 +71,7 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL,
     # Calculate control log fold change if control group is provided
     if (!is.null(controlGroup)) {
         fittedIntensities <- as.data.frame(fittedLinearModel$coefficients)
-        contrastIntensities <- select(fittedIntensities, one_of(contrastGroups))
+        contrastIntensities <- select(fittedIntensities, all_of(contrastGroups))
         controlIntensity <- fittedIntensities[, controlGroup]
         results$controlLogFoldChange <- 
             apply(contrastIntensities - controlIntensity, 1, max)
@@ -84,8 +84,10 @@ getContrastResults <- function(diffstats, contrast, controlGroup = NULL,
     SamplesCol <- as.character(MSnSetObj$SampleName)
     results <- bind_cols(fData(MSnSetObj), intensities, results) %>%
         arrange(desc(B)) %>%
-        mutate(across(c("logFC", "t", "B", SamplesCol), round, digits = 2)) %>%
-        mutate(across(c("P.Value", "adj.P.Val"), signif, digits = 2)) %>% 
+        mutate(across(c("logFC", "t", "B", all_of(SamplesCol)),
+                      function(x) round(x, digits = 2))) %>%
+        mutate(across(c("P.Value", "adj.P.Val"),
+                      function(x) signif(x, digits = 2))) %>%
         # Count column may not be present
         rename_with(str_replace, 
                     pattern = "^Count$", 

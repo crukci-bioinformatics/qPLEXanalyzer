@@ -69,7 +69,6 @@ checkArg_intensityPlot <- function(MSnSetObj,
 #' @importFrom magrittr %>%
 #' @importFrom rlang sym
 #' @importFrom tidyr pivot_longer
-#' @importFrom tidyselect one_of
 #'
 #' @export intensityPlot
 intensityPlot <- function(MSnSetObj, sampleColours=NULL, title="", 
@@ -115,7 +114,8 @@ intensityPlot <- function(MSnSetObj, sampleColours=NULL, title="",
             legend.key.height = unit(0.5, "cm"),
             legend.text = element_text(size = 11),
             legend.justification = c(1, 1),
-            legend.position = c(1, 1),
+            legend.position = "inside",
+            legend.position.inside = c(1, 1),
             legend.background = element_rect(fill = "transparent")
         )
 }

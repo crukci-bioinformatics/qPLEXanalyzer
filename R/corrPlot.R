@@ -99,7 +99,9 @@ corrPlot <- function(MSnSetObj, addValues=TRUE, title="",
                              limits = fillScaleLimits, 
                              oob = squish) +
         labs(x = NULL, y = NULL, title = title) +
-        guides(fill = guide_colorbar(barheight = 10)) +
+        guides(fill = guide_colorbar(
+            theme = theme(legend.key.height = unit(10, "lines"))
+        )) +
         theme(
             aspect.ratio = 1,
             axis.text.x = element_text(angle = 90, 

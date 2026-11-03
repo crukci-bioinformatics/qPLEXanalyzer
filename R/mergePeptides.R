@@ -48,7 +48,7 @@ checkArg_mergePeptides <- function(MSnSetObj,
 #' @importFrom dplyr select summarize ungroup
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_c
-#' @importFrom tidyselect all_of
+#' @importFrom tidyselect all_of where
 #'
 #' @export mergePeptides
 mergePeptides <- function(MSnSetObj, 

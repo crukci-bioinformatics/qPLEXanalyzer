@@ -80,7 +80,7 @@ hierarchicalPlot <- function(MSnSetObj, sampleColours=NULL,
         ang <- 90
     }
 
-    hcPlot <- ggplot(dendro.dat$segment) +
+    hcPlot <- ggplot(dendro.dat$segments) +
         geom_segment(aes(x = x, y = y, xend = xend, yend = yend)) +
         geom_text(
             data = labelDat,
