@@ -37,7 +37,7 @@ checkArg_getContrastResults <- function(diffstats,
 #' MSnset_Pnorm <- summarizeIntensities(MSnset_norm, sum, human_anno)
 #' contrasts <- c(tam.24h_vs_vehicle = "tam.24h - vehicle")
 #' diffstats <- computeDiffStats(MSnset_Pnorm, contrasts=contrasts)
-#' diffexp <- getContrastResults(diffstats=diffstats, contrast=contrasts)
+#' diffexp <- getContrastResults(diffstats=diffstats, contrast="tam.24h_vs_vehicle")
 #' 
 #' @import limma
 #' @importFrom Biobase exprs fData

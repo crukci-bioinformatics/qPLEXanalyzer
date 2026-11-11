@@ -68,7 +68,7 @@ MSnset_norm <- groupScaling(MSnSet_data, scalingFunction=median)
 MSnset_Pnorm <- summarizeIntensities(MSnset_norm, sum, human_anno)
 contrasts <- c(tam.24h_vs_vehicle = "tam.24h - vehicle")
 diffstats <- computeDiffStats(MSnset_Pnorm, contrasts=contrasts)
-maVolPlot(diffstats, contrast = contrasts, plotType="MA")
-maVolPlot(diffstats, contrast = contrasts, plotType="Volcano")
+maVolPlot(diffstats, contrast = "tam.24h_vs_vehicle", plotType="MA")
+maVolPlot(diffstats, contrast = "tam.24h_vs_vehicle", plotType="Volcano")
 
 }

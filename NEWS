@@ -1,3 +1,6 @@
+VERSION 1.29.3
+------------------------
+o Update maVolPlot man page
 VERSION 1.29.2
 ------------------------
 o Update to getContrasts man page example to account for changes in limma::topTable
