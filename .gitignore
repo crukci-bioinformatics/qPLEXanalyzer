@@ -3,4 +3,5 @@
 .RData
 .Ruserdata
 *.Rproj
-.Rbuildignore
+CLAUDE.md
+.DS_Store
