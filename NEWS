@@ -1,3 +1,10 @@
+VERSION 1.31.3
+------------------------
+o Tidy dependencies: MSnbase is now only listed in Depends, and the unused
+  Suggests statmod, testthat and vdiffr have been removed
+o Declare the column names used in dplyr, tidyr and ggplot2 code as global
+  variables, so R CMD check no longer reports them as undefined
+
 VERSION 1.31.2
 ------------------------
 o Fix computeDiffStats contrasts: group names containing "_vs_" are no longer
